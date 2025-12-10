@@ -1,0 +1,571 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root variables for better performance */
+:root {
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --transform-light: translateY(-4px) scale(1.02);
+  --transform-medium: translateY(-8px) scale(1.03);
+  --transform-heavy: translateY(-12px) scale(1.05);
+  
+  /* Light theme text colors */
+  --light-heading-color: #1f2937;
+  --light-text-color: #374151;
+  --light-subtext-color: #6b7280;
+}
+
+/* Base performance optimizations */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background-color: #000;
+}
+
+#root {
+  background-color: transparent;
+}
+
+/* Custom scrollbar with better mobile support */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Hide scrollbar on mobile for cleaner look */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* Performance optimized GPU acceleration */
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+
+/* Optimized theme transitions */
+.theme-transition {
+  transition: background-color var(--transition-normal),
+    color var(--transition-normal), border-color var(--transition-normal);
+}
+
+/* Enhanced animations with mobile optimization */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes float-mobile {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+  }
+}
+
+@keyframes pulse-glow-mobile {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp-mobile {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes rocketLaunch {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-150px) scale(1.08);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-600px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+/* Animation classes with mobile optimization */
+.animate-float {
+  animation: float 3.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+.rocket-launch {
+  animation: rocketLaunch 3.5s ease-in-out forwards;
+}
+
+/* Enhanced hover effects with performance optimization */
+.hover-3d {
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal), filter var(--transition-normal);
+  will-change: transform;
+}
+
+.hover-3d:hover {
+  transform: var(--transform-light);
+  box-shadow: var(--shadow-medium);
+}
+
+.hover-3d img {
+  transition: transform var(--transition-normal);
+  will-change: transform;
+}
+
+.hover-3d:hover img {
+  transform: scale(1.03);
+}
+
+/* Optimized card effects */
+.card-glow {
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  will-change: transform;
+}
+
+.card-glow:hover {
+  transform: var(--transform-light);
+  box-shadow: var(--shadow-medium);
+}
+
+.card-section {
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  will-change: transform;
+}
+
+.card-section:hover {
+  transform: var(--transform-light);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Enhanced button effects */
+.btn-hover-effect {
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  will-change: transform;
+}
+
+.btn-hover-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.btn-hover-effect:hover {
+  transform: var(--transform-light);
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-hover-effect:hover::before {
+  left: 100%;
+}
+
+button {
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  will-change: transform;
+}
+
+button:hover {
+  transform: var(--transform-light);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .hover-3d:hover,
+  .card-glow:hover,
+  .card-section:hover,
+  .btn-hover-effect:hover,
+  button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Add active states for touch */
+  .hover-3d:active {
+    transform: scale(0.99);
+  }
+
+  .btn-hover-effect:active,
+  button:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  :root {
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease-out;
+    --transition-slow: 0.3s ease-out;
+    --transform-light: translateY(-1px) scale(1.005);
+    --transform-medium: translateY(-2px) scale(1.01);
+    --transform-heavy: translateY(-3px) scale(1.015);
+  }
+
+  /* Use mobile-optimized animations */
+  .animate-float {
+    animation: float-mobile 5s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow-mobile 4s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp-mobile 0.5s ease-out forwards;
+  }
+
+  /* Disable will-change on mobile for better performance */
+  * {
+    will-change: auto !important;
+  }
+
+  /* Only apply will-change to actively animating elements */
+  .actively-animating {
+    will-change: transform;
+  }
+
+  /* Simplified grid layouts for mobile */
+  .grid.lg\:grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+
+  .grid.md\:grid-cols-2.lg\:grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+
+  /* Reduce complex animations */
+  .shimmer-effect {
+    animation-duration: 4s;
+  }
+
+  /* Optimize touch interactions */
+  .hover-3d,
+  .card-glow,
+  .card-section {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Reduce motion complexity on mobile */
+  .hover-3d:hover {
+    transform: var(--transform-light);
+    box-shadow: var(--shadow-light);
+  }
+
+  button:hover,
+  .btn-hover-effect:hover {
+    transform: translateY(-0.5px) scale(1.005);
+    box-shadow: var(--shadow-light);
+  }
+
+  .card-section:hover {
+    transform: var(--transform-light);
+    box-shadow: var(--shadow-light);
+  }
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hover-3d:hover,
+  .card-glow:hover,
+  .card-section:hover,
+  .btn-hover-effect:hover,
+  button:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .shimmer-effect,
+  .animate-pulse-glow {
+    animation: none;
+  }
+
+  button,
+  .btn-hover-effect {
+    border: 2px solid;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .card-glow:hover,
+  .card-section:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  .hover-3d:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Optimize images for mobile */
+img {
+  image-rendering: auto;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  max-width: 100%;
+  height: auto;
+  loading: lazy;
+}
+
+img[loading="eager"] {
+  loading: eager;
+}
+
+@media (max-width: 768px) {
+  img {
+    image-rendering: auto;
+  }
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+.btn-hover-effect:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  transition: opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.page-enter {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-15px);
+}
+
+/* Mobile safe areas */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Smooth scroll behavior for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced mobile performance */
+@media (max-width: 768px) {
+  /* Optimize touch interactions */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .hover-3d:hover,
+  .card-glow:hover,
+  .card-section:hover {
+    transform: translateY(-1px) scale(1.005);
+  }
+  
+  /* Optimize text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeSpeed;
+  }
+  
+  /* Reduce motion for better mobile performance */
+  .animate-float {
+    animation-duration: 6s;
+  }
+  
+  .animate-pulse-glow {
+    animation-duration: 5s;
+  }
+  
+  /* Optimize transforms for mobile */
+  .hover-3d,
+  .card-glow,
+  .card-section {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+}

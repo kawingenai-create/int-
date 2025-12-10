@@ -1,0 +1,60 @@
+# Default rules for all robots
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# ChatGPT and OpenAI crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Google AI crawlers
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic Claude crawler
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Bing AI and other Microsoft AI
+User-agent: Bingbot
+Allow: /
+
+# Common AI crawlers
+User-agent: CCBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Additional crawlers
+User-agent: Diffbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap location
+Sitemap: https://integer-io-services.com/sitemap.xml
+
+# Crawl-delay to prevent overload
+Crawl-delay: 1

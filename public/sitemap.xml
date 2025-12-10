@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Home Page - Main landing page with company overview -->
+  <url>
+    <loc>https://integer-io-services.com/</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- About Page - Company information, team, and mission -->
+  <url>
+    <loc>https://integer-io-services.com/about</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services Page - Our 6 core services -->
+  <url>
+    <loc>https://integer-io-services.com/services</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Services - Web Development -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=web-development</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services - Logo & Poster Design -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=logo-poster-design</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services - AI & ML Projects -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=ai-ml-projects</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services - Data Analytics -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=data-analytics</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services - Business Automation -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=business-automation</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Services - Digital Marketing -->
+  <url>
+    <loc>https://integer-io-services.com/services?service=digital-marketing</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Products Page - Our digital products and solutions -->
+  <url>
+    <loc>https://integer-io-services.com/products</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Projects Page - Portfolio of completed projects -->
+  <url>
+    <loc>https://integer-io-services.com/projects</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Contact Page - Contact form, phone, email, WhatsApp -->
+  <url>
+    <loc>https://integer-io-services.com/contact</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Privacy Policy -->
+  <url>
+    <loc>https://integer-io-services.com/privacy</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Terms of Service -->
+  <url>
+    <loc>https://integer-io-services.com/terms</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
