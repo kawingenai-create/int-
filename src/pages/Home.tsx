@@ -72,11 +72,11 @@ const Home = () => {
       color: 'emerald' as const,
     },
     {
-      title: 'AI & ML Projects',
-      description: 'Custom AI solutions for businesses and academic projects',
-      icon: <Sparkles className="h-8 w-8" />,
-      link: '/students',
-      color: 'purple' as const,
+      title: 'AI Apps & Integration (Chatbot)',
+      description: 'Intelligent chatbots and AI-powered applications for enhanced user engagement',
+      icon: <Brain className="h-8 w-8" />,
+      link: '/students', // Assuming the link remains the same as the previous AI service
+      color: 'purple' as const, // Keeping the color property for consistency, or could use 'gradient' if the component supports it
     },
     {
       title: 'Logo Design',
@@ -115,22 +115,29 @@ const Home = () => {
     },
   ];
 
+  const slideL = {
+    hidden: { opacity: 0, x: -25 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  const slideR = {
+    hidden: { opacity: 0, x: 25 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
   return (
     <div className="relative min-h-screen pt-16">
       {/* Hero Section with Enhanced Effects */}
-      <section className="relative pt-32 pb-20 px-4 z-10">
+      <section className="relative pt-32 pb-20 px-4 z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial="hidden"
+            animate="visible"
             className="mb-8"
           >
             {/* Animated Badge */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={slideL}
               className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 to-purple-500/20 border border-emerald-500/30 mb-8"
             >
               <Sparkles className="h-4 w-4 text-emerald-400 mr-2" />
@@ -143,17 +150,15 @@ const Home = () => {
             </motion.div>
 
             <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 sm:mb-6">
-              <span className="flex items-center justify-center gap-2 sm:gap-4">
+              <motion.span variants={slideR} className="flex items-center justify-center gap-2 sm:gap-4">
                 <img src={halfLogo} alt="Integer.IO" className="h-16 sm:h-14 md:h-24 w-auto object-contain" />
-                <span className="bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent pb-1 sm:pb-2 text-xl sm:text-3xl md:text-5xl" style={{ lineHeight: '1.3' }}>
+                <span className="bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 bg-clip-text text-transparent pb-1 sm:pb-2 text-xl sm:text-3xl md:text-5xl drop-shadow-sm" style={{ lineHeight: '1.3' }}>
                   Integer.IO Services
                 </span>
-              </span>
+              </motion.span>
               <br />
               <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                variants={slideL}
                 className={`text-xl sm:text-2xl md:text-5xl font-bold ${isDark ? 'text-gray-200' : 'text-gray-900'
                   }`}
               >
@@ -162,9 +167,7 @@ const Home = () => {
             </h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              variants={slideR}
               className={`text-xl md:text-2xl mb-8 max-w-4xl mx-auto font-bold ${isDark ? 'text-gray-200' : 'text-gray-900'
                 }`}
             >
@@ -172,9 +175,7 @@ const Home = () => {
             </motion.p>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              variants={slideL}
               className={`text-lg mb-12 max-w-3xl mx-auto font-medium ${isDark ? 'text-gray-300' : 'text-gray-800'
                 }`}
             >
@@ -208,20 +209,22 @@ const Home = () => {
       </section>
 
       {/* Products Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-20 px-4 relative z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideL}
             className="text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
           >
             Our Premium Products
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideR}
             className={`text-center text-lg mb-16 max-w-3xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-700'
               }`}
           >
@@ -231,9 +234,10 @@ const Home = () => {
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10">
             {/* Chatz.IO Product */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={slideL}
             >
               <InteractiveCard glowColor="emerald" className="h-full overflow-hidden">
                 <div className="relative">
@@ -267,9 +271,10 @@ const Home = () => {
 
             {/* Dips.IO Product */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={slideR}
             >
               <InteractiveCard glowColor="purple" className="h-full overflow-hidden">
                 <div className="relative">
@@ -305,24 +310,33 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-20 px-4 relative z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideL}
             className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
           >
             Our Core Services
           </motion.h2>
 
-          <section id="services">
+          <motion.section
+            id="services"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideR}
+          >
             <ServiceCarousel />
-          </section>
+          </motion.section>
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideL}
             className="text-center mt-12"
           >
             <Link
@@ -337,12 +351,13 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-20 px-4 relative z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideR}
             className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
           >
             Why Choose Integer.IO Services?
@@ -352,9 +367,10 @@ const Home = () => {
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={index % 2 === 0 ? slideL : slideR}
               >
                 <InteractiveCard
                   glowColor={feature.color}
@@ -382,12 +398,13 @@ const Home = () => {
       </section>
 
       {/* Projects Gallery Section */}
-      <section className="py-20 px-4 relative z-10">
+      <section className="py-20 px-4 relative z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideL}
             className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
           >
             Featured Projects
@@ -397,9 +414,10 @@ const Home = () => {
             {sampleProjects.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={index % 2 === 0 ? slideL : slideR}
                 className="group"
               >
                 <InteractiveCard
@@ -414,22 +432,8 @@ const Home = () => {
                       className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileHover={{ opacity: 1, y: 0 }}
-                      className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors shadow-lg"
-                      >
-                        See Online
-                      </a>
-                    </motion.div>
                   </div>
-                  <div className="p-2">
+                  <div className="p-2 flex flex-col h-full">
                     <span className="text-emerald-400 text-sm font-medium">
                       {project.category}
                     </span>
@@ -440,11 +444,22 @@ const Home = () => {
                       {project.title}
                     </h3>
                     <p
-                      className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                      className={`text-sm mb-4 flex-grow ${isDark ? 'text-gray-300' : 'text-gray-600'
                         }`}
                     >
                       {project.description}
                     </p>
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors ${isDark
+                        ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20'
+                        : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                        }`}
+                    >
+                      Visit Project <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
                   </div>
                 </InteractiveCard>
               </motion.div>
@@ -452,9 +467,10 @@ const Home = () => {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideR}
             className="text-center mt-12"
           >
             <Link
@@ -465,6 +481,68 @@ const Home = () => {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-20 px-4 relative z-10 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <motion.h2
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={slideL}
+            className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
+          >
+            Why Choose Us
+          </motion.h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={slideL}
+            >
+              <InteractiveCard glowColor="emerald" className="p-8 text-center h-full">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
+                  <Target className={`h-8 w-8 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                </div>
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Precision Focused</h3>
+                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>We deliver exactly what you need with attention to every detail</p>
+              </InteractiveCard>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={slideL} // Corrected
+            >
+              <InteractiveCard glowColor="purple" className="p-8 text-center h-full">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
+                  <Zap className={`h-8 w-8 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                </div>
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Modern Technology</h3>
+                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Built with the latest tools and frameworks for optimal performance</p>
+              </InteractiveCard>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={slideR}
+            >
+              <InteractiveCard glowColor="blue" className="p-8 text-center h-full">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
+                  <Users className={`h-8 w-8 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                </div>
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>24/7 Support</h3>
+                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Round-the-clock assistance to ensure your success</p>
+              </InteractiveCard>
+            </motion.div>
+          </div>
         </div>
       </section>
 

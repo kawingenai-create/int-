@@ -22,6 +22,7 @@ import Products from './pages/Products';
 import Contact from './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import Admin from './pages/Admin';
 
 function App() {
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
@@ -62,6 +63,7 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route path="/terms" element={<TermsOfService />} />
+                    <Route path="/admin" element={<Admin />} />
                   </Routes>
                 </main>
 

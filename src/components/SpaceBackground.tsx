@@ -51,16 +51,18 @@ const SpaceBackground: React.FC = () => {
 
     const createStars = () => {
       starsRef.current = [];
-      const starCount = window.innerWidth < 768 ? 30 : 80;
+      const starCount = window.innerWidth < 768 ? 60 : 180; // Increased for realism
+      const colors = ['#ffffff', '#cce6ff', '#ffe4b5', '#add8e6', '#ffefd5']; // White, light blue, peach, sky blue, papaya
       for (let i = 0; i < starCount; i++) {
         starsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           z: Math.random() * 1000,
-          size: Math.random() * 2 + 0.5,
-          speed: Math.random() * 0.4 + 0.1,
-          opacity: Math.random() * 0.5 + 0.2,
-          twinkle: Math.random() * Math.PI * 2
+          size: Math.random() * 1.8 + 0.3, // Slightly smaller range for realism
+          speed: Math.random() * 0.3 + 0.05, // Slower for depth
+          opacity: Math.random() * 0.6 + 0.3,
+          twinkle: Math.random() * Math.PI * 2,
+          color: colors[Math.floor(Math.random() * colors.length)], // Random color
         });
       }
     };
@@ -107,36 +109,39 @@ const SpaceBackground: React.FC = () => {
 
     const drawStar = (star: Star) => {
       ctx.save();
-      
+
       const scale = 1000 / (1000 + star.z);
       const x = star.x * scale;
       const y = star.y * scale;
       const size = star.size * scale;
-      
-      star.twinkle += 0.02;
-      const twinkleOpacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinkle));
-      
+
+      star.twinkle += 0.015; // Slower twinkle
+      const twinkleOpacity = star.opacity * (0.6 + 0.4 * Math.sin(star.twinkle));
+
       ctx.globalAlpha = twinkleOpacity;
-      
-      const starColor = isDark ? '#ffffff' : '#4338ca';
+
+      // Use star's individual color (fallback for type safety)
+      const starColor = (star as any).color || (isDark ? '#ffffff' : '#4338ca');
       ctx.fillStyle = starColor;
-      ctx.shadowBlur = 12 * scale;
+      ctx.shadowBlur = 6 * scale; // Reduced blur for performance
       ctx.shadowColor = starColor;
-      
+
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Cross lines for star effect
-      ctx.strokeStyle = starColor;
-      ctx.lineWidth = 0.5 * scale;
-      ctx.beginPath();
-      ctx.moveTo(x - size * 2, y);
-      ctx.lineTo(x + size * 2, y);
-      ctx.moveTo(x, y - size * 2);
-      ctx.lineTo(x, y + size * 2);
-      ctx.stroke();
-      
+
+      // Cross lines only for larger stars (performance optimization)
+      if (size > 0.8) {
+        ctx.strokeStyle = starColor;
+        ctx.lineWidth = 0.3 * scale;
+        ctx.beginPath();
+        ctx.moveTo(x - size * 1.5, y);
+        ctx.lineTo(x + size * 1.5, y);
+        ctx.moveTo(x, y - size * 1.5);
+        ctx.lineTo(x, y + size * 1.5);
+        ctx.stroke();
+      }
+
       ctx.restore();
     };
 
@@ -145,11 +150,11 @@ const SpaceBackground: React.FC = () => {
       ctx.translate(asteroid.x, asteroid.y);
       ctx.rotate(asteroid.rotation);
       ctx.scale(asteroid.depth, asteroid.depth);
-      
+
       ctx.fillStyle = asteroid.gradient || '#8b5cf6';
       ctx.shadowBlur = 10;
       ctx.shadowColor = isDark ? '#8b5cf6' : '#7c3aed';
-      
+
       ctx.beginPath();
       asteroid.points.forEach((pt, idx) => {
         if (idx === 0) ctx.moveTo(pt.x, pt.y);
@@ -157,11 +162,11 @@ const SpaceBackground: React.FC = () => {
       });
       ctx.closePath();
       ctx.fill();
-      
+
       ctx.globalCompositeOperation = 'screen';
       ctx.fillStyle = isDark ? 'rgba(139, 92, 246, 0.25)' : 'rgba(124, 58, 237, 0.15)';
       ctx.fill();
-      
+
       ctx.restore();
     };
 
@@ -186,14 +191,14 @@ const SpaceBackground: React.FC = () => {
       asteroidsRef.current.forEach(asteroid => {
         asteroid.x -= asteroid.speed * 0.85;
         asteroid.rotation += asteroid.rotationSpeed;
-        
+
         if (asteroid.x < -asteroid.size * 2) {
           const scaleX = ctx.getTransform().a || 1;
           const scaleY = ctx.getTransform().d || 1;
           asteroid.x = canvas.width / scaleX + asteroid.size * 2;
           asteroid.y = Math.random() * (canvas.height / scaleY);
         }
-        
+
         drawAsteroid(asteroid);
       });
 
@@ -242,10 +247,10 @@ const SpaceBackground: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none z-0"
-      style={{ 
-        background: isDark 
-          ? 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 30%, #16213e 70%, #0f0f23 100%)' 
-          : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)'
+      style={{
+        background: isDark
+          ? 'radial-gradient(ellipse at 20% 30%, rgba(30, 41, 82, 0.4) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(59, 28, 82, 0.3) 0%, transparent 50%), linear-gradient(135deg, #0a0a1a 0%, #0f0f23 25%, #1a1a2e 50%, #16213e 75%, #0a0a1a 100%)'
+          : 'radial-gradient(ellipse at 30% 40%, rgba(199, 210, 254, 0.5) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(221, 214, 254, 0.4) 0%, transparent 50%), linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)'
       }}
     />
   );

@@ -1,43 +1,57 @@
-import React, { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { trackPageVisit, updateTimeSpent } from '../lib/supabase';
 
 const Analytics: React.FC = () => {
+  const location = useLocation();
+  const startTime = useRef<number>(Date.now());
+  const currentVisitId = useRef<number | null>(null);
+
   useEffect(() => {
-    // Google Analytics 4
-    const script1 = document.createElement('script');
-    script1.async = true;
-    script1.src = 'https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID';
-    document.head.appendChild(script1);
+    // 1. Set start time for new page
+    startTime.current = Date.now();
 
-    const script2 = document.createElement('script');
-    script2.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID');
-    `;
-    document.head.appendChild(script2);
+    const pageName = location.pathname === '/' ? 'Home' :
+      location.pathname.replace('/', '').charAt(0).toUpperCase() +
+      location.pathname.slice(2);
 
-    // Facebook Pixel (optional)
-    const fbScript = document.createElement('script');
-    fbScript.innerHTML = `
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', 'YOUR_PIXEL_ID');
-      fbq('track', 'PageView');
-    `;
-    document.head.appendChild(fbScript);
-
-    return () => {
-      document.head.removeChild(script1);
-      document.head.removeChild(script2);
-      document.head.removeChild(fbScript);
+    // 2. Track the new visit and get its ID
+    const initVisit = async () => {
+      const id = await trackPageVisit(pageName);
+      if (id) {
+        currentVisitId.current = id;
+      }
     };
+    initVisit();
+
+    // 3. Define the cleanup function to update duration
+    const handleExit = () => {
+      if (currentVisitId.current) {
+        const duration = Math.floor((Date.now() - startTime.current) / 1000); // seconds
+        // Use navigator.sendBeacon if possible for reliability, but Supabase SDK is fetch-based.
+        // We'll standard fetch here, but note that modern browsers might cut it off.
+        // For this assignment, we use the standard SDK function we defined.
+        updateTimeSpent(currentVisitId.current, duration);
+      }
+    };
+
+    // Handle standard unmount/navigation
+    return () => {
+      handleExit();
+      currentVisitId.current = null; // Reset for next effect
+    };
+  }, [location.pathname]);
+
+  // Handle browser tab close / refresh
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (currentVisitId.current) {
+        const duration = Math.floor((Date.now() - startTime.current) / 1000);
+        updateTimeSpent(currentVisitId.current, duration);
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
   return null;

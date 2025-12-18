@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../contexts/ThemeContext';
 
-const DESKTOP_MIN = 1024; // Tailwind lg breakpoint
-const TABLET_MIN = 768;   // Tailwind md breakpoint
+const DESKTOP_MIN = 1024;
+const TABLET_MIN = 768;
 
 const useViewport = () => {
   const [width, setWidth] = useState<number>(typeof window !== 'undefined' ? window.innerWidth : 0);
@@ -44,7 +44,6 @@ const Spaceship: React.FC = () => {
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      // Desktop-only mouse parallax
       if (!isDesktop) return;
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -70,8 +69,6 @@ const Spaceship: React.FC = () => {
           const viewportHeight = window.innerHeight || 0;
           const isVisible = entry.isIntersecting;
           setIsFooterVisible(isVisible);
-
-          // Compute dock position just above the footer when it nears viewport
           if (isVisible) {
             const targetY = Math.max(40, viewportHeight - rect.height - 80);
             setDockY(targetY);
@@ -86,7 +83,6 @@ const Spaceship: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Positions are memoized to avoid re-computation in render
   const { spaceshipX, spaceshipY, rotation } = useMemo(() => {
     const width = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const baseX = 100 + ((scrollY * 0.06) % Math.max(200, width - 200));
@@ -100,87 +96,72 @@ const Spaceship: React.FC = () => {
     };
   }, [scrollY, mousePosition.x, mousePosition.y, isDesktop]);
 
-  // Render nothing on mobile for performance
   if (!isDesktop && !isTabletOnly) return null;
 
   if (isTabletOnly) {
-    // Tablet: simplified left-side flowing accent that follows scroll
-    const leftOffset = 0; // pinned to left
+    const leftOffset = 0;
     const topOffset = 150 + Math.sin(scrollY * 0.004) * 20;
-
     return (
-      <>
-        <motion.div
-          className="fixed pointer-events-none z-10 hidden md:block"
-          style={{ left: leftOffset, top: topOffset }}
-          animate={{ y: [0, 8, 0], opacity: [0.35, 0.55, 0.35] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <div className="relative">
-            <motion.div
-              className="absolute -left-10 top-1/2 -translate-y-1/2"
-              animate={{ opacity: [0.2, 0.5, 0.2], scaleX: [0.6, 0.9, 0.6] }}
-              transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <div className={`w-16 h-3 rounded-full ${
-                isDark
-                  ? 'bg-gradient-to-r from-transparent via-cyan-400 to-blue-500'
-                  : 'bg-gradient-to-r from-transparent via-purple-500 to-indigo-600'
-              }`} />
-            </motion.div>
-
-            <div className={`w-20 h-20 rounded-full blur-2xl opacity-30 ${
-              isDark ? 'bg-cyan-400' : 'bg-purple-500'
-            }`} />
-          </div>
-        </motion.div>
-      </>
+      <motion.div
+        className="fixed pointer-events-none z-10 hidden md:block"
+        style={{ left: leftOffset, top: topOffset }}
+        animate={{ y: [0, 8, 0], opacity: [0.35, 0.55, 0.35] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <div className="relative">
+          <motion.div
+            className="absolute -left-10 top-1/2 -translate-y-1/2"
+            animate={{ opacity: [0.2, 0.5, 0.2], scaleX: [0.6, 0.9, 0.6] }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <div className={`w-16 h-3 rounded-full ${isDark ? 'bg-gradient-to-r from-transparent via-cyan-400 to-blue-500' : 'bg-gradient-to-r from-transparent via-purple-500 to-indigo-600'}`} />
+          </motion.div>
+          <div className={`w-20 h-20 rounded-full blur-2xl opacity-30 ${isDark ? 'bg-cyan-400' : 'bg-purple-500'}`} />
+        </div>
+      </motion.div>
     );
   }
 
-  // Desktop: full animated spaceship
+  // Desktop: Original Structure Restored with Enhancements
   return (
     <>
       <motion.div
         className="fixed pointer-events-none z-10"
         style={{ left: spaceshipX, top: dockY ?? spaceshipY }}
         animate={{ rotate: rotation }}
-        transition={{ type: 'spring', stiffness: 40, damping: 25, mass: 0.6 }}
+        transition={{ type: 'spring', stiffness: 15, damping: 40, mass: 1 }}
       >
-        <div className="relative opacity-50">
+        {/* Container for Rocket + Rings */}
+        <div className="relative opacity-60">
+          {/* Flame Trails */}
           <motion.div
-            className="absolute -left-24 top-1/2 transform -translate-y-1/2"
+            className="absolute -left-28 top-1/2 transform -translate-y-1/2"
             animate={{ opacity: [0.25, 0.7, 0.25], scaleX: [0.6, 1.1, 0.6], scaleY: [1, 1.2, 1] }}
             transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <div className={`w-20 h-4 rounded-full ${
-              isDark ? 'bg-gradient-to-r from-transparent via-cyan-400 to-blue-500' : 'bg-gradient-to-r from-transparent via-purple-500 to-indigo-600'
-            }`} />
+            <div className={`w-24 h-5 rounded-full ${isDark ? 'bg-gradient-to-r from-transparent via-cyan-400 to-blue-500' : 'bg-gradient-to-r from-transparent via-purple-500 to-indigo-600'}`} />
           </motion.div>
 
           <motion.div
-            className="absolute -left-16 top-1/2 transform -translate-y-1/2"
+            className="absolute -left-20 top-1/2 transform -translate-y-1/2"
             animate={{ opacity: [0.15, 0.5, 0.15], scaleX: [0.5, 0.9, 0.5] }}
             transition={{ duration: 0.4, repeat: Infinity, ease: 'easeInOut', delay: 0.1 }}
           >
-            <div className={`w-12 h-2.5 rounded-full ${
-              isDark ? 'bg-gradient-to-r from-transparent via-emerald-400 to-cyan-500' : 'bg-gradient-to-r from-transparent via-pink-400 to-purple-500'
-            }`} />
+            <div className={`w-14 h-3 rounded-full ${isDark ? 'bg-gradient-to-r from-transparent via-emerald-400 to-cyan-500' : 'bg-gradient-to-r from-transparent via-pink-400 to-purple-500'}`} />
           </motion.div>
 
           <motion.div
-            className="absolute -left-10 top-1/2 transform -translate-y-1/2"
+            className="absolute -left-12 top-1/2 transform -translate-y-1/2"
             animate={{ opacity: [0.08, 0.3, 0.08], scaleX: [0.4, 0.7, 0.4] }}
             transition={{ duration: 0.3, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
           >
-            <div className={`w-8 h-1.5 rounded-full ${
-              isDark ? 'bg-gradient-to-r from-transparent via-yellow-400 to-orange-500' : 'bg-gradient-to-r from-transparent via-red-400 to-pink-500'
-            }`} />
+            <div className={`w-10 h-2 rounded-full ${isDark ? 'bg-gradient-to-r from-transparent via-yellow-400 to-orange-500' : 'bg-gradient-to-r from-transparent via-red-400 to-pink-500'}`} />
           </motion.div>
 
+          {/* Rocket SVG - Scaled Up 20% (96px width vs original 80px) */}
           <motion.svg
-            width="80"
-            height="40"
+            width="96"
+            height="48"
             viewBox="0 0 80 40"
             className="drop-shadow-2xl"
             animate={{
@@ -245,13 +226,13 @@ const Spaceship: React.FC = () => {
             <rect x="27" y="19" width="8" height="2" rx="1" fill={isDark ? '#8b5cf6' : '#7c3aed'} opacity="0.6" />
           </motion.svg>
 
+          {/* Random Particles */}
           <motion.div className="absolute -left-30 top-1/2 transform -translate-y-1/2">
             {[...Array(12)].map((_, i) => (
               <motion.div
                 key={i}
-                className={`absolute w-1 h-1 rounded-full ${
-                  i % 3 === 0 ? (isDark ? 'bg-cyan-400' : 'bg-purple-500') : i % 3 === 1 ? (isDark ? 'bg-emerald-400' : 'bg-pink-500') : isDark ? 'bg-yellow-400' : 'bg-indigo-500'
-                }`}
+                className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? (isDark ? 'bg-cyan-400' : 'bg-purple-500') : i % 3 === 1 ? (isDark ? 'bg-emerald-400' : 'bg-pink-500') : isDark ? 'bg-yellow-400' : 'bg-indigo-500'
+                  }`}
                 style={{ left: -i * 3, top: (Math.random() - 0.5) * 20 }}
                 animate={{ opacity: [1, 0], scale: [1, 0], x: [-5, -20] }}
                 transition={{ duration: 0.6, delay: i * 0.05, repeat: Infinity, ease: 'easeOut' }}
@@ -259,27 +240,12 @@ const Spaceship: React.FC = () => {
             ))}
           </motion.div>
 
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-          >
-            <div className={`w-24 h-24 border border-opacity-15 rounded-full ${isDark ? 'border-emerald-400' : 'border-purple-500'}`} />
-          </motion.div>
-
-          <motion.div
-            className="absolute inset-0 flex items-center justify-center"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-          >
-            <div className={`w-20 h-20 border border-opacity-10 rounded-full ${isDark ? 'border-cyan-400' : 'border-pink-500'}`} />
-          </motion.div>
         </div>
       </motion.div>
 
       <motion.div
         className="fixed pointer-events-none z-0"
-        style={{ left: spaceshipX - 20, top: (dockY ?? spaceshipY) + 60 }}
+        style={{ left: spaceshipX - 25, top: (dockY ?? spaceshipY) + 70 }}
         animate={{ opacity: [0.1, 0.25, 0.1], scale: [1, 1.15, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -290,5 +256,3 @@ const Spaceship: React.FC = () => {
 };
 
 export default Spaceship;
-
-

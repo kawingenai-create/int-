@@ -113,14 +113,31 @@ const Services = () => {
       category: 'Digital Marketing',
       icon: <Megaphone className="h-12 w-12" />,
       color: 'cyan' as const,
-      description: 'Strategic social media planning and content creation',
+      description: 'Strategic social media planning, branding and SEO services',
       features: [
         'Social Media Marketing',
+        'Logo Creation & Branding',
+        'SEO (Search Engine Optimization)',
         'Content Strategy',
         'Brand Awareness Campaigns',
         'Lead Generation',
         'Analytics & Reporting',
         'Email Marketing'
+      ]
+    },
+    {
+      key: 'portfolio-services',
+      category: 'Portfolio Services',
+      icon: <Globe className="h-12 w-12" />,
+      color: 'emerald' as const,
+      description: 'Professional portfolio websites for work, professionals, and students',
+      features: [
+        'Personal Portfolio Websites',
+        'Professional Work Showcase',
+        'Student Project Portfolios',
+        'Interactive Resume Sites',
+        'Creative Professional Profiles',
+        'Academic Achievement Displays'
       ]
     }
   ];
@@ -240,77 +257,95 @@ const Services = () => {
 
           {filteredServices.length > 0 ? (
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+              className="grid md:grid-cols-2 lg:grid-cols-6 gap-8 mb-16"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.1 }}
             >
-              {filteredServices.map((service) => (
-                <motion.div
-                  key={service.key}
-                  ref={(el) => { serviceRefs.current[service.key] = el; }}
-                  variants={itemVariants}
-                  whileHover={{
-                    y: -12,
-                    scale: 1.03,
-                    rotateX: 5,
-                    rotateY: 5,
-                    transition: { type: "spring", stiffness: 300, damping: 20 }
-                  }}
-                  className="group"
-                >
-                  <div className={`
+              {filteredServices.map((service, idx) => {
+                // Calculation for 2-3-2 layout
+                // Total 7 items
+                // Row 1: 0, 1 -> col-span-3 (2 items)
+                // Row 2: 2, 3, 4 -> col-span-2 (3 items)
+                // Row 3: 5, 6 -> col-span-3 (2 items)
+
+                let colSpanClass = "lg:col-span-2"; // Default fallback
+
+                if (idx === 0 || idx === 1) {
+                  colSpanClass = "lg:col-span-3";
+                } else if (idx === 2 || idx === 3 || idx === 4) {
+                  colSpanClass = "lg:col-span-2";
+                } else if (idx >= 5) {
+                  colSpanClass = "lg:col-span-3";
+                }
+
+                return (
+                  <motion.div
+                    key={service.key}
+                    ref={(el) => { serviceRefs.current[service.key] = el; }}
+                    variants={itemVariants}
+                    whileHover={{
+                      y: -12,
+                      scale: 1.03,
+                      rotateX: 5,
+                      rotateY: 5,
+                      transition: { type: "spring", stiffness: 300, damping: 20 }
+                    }}
+                    className={`group ${colSpanClass}`}
+                  >
+                    <div className={`
                     relative p-8 rounded-2xl backdrop-blur-lg border transition-all duration-500 h-full
                     ${isDark
-                      ? 'bg-gray-900/70 border-gray-700/50 hover:bg-gray-800/80'
-                      : 'bg-white/90 border-gray-300/50 hover:bg-white/95'
-                    }
+                        ? 'bg-gray-900/70 border-gray-700/50 hover:bg-gray-800/80'
+                        : 'bg-white/90 border-gray-300/50 hover:bg-white/95'
+                      }
                     ${highlightedService === service.key
-                      ? 'ring-4 ring-emerald-500 ring-opacity-50'
-                      : ''
-                    }
+                        ? 'ring-4 ring-emerald-500 ring-opacity-50'
+                        : ''
+                      }
                     hover:shadow-2xl
                     transform-gpu will-change-transform
                   `}>
-                    {/* Glow effect */}
-                    <div className={`
+                      {/* Glow effect */}
+                      <div className={`
                       absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500
                       bg-gradient-to-r from-${service.color}-500/10 via-transparent to-${service.color}-500/10
                     `} />
 
-                    <div className="relative z-10">
-                      <motion.div
-                        className={`text-${service.color}-400 mb-6`}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        {service.icon}
-                      </motion.div>
-                      <h3 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                        {service.category}
-                      </h3>
-                      <p className={`text-sm mb-4 font-medium text-${service.color}-400`}>
-                        {service.description}
-                      </p>
-                      <ul className="space-y-2 mb-6">
-                        {service.features.map((feature, idx) => (
-                          <motion.li
-                            key={idx}
-                            className={`flex items-center ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
-                            initial={{ opacity: 0, x: -10 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                          >
-                            <div className={`w-2 h-2 rounded-full mr-3 flex-shrink-0 bg-${service.color}-400`} />
-                            {feature}
-                          </motion.li>
-                        ))}
-                      </ul>
+                      <div className="relative z-10 flex flex-col h-full">
+                        <motion.div
+                          className={`text-${service.color}-400 mb-6 flex justify-center lg:justify-start`}
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
+                          {service.icon}
+                        </motion.div>
+                        <h3 className={`text-2xl font-bold mb-3 text-center lg:text-left ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                          {service.category}
+                        </h3>
+                        <p className={`text-sm mb-4 font-medium text-center lg:text-left text-${service.color}-400`}>
+                          {service.description}
+                        </p>
+                        <ul className="space-y-2 mb-6 flex-grow">
+                          {service.features.map((feature, featureIdx) => (
+                            <motion.li
+                              key={featureIdx}
+                              className={`flex items-center ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
+                              initial={{ opacity: 0, x: -10 }}
+                              whileInView={{ opacity: 1, x: 0 }}
+                              transition={{ delay: featureIdx * 0.1 }}
+                            >
+                              <div className={`w-2 h-2 rounded-full mr-3 flex-shrink-0 bg-${service.color}-400`} />
+                              {feature}
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </motion.div>
           ) : (
             <div className="text-center py-12">
@@ -342,82 +377,104 @@ const Services = () => {
               Dedicated support for college students with affordable project packages and expert guidance
             </p>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {/* ML Projects */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Web Development */}
               <InteractiveCard glowColor="emerald" className="p-6">
                 <Code className="h-10 w-10 text-emerald-400 mb-4" />
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Machine Learning Projects</h3>
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Web Development</h3>
                 <ul className={`space-y-2 mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Predictive Analytics</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Image Classification</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Recommendation Engines</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Fraud Detection</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Full Stack Applications</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />React & Node.js Projects</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />E-commerce Websites</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />Portfolio Websites</li>
+                </ul>
+                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Duration: 1-3 weeks</span>
+              </InteractiveCard>
+
+              {/* AI/ML & GenAI */}
+              <InteractiveCard glowColor="purple" className="p-6">
+                <Brain className="h-10 w-10 text-purple-400 mb-4" />
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>AI/ML & GenAI</h3>
+                <ul className={`space-y-2 mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Machine Learning Models</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Generative AI Apps</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Chatbot Development</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Computer Vision</li>
                 </ul>
                 <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Duration: 2-4 weeks</span>
               </InteractiveCard>
 
-              {/* Data Analysis */}
-              <InteractiveCard glowColor="purple" className="p-6">
-                <Brain className="h-10 w-10 text-purple-400 mb-4" />
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Data Analysis Projects</h3>
+              {/* Data Science & Analysis */}
+              <InteractiveCard glowColor="blue" className="p-6">
+                <MessageCircle className="h-10 w-10 text-blue-400 mb-4" />
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Data Science & Analysis</h3>
                 <ul className={`space-y-2 mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Sales Forecasting</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Market Research</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Healthcare Analytics</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />Financial Risk Analysis</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />Data Visualization</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />Predictive Analytics</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />Business Intelligence</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />Statistical Analysis</li>
                 </ul>
                 <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Duration: 1-2 weeks</span>
               </InteractiveCard>
-
-              {/* AI & Deep Learning */}
-              <InteractiveCard glowColor="pink" className="p-6">
-                <MessageCircle className="h-10 w-10 text-pink-400 mb-4" />
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>AI & Deep Learning</h3>
-                <ul className={`space-y-2 mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-pink-400 rounded-full" />Computer Vision</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-pink-400 rounded-full" />NLP Applications</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-pink-400 rounded-full" />Chatbot Development</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-pink-400 rounded-full" />Speech Recognition</li>
-                </ul>
-                <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Duration: 3-6 weeks</span>
-              </InteractiveCard>
             </div>
 
-            {/* Resume Services */}
-            <InteractiveCard glowColor="indigo" className="p-8">
-              <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="flex-1">
-                  <FileText className="h-12 w-12 text-indigo-400 mb-4" />
-                  <h3 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>ATS-Friendly Resume Making</h3>
-                  <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Get your dream job with professionally crafted, ATS-optimized resumes that pass through automated screening systems.
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    {['ATS-Optimized Templates', 'Keyword Optimization', 'Professional Formatting', 'Multiple Formats (PDF, DOC)'].map((feature, idx) => (
-                      <div key={idx} className={`flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
+            {/* Register Button for Final Year Projects */}
+            <div className="text-center mt-8 mb-12">
+              <a
+                href="https://integer-io-projectportal.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:scale-105"
+              >
+                <Brain className="h-5 w-5" />
+                Register for Final Year Project
+              </a>
+            </div>
+
+            {/* ATS Resume + Portfolio in one line */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* ATS Resume */}
+              <InteractiveCard glowColor="indigo" className="p-6">
+                <div className="flex items-start gap-4">
+                  <FileText className="h-12 w-12 text-indigo-400 flex-shrink-0" />
+                  <div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>ATS-Friendly Resume</h3>
+                    <p className={`text-sm mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                      Get professional, ATS-optimized resumes that pass automated screening systems.
+                    </p>
+                    <a
+                      href="https://wa.me/918015355914?text=Hi, I need help with ATS-friendly resume making"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300"
+                    >
+                      Order Resume
+                    </a>
                   </div>
-                  <a
-                    href="https://wa.me/918015355914?text=Hi, I need help with ATS-friendly resume making"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg"
-                  >
-                    Order Resume
-                  </a>
                 </div>
-                <div className="w-48 h-64 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border-2 border-indigo-400/30">
-                  <div className="text-center">
-                    <FileText className="h-16 w-16 text-indigo-400 mx-auto mb-2" />
-                    <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>Resume</p>
-                    <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>ATS Optimized</p>
+              </InteractiveCard>
+
+              {/* Portfolio */}
+              <InteractiveCard glowColor="pink" className="p-6">
+                <div className="flex items-start gap-4">
+                  <Globe className="h-12 w-12 text-pink-400 flex-shrink-0" />
+                  <div>
+                    <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>Portfolio Website</h3>
+                    <p className={`text-sm mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                      Showcase your work with a stunning professional portfolio website.
+                    </p>
+                    <a
+                      href="https://wa.me/918015355914?text=Hi, I need help with creating a portfolio website"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300"
+                    >
+                      Get Portfolio
+                    </a>
                   </div>
                 </div>
-              </div>
-            </InteractiveCard>
+              </InteractiveCard>
+            </div>
           </motion.div>
         )}
 

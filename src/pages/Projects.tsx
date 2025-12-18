@@ -41,7 +41,7 @@ const portfolioProjects = [
     image: floqImg,
     link: 'https://demo.floqpumps.com/',
     category: 'Web Development',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'PHP'],
+    technologies: ['JavaScript', 'Bootstrap', 'react', 'tailwindcss'],
   },
   {
     id: 4,
@@ -61,14 +61,14 @@ const portfolioProjects = [
     image: busImg,
     link: 'https://www.busconsulting.in/',
     category: 'Web Development',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'PHP'],
+    technologies: ['HTML5', 'CSS3', 'JavaScript'],
   },
 ];
 
 // Import PDFs from assets/pdf
-import DataSciencePDF from '../assets/pdf/Data_Science_Projects.pdf';
-import AiMlPDF from '../assets/pdf/AI_ML_Projects.pdf';
-import WebDevPDF from '../assets/pdf/Web_Development_Projects.pdf';
+import DataSciencePDF from '../assets/pdf/Integer_IO_Data_Science_Single_Column_Project_Ideas.pdf';
+import AiMlPDF from '../assets/pdf/Integer_IO_AI_ML_Project_Ideas_Corrected.pdf';
+import WebDevPDF from '../assets/pdf/Integer_IO_Web_Development_Project_Ideas.pdf';
 
 const Projects = () => {
   const { isDark } = useTheme();

@@ -5,7 +5,6 @@ import {
   Phone,
   MapPin,
   Heart,
-  ExternalLink,
   Instagram,
   Linkedin,
   ArrowRight,
@@ -74,14 +73,14 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="col-span-2 lg:col-span-1"
           >
-            <div className="flex items-center space-x-2 mb-3">
-              <img src={logo} alt="Logo" className="h-8 w-8 object-contain" />
-              <span className="text-lg font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+            <div className="flex items-center space-x-3 mb-4">
+              <img src={logo} alt="Logo" className="h-10 w-10 object-contain" />
+              <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
                 Integer.IO
               </span>
             </div>
             <p
-              className={`mb-3 text-xs leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
+              className={`mb-4 text-base leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
                 }`}
             >
               Empowering Tamil Nadu's future through smart web & AI solutions.
@@ -97,7 +96,7 @@ const Footer: React.FC = () => {
                 <Phone className="h-4 w-4" />
               </a>
               <a
-                href="mailto:Integer.IO.ai@gmail.com"
+                href="mailto:integer.io.ai@gmail.com"
                 className={`p-1.5 rounded-lg transition-colors border ${isDark
                   ? 'text-gray-200 border-white/10 hover:text-purple-400'
                   : 'text-gray-600 border-gray-200 hover:text-purple-600'
@@ -137,7 +136,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <h3
-              className={`text-sm font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-base font-semibold tracking-wide mb-3 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Quick Links
@@ -147,12 +146,12 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-xs transition-all flex items-center ${isDark
+                    className={`text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
                   >
-                    <ArrowRight className={`h-2.5 w-2.5 mr-1 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                    <ArrowRight className={`h-3 w-3 mr-1.5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
                     {link.name}
                   </Link>
                 </li>
@@ -160,7 +159,7 @@ const Footer: React.FC = () => {
             </ul>
 
             <h4
-              className={`text-xs font-bold mt-3 mb-1.5 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-sm font-bold mt-4 mb-2 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Legal
@@ -170,12 +169,12 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-xs transition-all flex items-center ${isDark
+                    className={`text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
                   >
-                    <ArrowRight className={`h-2.5 w-2.5 mr-1 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                    <ArrowRight className={`h-3 w-3 mr-1.5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
                     {link.name}
                   </Link>
                 </li>
@@ -200,12 +199,12 @@ const Footer: React.FC = () => {
                 <li key={service.key}>
                   <Link
                     to={`/services?service=${service.key}`}
-                    className={`text-xs transition-all flex items-center ${isDark
+                    className={`text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
                   >
-                    <ArrowRight className={`h-2.5 w-2.5 mr-1 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                    <ArrowRight className={`h-3 w-3 mr-1.5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
                     {service.name}
                   </Link>
                 </li>
@@ -229,22 +228,22 @@ const Footer: React.FC = () => {
                 >
                   Contact Info
                 </h3>
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <Phone className={`h-3 w-3 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                    <a href="tel:8015355914" className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <Phone className={`h-4 w-4 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                    <a href="tel:8015355914" className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       +91 8015355914
                     </a>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Mail className={`h-3 w-3 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-                    <a href="mailto:integer.io.ai@gmail.com" className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <Mail className={`h-4 w-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                    <a href="mailto:integer.io.ai@gmail.com" className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       integer.io.ai@gmail.com
                     </a>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <MapPin className={`h-3 w-3 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                    <span className={`text-xs ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <MapPin className={`h-4 w-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                    <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       Tamil Nadu, India
                     </span>
                   </div>
@@ -256,10 +255,10 @@ const Footer: React.FC = () => {
                 <h4 className={`text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Business Hours
                 </h4>
-                <div className={`text-xs space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className={`text-sm space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>Mon-Sat: 9AM - 8PM</p>
                   <p>Sunday: 10AM - 6PM</p>
-                  <p className="text-emerald-400 text-[10px]">24/7 WhatsApp Support</p>
+                  <p className="text-emerald-400 text-xs">24/7 WhatsApp Support</p>
                 </div>
               </div>
             </div>
@@ -281,7 +280,12 @@ const Footer: React.FC = () => {
             >
               © 2024 Integer.IO Services. Crafted with{' '}
               <Heart className="h-4 w-4 text-red-500 mx-1 animate-pulse" /> by
-              MS Kawin
+              <Link
+                to="/admin"
+                className={`ml-1 hover:text-emerald-400 transition-colors ${isDark ? 'text-gray-200' : 'text-gray-600'}`}
+              >
+                MS Kawin
+              </Link>
             </p>
             <div className="flex items-center space-x-2">
               <motion.div

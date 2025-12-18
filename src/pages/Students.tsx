@@ -139,17 +139,15 @@ const Students = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${
-            isDark 
+          <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
               ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
               : 'text-gray-900'
-          }`}>
+            }`}>
             Final-Year Student Corner
           </h1>
           <p
-            className={`text-xl max-w-3xl mx-auto font-medium ${
-              isDark ? 'text-gray-200' : 'text-gray-800'
-            }`}
+            className={`text-xl max-w-3xl mx-auto font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'
+              }`}
           >
             Dedicated support for college students with affordable project
             packages, complete documentation, and expert guidance
@@ -204,11 +202,10 @@ const Students = () => {
               <div
                 className={`
                 relative p-8 rounded-2xl backdrop-blur-lg border transition-all duration-500 h-full
-                ${
-                  isDark
+                ${isDark
                     ? 'bg-gray-900/70 border-gray-700/50 hover:bg-gray-800/80'
                     : 'bg-white/90 border-gray-300/50 hover:bg-white/95'
-                }
+                  }
                 hover:shadow-2xl hover:shadow-${pkg.color}-500/20
                 transform-gpu will-change-transform
               `}
@@ -230,9 +227,8 @@ const Students = () => {
                     {pkg.icon}
                   </motion.div>
                   <h3
-                    className={`text-2xl font-bold mb-4 ${
-                      isDark ? 'text-white' : 'text-gray-800'
-                    }`}
+                    className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
+                      }`}
                   >
                     {pkg.title}
                   </h3>
@@ -240,9 +236,8 @@ const Students = () => {
                     {pkg.projects.map((project, idx) => (
                       <motion.li
                         key={idx}
-                        className={`flex items-center ${
-                          isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
+                        className={`flex items-center ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
                         initial={{ opacity: 0, x: -10 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ delay: idx * 0.1 }}
@@ -256,9 +251,8 @@ const Students = () => {
                   </ul>
                   <div className="flex justify-between items-center">
                     <div
-                      className={`text-sm ${
-                        isDark ? 'text-gray-400' : 'text-gray-500'
-                      }`}
+                      className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'
+                        }`}
                     >
                       Duration: {pkg.duration}
                     </div>
@@ -285,16 +279,14 @@ const Students = () => {
               <div>
                 <FileText className="h-16 w-16 text-indigo-400 mb-6" />
                 <h3
-                  className={`text-3xl font-bold mb-4 ${
-                    isDark ? 'text-white' : 'text-gray-800'
-                  }`}
+                  className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
+                    }`}
                 >
                   ATS-Friendly Resume Making
                 </h3>
                 <p
-                  className={`mb-6 leading-relaxed ${
-                    isDark ? 'text-gray-200' : 'text-gray-700'
-                  }`}
+                  className={`mb-6 leading-relaxed ${isDark ? 'text-gray-200' : 'text-gray-700'
+                    }`}
                 >
                   Get your dream job with professionally crafted, ATS-optimized
                   resumes that pass through automated screening systems and
@@ -304,9 +296,8 @@ const Students = () => {
                   {resumeFeatures.map((feature, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-center ${
-                        isDark ? 'text-gray-200' : 'text-gray-700'
-                      }`}
+                      className={`flex items-center ${isDark ? 'text-gray-200' : 'text-gray-700'
+                        }`}
                     >
                       <div className="w-2 h-2 bg-indigo-400 rounded-full mr-3" />
                       {feature}
@@ -341,16 +332,14 @@ const Students = () => {
                   <div className="text-center">
                     <FileText className="h-24 w-24 text-indigo-400 mx-auto mb-4" />
                     <p
-                      className={`text-lg font-semibold ${
-                        isDark ? 'text-white' : 'text-gray-800'
-                      }`}
+                      className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'
+                        }`}
                     >
                       Professional Resume
                     </p>
                     <p
-                      className={`text-sm ${
-                        isDark ? 'text-gray-300' : 'text-gray-600'
-                      }`}
+                      className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                        }`}
                     >
                       ATS Optimized
                     </p>
@@ -383,16 +372,14 @@ const Students = () => {
                 <InteractiveCard glowColor="emerald">
                   <div className="text-emerald-400 mb-4">{feature.icon}</div>
                   <h3
-                    className={`text-lg font-semibold mb-2 ${
-                      isDark ? 'text-white' : 'text-gray-800'
-                    }`}
+                    className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'
+                      }`}
                   >
                     {feature.title}
                   </h3>
                   <p
-                    className={`text-sm ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     {feature.description}
                   </p>
@@ -417,9 +404,8 @@ const Students = () => {
             <InteractiveCard glowColor="emerald" className="p-8">
               <GraduationCap className="h-16 w-16 text-emerald-400 mb-6" />
               <h3
-                className={`text-2xl font-bold mb-4 ${
-                  isDark ? 'text-white' : 'text-gray-800'
-                }`}
+                className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
+                  }`}
               >
                 Group Project Discount
               </h3>
@@ -430,9 +416,8 @@ const Students = () => {
                 members
               </p>
               <ul
-                className={`space-y-2 mb-6 ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}
+                className={`space-y-2 mb-6 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                  }`}
               >
                 <li>• Individual project support for each member</li>
                 <li>• Collaborative documentation</li>
@@ -446,9 +431,8 @@ const Students = () => {
             <InteractiveCard glowColor="purple" className="p-8">
               <Award className="h-16 w-16 text-purple-400 mb-6" />
               <h3
-                className={`text-2xl font-bold mb-4 ${
-                  isDark ? 'text-white' : 'text-gray-800'
-                }`}
+                className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
+                  }`}
               >
                 Early Bird Special
               </h3>
@@ -459,9 +443,8 @@ const Students = () => {
                 pricing
               </p>
               <ul
-                className={`space-y-2 mb-6 ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}
+                className={`space-y-2 mb-6 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                  }`}
               >
                 <li>• Extended development time</li>
                 <li>• Multiple revision rounds</li>
@@ -486,9 +469,8 @@ const Students = () => {
               Ready to Excel in Your Final Year?
             </h2>
             <p
-              className={`text-xl mb-8 ${
-                isDark ? 'text-gray-200' : 'text-gray-700'
-              }`}
+              className={`text-xl mb-8 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                }`}
             >
               Contact us today for free guidance and get started on your dream
               project.
@@ -518,11 +500,10 @@ const Students = () => {
           className="mt-16"
         >
           <div
-            className={`p-8 rounded-xl border-2 border-dashed ${
-              isDark
+            className={`p-8 rounded-xl border-2 border-dashed ${isDark
                 ? 'border-blue-400/30 bg-blue-400/5'
                 : 'border-blue-500/30 bg-blue-500/5'
-            }`}
+              }`}
           >
             <div className="text-center">
               <div className="flex justify-center items-center space-x-3 mb-4">
@@ -553,9 +534,8 @@ const Students = () => {
                 </motion.div>
               </div>
               <p
-                className={`text-lg mb-6 ${
-                  isDark ? 'text-gray-200' : 'text-gray-700'
-                }`}
+                className={`text-lg mb-6 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                  }`}
               >
                 "Education is the most powerful weapon which you can use to
                 change the world." We're here to arm you with the best projects
@@ -574,9 +554,8 @@ const Students = () => {
                     📚
                   </motion.span>
                   <span
-                    className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}
+                    className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}
                   >
                     Learn
                   </span>
@@ -589,9 +568,8 @@ const Students = () => {
                     💡
                   </motion.span>
                   <span
-                    className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}
+                    className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}
                   >
                     Create
                   </span>
@@ -604,9 +582,8 @@ const Students = () => {
                     🏆
                   </motion.span>
                   <span
-                    className={`text-sm ${
-                      isDark ? 'text-gray-300' : 'text-gray-600'
-                    }`}
+                    className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                      }`}
                   >
                     Succeed
                   </span>

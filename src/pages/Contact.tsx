@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Mail,
@@ -16,48 +16,110 @@ import {
 } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
+import ReviewFormModal from '../components/ReviewFormModal';
 
 const Contact = () => {
   const { isDark } = useTheme();
+  const [showReviewForm, setShowReviewForm] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
-    service: '',
+    service: [] as string[], // Changed to array for multi-select
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [validationError, setValidationError] = useState('');
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+
+  // Auto-scroll to form if hash is present
+  useEffect(() => {
+    if (window.location.hash === '#contact-form') {
+      setTimeout(() => {
+        document.getElementById('contact-form')?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 100);
+    }
+  }, []);
+
+  // Validation function
+  const validateForm = (): boolean => {
+    setValidationError('');
+
+    // Name validation (text only)
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!nameRegex.test(formData.name.trim())) {
+      setValidationError('Name must contain only letters and spaces');
+      return false;
+    }
+
+    // Phone validation (exactly 10 digits)
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(formData.phone.trim())) {
+      setValidationError('Phone number must be exactly 10 digits');
+      return false;
+    }
+
+    // Service validation (at least one selected)
+    if (formData.service.length === 0) {
+      setValidationError('Please select at least one service');
+      return false;
+    }
+
+    // Message validation (min 25 characters)
+    if (formData.message.trim().length < 25) {
+      setValidationError('Message must be at least 25 characters long');
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate form
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
+    setValidationError('');
 
-    // Simulate form submission
-    setTimeout(() => {
-      const subject = `Service Inquiry: ${formData.service}`;
-      const body = `Name: ${formData.name}%0D%0APhone: ${formData.phone}%0D%0AEmail: ${formData.email}%0D%0AService: ${formData.service}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+    try {
+      // Submit to database
+      const { submitContactForm } = await import('../lib/supabase');
+      const success = await submitContactForm({
+        ...formData,
+        service: formData.service.join(', ') // Convert array to string
+      });
 
-      // Open email client
-      window.open(
-        `mailto:Integer.IO.ai@gmail.com?subject=${subject}&body=${body}`
-      );
+      if (success) {
+        setIsSubmitted(true);
 
+        // Reset form after 3 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({
+            name: '',
+            phone: '',
+            email: '',
+            service: [],
+            message: '',
+          });
+        }, 3000);
+      } else {
+        setValidationError('Failed to submit enquiry. Please try again.');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setValidationError('An error occurred. Please try again later.');
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-
-      // Reset form after 3 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({
-          name: '',
-          phone: '',
-          email: '',
-          service: '',
-          message: '',
-        });
-      }, 3000);
-    }, 1000);
+    }
   };
 
   const handleChange = (
@@ -71,57 +133,28 @@ const Contact = () => {
     });
   };
 
-  const teamContacts = [
-    {
-      role: 'CEO',
-      name: 'Kawin M.S.',
-      phone: '+91 8015355914',
-      email: 'integeriokawin@gmail.com',
-      color: 'emerald',
-      linkedin: 'https://www.linkedin.com/in/kawin-m-s-570961285/',
-    },
-    {
-      role: 'Creative Director',
-      name: 'Livan',
-      phone: '+91 6385243064',
-      email: 'integeriolivan@gmail.com',
-      color: 'indigo',
-      linkedin: 'https://linkedin.com/in/livan',
-    },
+  // Handle service checkbox toggle
+  const handleServiceToggle = (service: string) => {
+    setFormData(prev => ({
+      ...prev,
+      service: prev.service.includes(service)
+        ? prev.service.filter(s => s !== service)
+        : [...prev.service, service]
+    }));
+  };
+
+  const services = [
+    'Web Development',
+    'AI Integration Projects',
+    'AI Apps & Integration (Chatbot)',
+    'Final Year Projects',
+    'Digital Marketing',
+    'Video/Logo Designing',
+    'Portfolio (Students/Employees)',
+    'Billing Software',
+    'Mobile App Development',
+    'Data Analytics'
   ];
-
-  const getColorClasses = (color: string) => {
-    const colorMap = {
-      emerald: 'text-emerald-400 hover:text-emerald-400 hover:bg-emerald-400/10',
-      purple: 'text-purple-400 hover:text-purple-400 hover:bg-purple-400/10',
-      blue: 'text-blue-400 hover:text-blue-400 hover:bg-blue-400/10',
-      pink: 'text-pink-400 hover:text-pink-400 hover:bg-pink-400/10',
-      indigo: 'text-indigo-400 hover:text-indigo-400 hover:bg-indigo-400/10',
-    };
-    return colorMap[color as keyof typeof colorMap] || 'text-emerald-400 hover:text-emerald-400 hover:bg-emerald-400/10';
-  };
-
-  const getGlowClasses = (color: string) => {
-    const glowMap = {
-      emerald: 'hover:shadow-emerald-500/20',
-      purple: 'hover:shadow-purple-500/20',
-      blue: 'hover:shadow-blue-500/20',
-      pink: 'hover:shadow-pink-500/20',
-      indigo: 'hover:shadow-indigo-500/20',
-    };
-    return glowMap[color as keyof typeof glowMap] || 'hover:shadow-emerald-500/20';
-  };
-
-  const getGradientClasses = (color: string) => {
-    const gradientMap = {
-      emerald: 'from-emerald-500/10 via-transparent to-emerald-500/10',
-      purple: 'from-purple-500/10 via-transparent to-purple-500/10',
-      blue: 'from-blue-500/10 via-transparent to-blue-500/10',
-      pink: 'from-pink-500/10 via-transparent to-pink-500/10',
-      indigo: 'from-indigo-500/10 via-transparent to-indigo-500/10',
-    };
-    return gradientMap[color as keyof typeof gradientMap] || 'from-emerald-500/10 via-transparent to-emerald-500/10';
-  };
 
   return (
     <div className="relative min-h-screen pt-20">
@@ -280,7 +313,7 @@ const Contact = () => {
                       </p>
                       <p className="text-teal-400 flex items-center">
                         <Users className="h-4 w-4 mr-2" />
-                        Offline Clients: Madurai, Coimbatore, Chennai, Bangalore
+                        Offline Clients: Madurai, Coimbatore, Chennai
                       </p>
                     </div>
                   </div>
@@ -321,7 +354,7 @@ const Contact = () => {
                     className={`text-xl font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'
                       }`}
                   >
-                    Message Sent Successfully!
+                    Enquiry Submitted Successfully!
                   </h3>
                   <p
                     className={`${isDark ? 'text-gray-200' : 'text-gray-700'}`}
@@ -330,233 +363,239 @@ const Contact = () => {
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                    >
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
-                        ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
-                        : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
-                        }`}
-                      placeholder="Enter your full name"
-                    />
-                  </div>
+                <>
+                  {validationError && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg">
+                      <p className="text-red-500 text-sm">{validationError}</p>
+                    </div>
+                  )}
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
+                      >
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
+                          ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
+                          : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
+                          }`}
+                        placeholder="Enter your full name"
+                      />
+                    </div>
 
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                    >
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
-                        ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
-                        : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
-                        }`}
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
+                    <div>
+                      <label
+                        htmlFor="phone"
+                        className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
+                      >
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
+                          ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
+                          : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
+                          }`}
+                        placeholder="Enter your phone number"
+                      />
+                    </div>
 
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                    >
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
-                        ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
-                        : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
-                        }`}
-                      placeholder="Enter your email address"
-                    />
-                  </div>
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
+                      >
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
+                          ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
+                          : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
+                          }`}
+                        placeholder="Enter your email address"
+                      />
+                    </div>
 
-                  <div>
-                    <label
-                      htmlFor="service"
-                      className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                    >
-                      Service Interested In *
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      required
-                      value={formData.service}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                        }`}
-                    >
-                      <option value="">Select a service</option>
-                      <option value="Web Development">Web Development</option>
-                      <option value="Logo & Poster Design">Logo & Poster Design</option>
-                      <option value="AI & ML Projects">AI & ML Projects</option>
-                      <option value="Data Analytics">Data Analytics</option>
-                      <option value="Business Automation">Business Automation</option>
-                      <option value="Digital Marketing">Digital Marketing</option>
-                    </select>
-                  </div>
+                    <div>
+                      <label
+                        className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
+                      >
+                        Services Interested In * ({formData.service.length} selected)
+                      </label>
+                      <div className="relative">
+                        {/* Selected Services Display */}
+                        <div
+                          onClick={() => setShowServiceDropdown(!showServiceDropdown)}
+                          className={`w-full min-h-[48px] px-3 py-2 border rounded-lg cursor-pointer focus:outline-none focus:border-emerald-500 transition-colors ${isDark
+                            ? 'bg-gray-800 border-gray-600'
+                            : 'bg-white border-gray-300'
+                            }`}
+                        >
+                          {formData.service.length === 0 ? (
+                            <div className={`py-1.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                              Select services
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-2">
+                              {formData.service.map((service) => (
+                                <span
+                                  key={service}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white text-sm rounded-full font-medium"
+                                >
+                                  {service}
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleServiceToggle(service);
+                                    }}
+                                    className="flex items-center justify-center w-4 h-4 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                                  >
+                                    <svg
+                                      className="w-3 h-3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
 
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
-                        }`}
-                    >
-                      Message *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors resize-none ${isDark
-                        ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
-                        : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
-                        }`}
-                      placeholder="Tell us about your project requirements..."
-                    />
-                  </div>
+                        {/* Dropdown Menu */}
+                        {showServiceDropdown && (
+                          <div
+                            className={`absolute z-10 w-full mt-2 rounded-lg shadow-lg border max-h-64 overflow-y-auto ${isDark
+                              ? 'bg-gray-800 border-gray-600'
+                              : 'bg-white border-gray-300'
+                              }`}
+                          >
+                            {services.map((service) => (
+                              <label
+                                key={service}
+                                className={`flex items-center px-4 py-3 cursor-pointer hover:bg-opacity-10 transition-colors ${isDark
+                                  ? 'hover:bg-white'
+                                  : 'hover:bg-gray-900'
+                                  }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={formData.service.includes(service)}
+                                  onChange={() => handleServiceToggle(service)}
+                                  className="w-4 h-4 text-emerald-500 border-gray-300 rounded focus:ring-emerald-500"
+                                />
+                                <span className={`ml-3 text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                                  {service}
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center group shadow-lg btn-hover-effect hover:scale-105"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        Send Message
-                        <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </button>
+                    <div>
+                      <label
+                        htmlFor="message"
+                        className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                          }`}
+                      >
+                        Message *
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        required
+                        rows={4}
+                        value={formData.message}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors resize-none ${isDark
+                          ? 'bg-gray-800 border-gray-600 text-white placeholder-gray-400'
+                          : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'
+                          }`}
+                        placeholder="Tell us about your project requirements..."
+                      />
+                    </div>
 
-                  {/* Quick Action Buttons - 3 in one row */}
-                  <div className="mt-4 flex gap-2">
-                    <a
-                      href="/about#client-reviews"
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center group shadow-lg btn-hover-effect hover:scale-105"
                     >
-                      <Star className="h-4 w-4" />
-                      Review
-                    </a>
-                    <a
-                      href="tel:8015355914"
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
-                    >
-                      <Phone className="h-4 w-4" />
-                      Call
-                    </a>
-                    <a
-                      href="https://wa.me/918015355914"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
-                    >
-                      <MessageCircle className="h-4 w-4" />
-                      WhatsApp
-                    </a>
-                  </div>
-                </form>
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          Submit Enquiry
+                          <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </>
+                      )}
+                    </button>
+
+                    {/* Quick Action Buttons - 3 in one row */}
+                    <div className="mt-4 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowReviewForm(true)}
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
+                      >
+                        <Star className="h-4 w-4" />
+                        Add Review
+                      </button>
+                      <a
+                        href="tel:8015355914"
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
+                      >
+                        <Phone className="h-4 w-4" />
+                        Call
+                      </a>
+                      <a
+                        href="https://wa.me/918015355914"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-3 py-3 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        WhatsApp
+                      </a>
+                    </div>
+                  </form>
+                </>
               )}
             </InteractiveCard>
           </motion.div>
         </div>
-
-        {/* Contact Our Team - Moved below form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mt-16 mb-16"
-        >
-          <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
-            Contact Our Team
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {teamContacts.map((contact, index) => (
-              <motion.div
-                key={`team-bottom-${contact.role}`}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group"
-              >
-                <InteractiveCard glowColor={contact.color as 'emerald' | 'purple'} className="p-6 text-center h-full">
-                  <h3 className={`text-lg font-bold mb-2 ${getColorClasses(contact.color).split(' ')[0]}`}>
-                    {contact.role}
-                  </h3>
-                  <h4 className={`text-md font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                    {contact.name}
-                  </h4>
-                  <div className="space-y-2">
-                    <a
-                      href={`tel:${contact.phone.replace(/\s/g, '')}`}
-                      className={`block text-sm transition-colors ${isDark ? 'text-gray-200' : 'text-gray-700'} ${getColorClasses(contact.color)}`}
-                    >
-                      {contact.phone}
-                    </a>
-                    <a
-                      href={`mailto:${contact.email}`}
-                      className={`block text-sm transition-colors break-words ${isDark ? 'text-gray-200' : 'text-gray-700'} ${getColorClasses(contact.color)}`}
-                    >
-                      {contact.email}
-                    </a>
-                    <div className="flex justify-center mt-4 pt-3 border-t border-gray-200/20">
-                      <a
-                        href={contact.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-2 rounded-lg transition-colors hover:bg-blue-500/20 hover:text-blue-400 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-                      >
-                        <Linkedin className="h-5 w-5" />
-                      </a>
-                    </div>
-                  </div>
-                </InteractiveCard>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* Business Hours */}
         <motion.div
@@ -602,6 +641,11 @@ const Contact = () => {
           </InteractiveCard>
         </motion.div>
 
+        {/* Review Form Modal */}
+        <ReviewFormModal
+          isOpen={showReviewForm}
+          onClose={() => setShowReviewForm(false)}
+        />
 
       </div>
     </div>

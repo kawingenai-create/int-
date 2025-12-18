@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, XCircle, X } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface StatusPopupProps {
@@ -12,34 +12,41 @@ interface StatusPopupProps {
 const StatusPopup: React.FC<StatusPopupProps> = ({ message, type, onClose }) => {
   const { isDark } = useTheme();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, 4000); // Auto-close after 4 seconds
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  const popupClasses = type === 'success'
-    ? 'bg-emerald-600'
-    : 'bg-red-600';
-
   return (
-    <motion.div
-      initial={{ y: -50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: -50, opacity: 0 }}
-      className={`fixed top-5 left-1/2 -translate-x-1/2 p-4 rounded-lg shadow-xl text-white z-[100] flex items-center space-x-3 ${popupClasses}`}
-    >
-      {type === 'success' ? (
-        <CheckCircle className="h-6 w-6" />
-      ) : (
-        <XCircle className="h-6 w-6" />
-      )}
-      <p className="text-sm font-medium">{message}</p>
-      <button onClick={onClose} className="p-1 rounded-full hover:bg-white/20 transition-colors">
-        <X className="h-4 w-4" />
-      </button>
-    </motion.div>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        className={`${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+          } border rounded-xl shadow-2xl p-6 sm:p-8 text-center max-w-sm w-full`}
+      >
+        <div className={`w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center ${type === 'success'
+            ? 'bg-emerald-500/20'
+            : 'bg-red-500/20'
+          }`}>
+          {type === 'success' ? (
+            <CheckCircle className="h-8 w-8 text-emerald-500" />
+          ) : (
+            <XCircle className="h-8 w-8 text-red-500" />
+          )}
+        </div>
+
+        <p className={`text-lg font-medium mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+          {message}
+        </p>
+
+        <button
+          onClick={onClose}
+          className={`w-full py-3 rounded-lg font-semibold transition-all ${type === 'success'
+              ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
+              : 'bg-red-500 hover:bg-red-600 text-white'
+            }`}
+        >
+          OK
+        </button>
+      </motion.div>
+    </div>
   );
 };
 

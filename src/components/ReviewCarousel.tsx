@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Star,
-  Plus,
   X,
   ChevronLeft,
   ChevronRight,
@@ -110,17 +109,30 @@ const ReviewCarousel: React.FC = () => {
   ];
 
   useEffect(() => {
-    const savedReviews = localStorage.getItem('reviews');
-    if (savedReviews) {
+    const fetchReviews = async () => {
       try {
-        const parsedReviews = JSON.parse(savedReviews);
-        setReviews([...initialReviews, ...parsedReviews]);
-      } catch {
+        const { getApprovedReviews } = await import('../lib/supabase');
+        const approvedData = await getApprovedReviews();
+
+        const dbReviews: Review[] = approvedData.map((r: any) => ({
+          id: r.id,
+          name: r.name,
+          company: r.company,
+          service: r.services,
+          rating: r.rating,
+          review: r.review,
+          image: r.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}`,
+          email: r.email,
+        }));
+
+        setReviews([...initialReviews, ...dbReviews]);
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
         setReviews(initialReviews);
       }
-    } else {
-      setReviews(initialReviews);
-    }
+    };
+
+    fetchReviews();
   }, []);
 
   useEffect(() => {
@@ -210,19 +222,6 @@ const ReviewCarousel: React.FC = () => {
       )
     );
 
-    const subject = 'New Review Submitted - Integer.IO Services';
-    const body = `New Review Details:%0D%0A%0D%0AName: ${
-      formData.name
-    }%0D%0ACompany: ${formData.company}%0D%0AEmail: ${
-      formData.email
-    }%0D%0APhone: ${formData.phone}%0D%0ARating: ${
-      formData.rating
-    } stars%0D%0AServices: ${formData.services.join(
-      ', '
-    )}%0D%0A%0D%0AReview:%0D%0A${formData.description}`;
-    window.open(
-      `mailto:integer.ai.io@gmail.com?subject=${subject}&body=${body}`
-    );
 
     setPopupMessage(
       'Thank you for your review! It has been added to the carousel.'
@@ -270,11 +269,10 @@ const ReviewCarousel: React.FC = () => {
       <div className="flex justify-center items-center mb-6">
         <button
           onClick={() => setIsAutoPlay(!isAutoPlay)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-            isDark
-              ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-          }`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${isDark
+            ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
+            : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+            }`}
         >
           {isAutoPlay ? (
             <Pause className="h-4 w-4" />
@@ -298,9 +296,8 @@ const ReviewCarousel: React.FC = () => {
               return (
                 <motion.div
                   key={`${review.id}-${position}`}
-                  className={`absolute w-full max-w-2xl h-[250px] sm:h-80 ${
-                    !isCenter ? 'hidden sm:block' : ''
-                  }`}
+                  className={`absolute w-full max-w-2xl h-[250px] sm:h-80 ${!isCenter ? 'hidden sm:block' : ''
+                    }`}
                   variants={
                     window.innerWidth < 640 ? mobileCardVariants : cardVariants
                   }
@@ -310,21 +307,11 @@ const ReviewCarousel: React.FC = () => {
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                 >
                   <div
-                    className={`h-full rounded-2xl backdrop-blur-lg border transition-all duration-500 relative ${
-                      isDark
-                        ? 'bg-gray-900/90 border-gray-700/50'
-                        : 'bg-white/95 border-gray-300/50'
-                    } shadow-2xl`}
+                    className={`h-full rounded-2xl backdrop-blur-lg border transition-all duration-500 relative ${isDark
+                      ? 'bg-gray-900/90 border-gray-700/50'
+                      : 'bg-white/95 border-gray-300/50'
+                      } shadow-2xl`}
                   >
-                    {isCenter && isUserReview && (
-                      <button
-                        onClick={() => setShowDeleteConfirm(review.id)}
-                        className="absolute top-4 right-4 p-2 rounded-full bg-red-500 hover:bg-red-600 text-white transition-colors z-20"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    )}
-
                     <div className="flex flex-col h-full justify-between p-4 sm:p-6">
                       <div className="flex items-center mb-4">
                         <img
@@ -334,9 +321,8 @@ const ReviewCarousel: React.FC = () => {
                         />
                         <div className="flex-1 min-w-0">
                           <h3
-                            className={`text-base sm:text-xl font-bold truncate ${
-                              isDark ? 'text-white' : 'text-gray-800'
-                            }`}
+                            className={`text-base sm:text-xl font-bold truncate ${isDark ? 'text-white' : 'text-gray-800'
+                              }`}
                           >
                             {review.name}
                           </h3>
@@ -346,9 +332,8 @@ const ReviewCarousel: React.FC = () => {
                             </p>
                           )}
                           <p
-                            className={`text-xs sm:text-sm ${
-                              isDark ? 'text-gray-300' : 'text-gray-600'
-                            }`}
+                            className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'
+                              }`}
                           >
                             Service:{' '}
                             <span className="font-medium text-blue-400">
@@ -362,20 +347,18 @@ const ReviewCarousel: React.FC = () => {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 sm:h-5 sm:w-5 mr-1 ${
-                              i < review.rating
-                                ? 'text-yellow-400 fill-current'
-                                : 'text-gray-300'
-                            }`}
+                            className={`h-4 w-4 sm:h-5 sm:w-5 mr-1 ${i < review.rating
+                              ? 'text-yellow-400 fill-current'
+                              : 'text-gray-300'
+                              }`}
                           />
                         ))}
                       </div>
 
                       <div className="flex-1 overflow-y-auto">
                         <p
-                          className={`text-sm sm:text-base leading-relaxed ${
-                            isDark ? 'text-gray-200' : 'text-gray-700'
-                          }`}
+                          className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-gray-200' : 'text-gray-700'
+                            }`}
                         >
                           "{review.review}"
                         </p>
@@ -391,11 +374,10 @@ const ReviewCarousel: React.FC = () => {
       <div className="flex justify-center items-center space-x-4 mt-8">
         <button
           onClick={handlePrevious}
-          className={`p-2 sm:p-3 rounded-full transition-colors shadow-lg ${
-            isDark
-              ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-          }`}
+          className={`p-2 sm:p-3 rounded-full transition-colors shadow-lg ${isDark
+            ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
+            : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+            }`}
         >
           <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
@@ -405,36 +387,24 @@ const ReviewCarousel: React.FC = () => {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
-                index === currentIndex
-                  ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 w-6'
-                  : isDark
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${index === currentIndex
+                ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 w-6'
+                : isDark
                   ? 'bg-gray-600'
                   : 'bg-gray-300'
-              }`}
+                }`}
             />
           ))}
         </div>
 
         <button
           onClick={handleNext}
-          className={`p-2 sm:p-3 rounded-full transition-colors shadow-lg ${
-            isDark
-              ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-          }`}
+          className={`p-2 sm:p-3 rounded-full transition-colors shadow-lg ${isDark
+            ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
+            : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+            }`}
         >
           <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-        </button>
-      </div>
-
-      <div className="text-center mt-8">
-        <button
-          onClick={() => setShowReviewForm(true)}
-          className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium shadow-lg flex items-center mx-auto"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Give Review
         </button>
       </div>
 
@@ -446,27 +416,24 @@ const ReviewCarousel: React.FC = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`w-full max-w-sm rounded-xl shadow-2xl p-4 sm:p-6 ${
-              isDark
-                ? 'bg-gray-900 border border-gray-700'
-                : 'bg-white border border-gray-200'
-            }`}
+            className={`w-full max-w-sm rounded-xl shadow-2xl p-4 sm:p-6 ${isDark
+              ? 'bg-gray-900 border border-gray-700'
+              : 'bg-white border border-gray-200'
+              }`}
           >
             <div className="text-center">
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
                 <Trash2 className="h-6 w-6 text-red-600" />
               </div>
               <h3
-                className={`text-lg font-medium mb-2 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}
+                className={`text-lg font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+                  }`}
               >
                 Delete Review
               </h3>
               <p
-                className={`text-sm mb-6 ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                }`}
+                className={`text-sm mb-6 ${isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}
               >
                 Are you sure you want to delete this review? This action cannot
                 be undone.
@@ -474,11 +441,10 @@ const ReviewCarousel: React.FC = () => {
               <div className="flex space-x-3">
                 <button
                   onClick={() => setShowDeleteConfirm(null)}
-                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium ${
-                    isDark
-                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                  }`}
+                  className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium ${isDark
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                    }`}
                 >
                   Cancel
                 </button>
@@ -502,18 +468,16 @@ const ReviewCarousel: React.FC = () => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className={`w-full max-w-sm sm:max-w-md max-h-[80vh] overflow-y-auto rounded-xl shadow-2xl ${
-              isDark
-                ? 'bg-gray-900 border border-gray-700'
-                : 'bg-white border border-gray-200'
-            }`}
+            className={`w-full max-w-sm sm:max-w-md max-h-[80vh] overflow-y-auto rounded-xl shadow-2xl ${isDark
+              ? 'bg-gray-900 border border-gray-700'
+              : 'bg-white border border-gray-200'
+              }`}
           >
             <div className="p-4 sm:p-6">
               <div className="flex justify-between items-center mb-4">
                 <h2
-                  className={`text-lg sm:text-xl font-bold ${
-                    isDark ? 'text-white' : 'text-gray-800'
-                  }`}
+                  className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-gray-800'
+                    }`}
                 >
                   Give Your Review
                 </h2>
@@ -525,9 +489,8 @@ const ReviewCarousel: React.FC = () => {
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Full Name *
                   </label>
@@ -538,20 +501,18 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="Enter your full name"
                   />
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Company (Optional)
                   </label>
@@ -561,20 +522,18 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, company: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="Enter your company name"
                   />
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Email Address *
                   </label>
@@ -585,20 +544,18 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="Enter your email address"
                   />
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Phone Number *
                   </label>
@@ -609,20 +566,18 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="Enter your phone number"
                   />
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Rating *
                   </label>
@@ -636,11 +591,10 @@ const ReviewCarousel: React.FC = () => {
                         }
                       >
                         <Star
-                          className={`h-6 w-6 ${
-                            star <= formData.rating
-                              ? 'text-yellow-400 fill-current'
-                              : 'text-gray-300'
-                          }`}
+                          className={`h-6 w-6 ${star <= formData.rating
+                            ? 'text-yellow-400 fill-current'
+                            : 'text-gray-300'
+                            }`}
                         />
                       </button>
                     ))}
@@ -649,9 +603,8 @@ const ReviewCarousel: React.FC = () => {
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Services Received *
                   </label>
@@ -665,9 +618,8 @@ const ReviewCarousel: React.FC = () => {
                           className="mr-2 text-emerald-500"
                         />
                         <span
-                          className={`text-sm ${
-                            isDark ? 'text-gray-200' : 'text-gray-700'
-                          }`}
+                          className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'
+                            }`}
                         >
                           {service}
                         </span>
@@ -678,9 +630,8 @@ const ReviewCarousel: React.FC = () => {
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Your Review *
                   </label>
@@ -691,20 +642,18 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg resize-none ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg resize-none ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="Tell us about your experience..."
                   />
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-1 ${
-                      isDark ? 'text-gray-200' : 'text-gray-700'
-                    }`}
+                    className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                      }`}
                   >
                     Profile Image URL (Optional)
                   </label>
@@ -714,11 +663,10 @@ const ReviewCarousel: React.FC = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, imageUrl: e.target.value })
                     }
-                    className={`w-full px-3 py-2 border rounded-lg ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-800'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg ${isDark
+                      ? 'bg-gray-800 border-gray-600 text-white'
+                      : 'bg-white border-gray-300 text-gray-800'
+                      }`}
                     placeholder="https://example.com/your-photo.jpg"
                   />
                 </div>

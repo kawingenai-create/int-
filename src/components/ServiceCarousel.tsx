@@ -93,18 +93,36 @@ const ServiceCarousel = () => {
   };
 
   const handleMouseUp = () => {
-    isDraggingRef.current = false;
-    setTimeout(() => setIsPaused(false), 500);
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      setTimeout(() => setIsPaused(false), 200); // Resume quickly after drag
+    }
   };
 
-  const handleMouseEnter = () => {
+  // Touch interaction handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDraggingRef.current = true;
+    lastMouseXRef.current = e.touches[0].clientX;
     setIsPaused(true);
   };
 
-  const handleMouseLeave = () => {
-    isDraggingRef.current = false;
-    setIsPaused(false);
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDraggingRef.current || !carouselRef.current) return;
+    // Don't preventDefault here generally to allow vertical scroll, 
+    // but maybe for horizontal swipe we might need to.
+    const deltaX = e.touches[0].clientX - lastMouseXRef.current;
+    rotationRef.current = (rotationRef.current + deltaX * 0.5) % 360; // Slightly faster multiplier for touch
+    (carouselRef.current as HTMLDivElement).style.transform = `rotateY(${rotationRef.current}deg)`;
+    lastMouseXRef.current = e.touches[0].clientX;
   };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
+    setTimeout(() => setIsPaused(false), 200);
+  };
+
+  // Removed handleMouseEnter/Leave pause logic to keep it rotating on hover as requested
+  // Hover effect will be handled by CSS only
 
   // Optimized animation: faster rotation speed
   useEffect(() => {
@@ -153,8 +171,10 @@ const ServiceCarousel = () => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseLeave={handleMouseUp} // Handle leaving window while dragging
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{ cursor: isDraggingRef.current ? 'grabbing' : 'grab' }}
       >
         <div

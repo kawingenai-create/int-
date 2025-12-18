@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Target,
   Award,
-  Code,
   Mail,
   Phone,
   Linkedin,
   Globe,
-  HeadphonesIcon,
   Rocket,
   Lightbulb,
   Heart,
@@ -17,6 +14,9 @@ import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
 import logo from '../assets/company_logo/hand.webp';
 import ReviewCarousel from '../components/ReviewCarousel';
+import kawin from '../assets/team/kawin.webp'
+import livan from '../assets/team/livan.webp'
+import muthulakshmi from '../assets/team/muthulakshmi.webp'
 
 // Add these styles to your CSS file or add as a style tag in your component
 const flipCardStyles = `
@@ -50,7 +50,7 @@ const About = () => {
       phone: '+91 8015355914',
       linkedin: 'https://www.linkedin.com/in/kawin-m-s-570961285/',
       portfolio: 'https://kawin-portfolio.netlify.app/',
-      image: 'https://i.postimg.cc/28DQW47p/kawin-removebg-preview.png',
+      image: kawin,
       color: 'emerald',
     },
     {
@@ -60,8 +60,18 @@ const About = () => {
       email: 'integeriolivan@gmail.com',
       phone: '+91 6385243064',
       linkedin: 'https://linkedin.com/in/livan',
-      image: 'https://i.postimg.cc/pTgPMDzN/IMG-20250426-WA0007-1-removebg-preview.png',
+      image: livan,
       color: 'indigo',
+    },
+    {
+      name: 'Muthulakshmi',
+      role: 'Operations & QA Executive',
+      description: 'Oversees profit/loss and supports client communication. Manages financial planning and stakeholder relations.',
+      email: 'integeriofinance@gmail.com',
+      phone: '+91 8015355914',
+      linkedin: 'https://linkedin.com/in/muthulakshmi',
+      image: muthulakshmi,
+      color: 'pink',
     },
   ];
 
@@ -199,6 +209,109 @@ const About = () => {
           </InteractiveCard>
         </motion.div>
 
+        {/* Team Section with Square Cards - 3 in a row on PC */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 pt-8"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+            Our Team
+          </h2>
+
+          {/* Square Cards - 3 in a row on PC */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {teamMembers.map((member, index) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="relative perspective-1000"
+              >
+                <div
+                  className={`relative w-full transition-transform duration-700 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
+                  style={{ minHeight: '320px' }}
+                >
+                  {/* Front Face - Square Card with Border */}
+                  <div
+                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden transition-all duration-300 ${isDark
+                      ? 'bg-white/5 backdrop-blur-md border border-emerald-500/30'
+                      : 'bg-white/70 backdrop-blur-md border border-emerald-400/40'
+                      } shadow-lg`}
+                  >
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
+                    <div className="p-6 h-full flex flex-col items-center text-center">
+                      <div className={`w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 mb-4 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
+                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-center" />
+                      </div>
+                      <h3 className={`text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                        {member.name}
+                      </h3>
+                      <p className={`text-sm font-medium mb-3 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                        {member.role}
+                      </p>
+                      <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} line-clamp-3`}>
+                        {member.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Back Face - Contact Details with Border */}
+                  <div
+                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden rotate-y-180 transition-all duration-300 ${isDark
+                      ? 'bg-white/5 backdrop-blur-md border border-emerald-500/30'
+                      : 'bg-white/70 backdrop-blur-md border border-emerald-400/40'
+                      } shadow-lg`}
+                  >
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
+                    <div className="p-6 h-full flex flex-col justify-center">
+                      <h3 className={`text-xl font-bold mb-4 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                        Contact Details
+                      </h3>
+                      <div className="space-y-4">
+                        <a href={`mailto:${member.email}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                          <Mail className="h-4 w-4" />
+                          <span className="truncate">{member.email}</span>
+                        </a>
+                        <a href={`tel:${member.phone}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                          <Phone className="h-4 w-4" />
+                          <span>{member.phone}</span>
+                        </a>
+                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                          <Linkedin className="h-4 w-4" />
+                          <span>LinkedIn</span>
+                        </a>
+                        {member.portfolio && (
+                          <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                            <Globe className="h-4 w-4" />
+                            <span>Portfolio</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Contact Button */}
+                <div className="flex justify-center mt-4">
+                  <button
+                    onClick={() => setHoveredCard(hoveredCard === index ? null : index)}
+                    className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105 ${hoveredCard === index
+                      ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white'
+                      : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
+                      }`}
+                  >
+                    <Mail className="h-4 w-4" />
+                    {hoveredCard === index ? 'Back' : 'Contact'}
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Client Reviews Section */}
         <motion.div
           id="client-reviews"
@@ -246,144 +359,6 @@ const About = () => {
                 </InteractiveCard>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Team Section with Wide Rectangle Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 pt-8"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
-            Our Team
-          </h2>
-
-          {/* Wide Rectangle Cards - 2 in a row on PC */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="relative perspective-1000"
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <div
-                  className={`relative w-full transition-transform duration-500 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
-                  style={{ minHeight: '220px' }}
-                >
-                  {/* Front Face - Wide Rectangle */}
-                  <div
-                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden transition-all duration-300 ${isDark
-                      ? 'bg-white/5 backdrop-blur-md border border-white/10'
-                      : 'bg-white/70 backdrop-blur-md border border-gray-200/50'
-                      } shadow-lg`}
-                  >
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-6 h-full flex flex-row items-center gap-6">
-                      <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 flex-shrink-0 ${isDark ? 'border-white/50' : 'border-gray-300/50'}`}>
-                        <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className={`text-xl md:text-2xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                          {member.name}
-                        </h3>
-                        <p className={`text-sm font-medium mb-2 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                          {member.role}
-                        </p>
-                        <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                          {member.description}
-                        </p>
-                        <div className="text-xs text-gray-400 mt-3">Hover for contact details</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Back Face - Contact Details */}
-                  <div
-                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden rotate-y-180 transition-all duration-300 ${isDark
-                      ? 'bg-white/5 backdrop-blur-md border border-white/10'
-                      : 'bg-white/70 backdrop-blur-md border border-gray-200/50'
-                      } shadow-lg`}
-                  >
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-6 h-full flex flex-col justify-center">
-                      <h3 className={`text-xl font-bold mb-4 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                        Contact Details
-                      </h3>
-                      <div className="space-y-4">
-                        <a href={`mailto:${member.email}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Mail className="h-4 w-4" />
-                          <span className="truncate">{member.email}</span>
-                        </a>
-                        <a href={`tel:${member.phone}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Phone className="h-4 w-4" />
-                          <span>{member.phone}</span>
-                        </a>
-                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Linkedin className="h-4 w-4" />
-                          <span>LinkedIn</span>
-                        </a>
-                        {member.portfolio && (
-                          <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                            <Globe className="h-4 w-4" />
-                            <span>Portfolio</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Why Choose Us */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
-            Why Choose Us
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <InteractiveCard glowColor="emerald" className="p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
-                  <Target className={`h-8 w-8 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Precision Focused</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>We deliver exactly what you need with attention to every detail</p>
-              </div>
-            </InteractiveCard>
-
-            <InteractiveCard glowColor="purple" className="p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
-                  <Code className={`h-8 w-8 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Modern Technology</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Built with the latest tools and frameworks for optimal performance</p>
-              </div>
-            </InteractiveCard>
-
-            <InteractiveCard glowColor="blue" className="p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                  <HeadphonesIcon className={`h-8 w-8 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>24/7 Support</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Round-the-clock assistance to ensure your success</p>
-              </div>
-            </InteractiveCard>
           </div>
         </motion.div>
       </div>
