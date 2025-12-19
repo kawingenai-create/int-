@@ -81,7 +81,8 @@ export const trackPageVisit = async (pagePath: string, visitorId: string): Promi
 
         if (existing) {
             // Update existing user - increment page visit count
-            const currentCount = existing[columnName] || 0;
+            const existingRecord = existing as Record<string, unknown>;
+            const currentCount = (existingRecord[columnName] as number) || 0;
             const { data, error } = await supabase
                 .from('user_analytics')
                 .update({
@@ -95,9 +96,9 @@ export const trackPageVisit = async (pagePath: string, visitorId: string): Promi
 
             if (error) {
                 console.error('Error updating user analytics:', error);
-                return existing.id;
+                return existingRecord.id as number;
             }
-            return data?.id || existing.id;
+            return (data?.id as number) || (existingRecord.id as number);
         } else {
             // Create new user record
             const { data, error } = await supabase

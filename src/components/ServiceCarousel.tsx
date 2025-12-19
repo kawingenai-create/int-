@@ -29,7 +29,7 @@ const ServiceCarousel = () => {
       image: webdevImg,
     },
     {
-      title: 'AI - Chatbot / Voice Assistant',
+      title: 'AI projects / intgeration (chatbot, voice assistant)',
       description: 'Intelligent AI chatbots and voice assistants for your business',
       image: aiImg,
     },
@@ -40,7 +40,7 @@ const ServiceCarousel = () => {
     },
     {
       title: 'Final Year Projects',
-      description: 'AI, ML, DL, NLP, Data Analysis Projects with Documentation',
+      description: 'AI / ML, Web Development, Data Analysis Projects with Documentation',
       image: finalyrImg,
     },
     {
