@@ -70,8 +70,8 @@ const Contact = () => {
     }
 
     // Message validation (min 25 characters)
-    if (formData.message.trim().length < 25) {
-      setValidationError('Message must be at least 25 characters long');
+    if (formData.message.trim().length < 10) {
+      setValidationError('Message must be at least 10 characters long');
       return false;
     }
 
@@ -145,7 +145,7 @@ const Contact = () => {
 
   const services = [
     'Web Development',
-    'AI Integration Projects',
+    
     'AI Apps & Integration (Chatbot)',
     'Final Year Projects',
     'Digital Marketing',

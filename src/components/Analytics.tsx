@@ -11,13 +11,18 @@ const Analytics: React.FC = () => {
     // 1. Set start time for new page
     startTime.current = Date.now();
 
-    const pageName = location.pathname === '/' ? 'Home' :
-      location.pathname.replace('/', '').charAt(0).toUpperCase() +
-      location.pathname.slice(2);
+    // Get or create visitor ID
+    let visitorId = localStorage.getItem('visitor_id');
+    if (!visitorId) {
+      visitorId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('visitor_id', visitorId);
+    }
+
+    const pagePath = location.pathname;
 
     // 2. Track the new visit and get its ID
     const initVisit = async () => {
-      const id = await trackPageVisit(pageName);
+      const id = await trackPageVisit(pagePath, visitorId!);
       if (id) {
         currentVisitId.current = id;
       }

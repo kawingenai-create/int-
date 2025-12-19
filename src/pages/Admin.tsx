@@ -6,6 +6,7 @@ import {
     EyeOff,
     CheckCircle,
     XCircle,
+    Trash2,
     Star,
     Users,
     BarChart3,
@@ -79,6 +80,7 @@ const Admin: React.FC = () => {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [enquiries, setEnquiries] = useState<Enquiry[]>([]); // Added enquiries state
     const [replyText, setReplyText] = useState<{ [key: number]: string }>({}); // Added replyText state
+    const [expandedReply, setExpandedReply] = useState<number | null>(null); // Track which enquiry's reply is expanded
     const [analytics, setAnalytics] = useState<AnalyticsData>({
         totalVisits: 0,
         todayVisits: 0,
@@ -145,7 +147,20 @@ const Admin: React.FC = () => {
                 image: r.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}`,
                 status: r.status,
             })));
-            setEnquiries(enquiriesData); // Set enquiries state
+            // Map enquiries data properly - filter out any invalid entries
+            const mappedEnquiries = enquiriesData
+                .filter((e: any) => e && e.id) // Only include entries with valid id
+                .map((e: any) => ({
+                    id: e.id,
+                    name: e.name || 'Unknown',
+                    phone: e.phone || 'N/A',
+                    email: e.email || 'N/A',
+                    service: e.service || 'General Enquiry',
+                    message: e.message || '',
+                    status: e.status || 'new',
+                    created_at: e.created_at || new Date().toISOString(),
+                }));
+            setEnquiries(mappedEnquiries);
 
             // Load analytics from Supabase
             const users = await getAnalytics();
@@ -283,6 +298,29 @@ const Admin: React.FC = () => {
         const success = await updateReviewStatus(id, 'rejected');
         if (success) {
             setReviews(reviews.filter(r => r.id !== id));
+        }
+    };
+
+    const handleDeleteReview = async (id: number) => {
+        if (!window.confirm('Are you sure you want to permanently delete this review?')) {
+            return;
+        }
+
+        try {
+            const { supabase } = await import('../lib/supabase');
+            const { error } = await supabase
+                .from('pending_reviews')
+                .delete()
+                .eq('id', id);
+
+            if (!error) {
+                setReviews(reviews.filter(r => r.id !== id));
+            } else {
+                alert('Failed to delete review');
+            }
+        } catch (error) {
+            console.error('Error deleting review:', error);
+            alert('An error occurred while deleting the review');
         }
     };
 
@@ -642,7 +680,7 @@ const Admin: React.FC = () => {
                                                     <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                                         "{review.review}"
                                                     </p>
-                                                    <div className="flex gap-2 mt-4">
+                                                    <div className="flex flex-wrap gap-2 mt-4">
                                                         <button
                                                             onClick={() => handleApproveReview(review.id)}
                                                             className="flex items-center gap-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm transition-all"
@@ -652,9 +690,16 @@ const Admin: React.FC = () => {
                                                         </button>
                                                         <button
                                                             onClick={() => handleRejectReview(review.id)}
-                                                            className="flex items-center gap-1 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-all"
+                                                            className="flex items-center gap-1 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm transition-all"
                                                         >
                                                             <XCircle className="h-4 w-4" />
+                                                            Reject
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteReview(review.id)}
+                                                            className="flex items-center gap-1 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-all"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
                                                             Delete
                                                         </button>
                                                     </div>
@@ -758,8 +803,8 @@ const Admin: React.FC = () => {
                                     <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         Visits by Hour (24h)
                                     </h3>
-                                    <div className="h-64 w-full" style={{ minHeight: '256px' }}>
-                                        <ResponsiveContainer width="100%" height="100%">
+                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
                                             <AreaChart data={analytics.hourlyVisits}>
                                                 <defs>
                                                     <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
@@ -808,8 +853,8 @@ const Admin: React.FC = () => {
                                     <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         Monthly Overview (Last 30 Days)
                                     </h3>
-                                    <div className="h-64 w-full" style={{ minHeight: '256px' }}>
-                                        <ResponsiveContainer width="100%" height="100%">
+                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
                                             <BarChart data={analytics.weeklyVisits}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} vertical={false} />
                                                 <XAxis
@@ -846,7 +891,7 @@ const Admin: React.FC = () => {
                                 {/* Page Views with Time */}
                                 <InteractiveCard className="p-6">
                                     <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                        Top Pages by Duration
+                                        Top Pages by Views
                                     </h3>
                                     {analytics.pageViews.length === 0 ? (
                                         <p className={`text-center py-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -861,81 +906,17 @@ const Admin: React.FC = () => {
                                                             }`}>
                                                             {idx + 1}
                                                         </span>
-                                                        <div>
-                                                            <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                                {pv.page}
-                                                            </p>
-                                                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                                {pv.views} visits
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right">
-                                                        <p className={`text-sm font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                                                            {pv.avgTime}s
-                                                        </p>
-                                                        <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                                                            avg time
+                                                        <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                            {pv.page}
                                                         </p>
                                                     </div>
+                                                    <p className={`text-sm font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                                                        {pv.views} visits
+                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                </InteractiveCard>
-
-                                {/* Visit History Table */}
-                                <InteractiveCard className="p-6 col-span-full">
-                                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                        Recent Visits
-                                    </h3>
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full">
-                                            <thead>
-                                                <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-                                                    <th className={`text-left py-3 px-4 text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        Page
-                                                    </th>
-                                                    <th className={`text-left py-3 px-4 text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        Visit Time
-                                                    </th>
-                                                    <th className={`text-left py-3 px-4 text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        Time Spent
-                                                    </th>
-                                                    <th className={`text-left py-3 px-4 text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        Device
-                                                    </th>
-                                                    <th className={`text-left py-3 px-4 text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                        Browser
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {analytics.pageViews.slice(0, 10).map((pv, idx) => (
-                                                    <tr
-                                                        key={idx}
-                                                        className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'} hover:bg-opacity-5 ${isDark ? 'hover:bg-white' : 'hover:bg-gray-900'}`}
-                                                    >
-                                                        <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                                                            {pv.page}
-                                                        </td>
-                                                        <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                                            {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
-                                                        </td>
-                                                        <td className={`py-3 px-4 text-sm ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                                                            {Math.floor(pv.avgTime / 60)}m {pv.avgTime % 60}s
-                                                        </td>
-                                                        <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                                            Mobile
-                                                        </td>
-                                                        <td className={`py-3 px-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                                            Safari
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </InteractiveCard>
                             </div>
                         </motion.div>
@@ -962,84 +943,100 @@ const Admin: React.FC = () => {
                                     </InteractiveCard>
                                 ) : (
                                     enquiries.map((enquiry) => (
-                                        <InteractiveCard key={enquiry.id} className="p-6">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <div>
-                                                    <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                        {enquiry.name}
-                                                    </h3>
-                                                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                                                        {new Date(enquiry.created_at).toLocaleString()}
-                                                    </p>
-                                                </div>
-                                                <button
-                                                    onClick={() => handleDeleteEnquiry(enquiry.id)}
-                                                    className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-colors"
-                                                >
-                                                    Delete
-                                                </button>
+                                        <InteractiveCard key={enquiry.id} className="p-3 sm:p-6">
+                                            {/* Header with name and date */}
+                                            <div className="mb-3">
+                                                <h3 className={`text-base sm:text-lg font-semibold truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                    {enquiry.name}
+                                                </h3>
+                                                <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                                    {new Date(enquiry.created_at).toLocaleString()}
+                                                </p>
                                             </div>
 
-                                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                            {/* Enquiry details */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-4">
                                                 <div>
-                                                    <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                    <p className={`text-xs sm:text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                                         Email
                                                     </p>
-                                                    <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                                    <p className={`text-sm truncate ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                                         {enquiry.email}
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                    <p className={`text-xs sm:text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                                         Phone
                                                     </p>
-                                                    <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                                         {enquiry.phone}
                                                     </p>
                                                 </div>
-                                                <div className="md:col-span-2">
-                                                    <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                <div className="sm:col-span-2">
+                                                    <p className={`text-xs sm:text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                                         Service
                                                     </p>
-                                                    <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                                         {enquiry.service}
                                                     </p>
                                                 </div>
-                                                <div className="md:col-span-2">
-                                                    <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                <div className="sm:col-span-2">
+                                                    <p className={`text-xs sm:text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                                         Message
                                                     </p>
-                                                    <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                                         {enquiry.message}
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <div className="mt-4">
-                                                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                                                    Reply
-                                                </label>
-                                                <textarea
-                                                    value={replyText[enquiry.id] || ''}
-                                                    onChange={(e) => setReplyText({ ...replyText, [enquiry.id]: e.target.value })}
-                                                    placeholder="Type your reply here..."
-                                                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors ${isDark
-                                                        ? 'bg-gray-800 border-gray-600 text-white'
-                                                        : 'bg-white border-gray-300 text-gray-800'
-                                                        }`}
-                                                    rows={3}
-                                                />
+                                            {/* Reply section - shown when expanded */}
+                                            {expandedReply === enquiry.id && (
+                                                <div className="mt-3 sm:mt-4 mb-3">
+                                                    <label className={`block text-xs sm:text-sm font-medium mb-1 sm:mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Reply
+                                                    </label>
+                                                    <textarea
+                                                        value={replyText[enquiry.id] || ''}
+                                                        onChange={(e) => setReplyText({ ...replyText, [enquiry.id]: e.target.value })}
+                                                        placeholder="Type your reply here..."
+                                                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:outline-none focus:border-emerald-500 transition-colors text-sm ${isDark
+                                                            ? 'bg-gray-800 border-gray-600 text-white'
+                                                            : 'bg-white border-gray-300 text-gray-800'
+                                                            }`}
+                                                        rows={2}
+                                                    />
+                                                    <button
+                                                        onClick={() => {
+                                                            const reply = replyText[enquiry.id] || '';
+                                                            const subject = `Re: ${enquiry.service} Enquiry`;
+                                                            const body = `${reply}%0D%0A%0D%0A--- Original Message ---%0D%0AFrom: ${enquiry.name}%0D%0AEmail: ${enquiry.email}%0D%0APhone: ${enquiry.phone}%0D%0AService: ${enquiry.service}%0D%0AMessage: ${enquiry.message}`;
+                                                            window.open(`mailto:${enquiry.email}?subject=${subject}&body=${body}`);
+                                                            setExpandedReply(null); // Close after sending
+                                                        }}
+                                                        className="mt-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                                                    >
+                                                        <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
+                                                        Send
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            {/* Action buttons at the end */}
+                                            <div className="flex gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                                                 <button
-                                                    onClick={() => {
-                                                        const reply = replyText[enquiry.id] || '';
-                                                        const subject = `Re: ${enquiry.service} Enquiry`;
-                                                        const body = `${reply}%0D%0A%0D%0A--- Original Message ---%0D%0AFrom: ${enquiry.name}%0D%0AEmail: ${enquiry.email}%0D%0APhone: ${enquiry.phone}%0D%0AService: ${enquiry.service}%0D%0AMessage: ${enquiry.message}`;
-                                                        window.open(`mailto:${enquiry.email}?subject=${subject}&body=${body}`);
-                                                    }}
-                                                    className="mt-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                                    onClick={() => setExpandedReply(expandedReply === enquiry.id ? null : enquiry.id)}
+                                                    className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors"
                                                 >
-                                                    <Mail className="h-4 w-4" />
-                                                    Send Reply
+                                                    <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
+                                                    {expandedReply === enquiry.id ? 'Cancel' : 'Reply'}
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteEnquiry(enquiry.id)}
+                                                    className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors"
+                                                >
+                                                    <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                                                    Delete
                                                 </button>
                                             </div>
                                         </InteractiveCard>

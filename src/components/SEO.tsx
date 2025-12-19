@@ -15,7 +15,7 @@ const SEO: React.FC<SEOProps> = ({
   description = "Leading technology solutions provider in Tamil Nadu, India. We specialize in custom web development, artificial intelligence and machine learning projects, professional logo design, digital marketing, data analytics, and business automation. Serving businesses, educational institutions, and students with affordable, innovative, and scalable digital solutions. Expert team with proven track record in delivering high-quality projects across multiple industries including healthcare, e-commerce, education, and consulting.",
   keywords = "web development Tamil Nadu, AI ML projects India, machine learning solutions, professional logo design, digital marketing services, business automation, data analytics, custom software development, student projects, academic projects, React development, Python AI projects, e-commerce websites, business websites, healthcare technology, educational technology, consulting services Tamil Nadu, affordable web solutions India, Integer.IO Services",
   image = logoAsset,
-  url = "https://integer-io-services.com"
+  url = "https://integer-io.vercel.app"
 }) => {
   return (
     <Helmet>

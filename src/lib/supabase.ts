@@ -15,7 +15,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Test connection on load
 (async () => {
     try {
-        const { error } = await supabase.from('page_visits').select('count').limit(1);
+        const { error } = await supabase.from('user_analytics').select('count').limit(1);
         if (error) {
             console.error('❌ [Supabase] Connection test FAILED:', error.message);
         } else {
@@ -256,15 +256,31 @@ export const submitContactForm = async (data: ContactEnquiry): Promise<boolean> 
 // Get contact enquiries
 export const getContactEnquiries = async (): Promise<ContactEnquiry[]> => {
     try {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
             .from('contact_enquiries')
             .select('*')
             .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        // If contact_enquiries is empty, try 'enquiries' table as fallback
+        if ((!data || data.length === 0) && !error) {
+            const fallbackResult = await supabase
+                .from('enquiries')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (!fallbackResult.error && fallbackResult.data && fallbackResult.data.length > 0) {
+                return fallbackResult.data;
+            }
+        }
+
+        if (error) {
+            console.error('[Supabase] Error fetching enquiries:', error);
+            throw error;
+        }
+
         return data || [];
     } catch (err) {
-        console.error('Error fetching enquiries:', err);
+        console.error('[Supabase] Connection error fetching enquiries:', err);
         return [];
     }
 };

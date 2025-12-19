@@ -8,6 +8,7 @@ import {
   Globe,
   Users,
   Award,
+  Brain,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
