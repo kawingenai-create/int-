@@ -63,37 +63,7 @@ const sampleProjects = [
 const Home = () => {
   const { isDark } = useTheme();
 
-  const services = [
-    {
-      title: 'Web Development',
-      description:
-        'Professional websites with responsive design and modern features',
-      icon: <Zap className="h-8 w-8" />,
-      link: '/services',
-      color: 'emerald' as const,
-    },
-    {
-      title: 'AI Apps & Integration (Chatbot)',
-      description: 'Intelligent chatbots and AI-powered applications for enhanced user engagement',
-      icon: <Brain className="h-8 w-8" />,
-      link: '/students', // Assuming the link remains the same as the previous AI service
-      color: 'purple' as const, // Keeping the color property for consistency, or could use 'gradient' if the component supports it
-    },
-    {
-      title: 'Logo Design',
-      description: 'Professional brand identity and creative logo solutions',
-      icon: <Palette className="h-8 w-8" />,
-      link: '/services',
-      color: 'pink' as const,
-    },
-    {
-      title: 'Data Analysis',
-      description: 'Comprehensive data insights and visualization solutions',
-      icon: <Target className="h-8 w-8" />,
-      link: '/services',
-      color: 'blue' as const,
-    },
-  ];
+
 
   const features = [
     {
@@ -241,12 +211,12 @@ const Home = () => {
               variants={slideL}
             >
               <InteractiveCard glowColor="emerald" className="h-full overflow-hidden">
-                <div className="relative">
+                <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
                   <img
                     src={chatzImg}
                     alt="Chatz.IO - AI Chat for Students"
                     loading="lazy"
-                    className="w-full h-48 sm:h-56 md:h-64 object-cover rounded-t-xl"
+                    className="w-full h-48 sm:h-56 md:h-64 object-contain p-2"
                   />
                   <span className="absolute top-4 right-4 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">
                     NEW
@@ -256,7 +226,7 @@ const Home = () => {
                   <h3 className={`text-xl sm:text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                     Chatz.IO
                   </h3>
-                  <p className={`text-sm sm:text-base leading-relaxed mb-4 line-clamp-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className={`text-sm sm:text-base leading-relaxed mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     An intelligent AI-powered chat assistant designed specifically for students. Get help with studies and research.
                   </p>
                   <Link
@@ -278,12 +248,12 @@ const Home = () => {
               variants={slideR}
             >
               <InteractiveCard glowColor="purple" className="h-full overflow-hidden">
-                <div className="relative">
+                <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
                   <img
                     src={imgGenImg}
                     alt="Dips.IO - Coming Soon"
                     loading="lazy"
-                    className="w-full h-48 sm:h-56 md:h-64 object-cover rounded-t-xl"
+                    className="w-full h-48 sm:h-56 md:h-64 object-contain p-2"
                   />
                   <span className="absolute top-4 right-4 px-3 py-1 bg-purple-500 text-white text-xs font-bold rounded-full">
                     COMING SOON
@@ -293,7 +263,7 @@ const Home = () => {
                   <h3 className={`text-xl sm:text-2xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                     Dips.IO
                   </h3>
-                  <p className={`text-sm sm:text-base leading-relaxed mb-4 line-clamp-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className={`text-sm sm:text-base leading-relaxed mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     An innovative next-gen digital platform coming soon! Stay tuned for revolutionary features.
                   </p>
                   <Link
@@ -485,67 +455,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-20 px-4 relative z-10 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={slideL}
-            className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
-          >
-            Why Choose Us
-          </motion.h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={slideL}
-            >
-              <InteractiveCard glowColor="emerald" className="p-8 text-center h-full">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
-                  <Target className={`h-8 w-8 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Precision Focused</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>We deliver exactly what you need with attention to every detail</p>
-              </InteractiveCard>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={slideL} // Corrected
-            >
-              <InteractiveCard glowColor="purple" className="p-8 text-center h-full">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
-                  <Zap className={`h-8 w-8 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>Modern Technology</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Built with the latest tools and frameworks for optimal performance</p>
-              </InteractiveCard>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={slideR}
-            >
-              <InteractiveCard glowColor="blue" className="p-8 text-center h-full">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                  <Users className={`h-8 w-8 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                </div>
-                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>24/7 Support</h3>
-                <p className={isDark ? 'text-gray-300' : 'text-gray-600'}>Round-the-clock assistance to ensure your success</p>
-              </InteractiveCard>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
     </div>
   );

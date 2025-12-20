@@ -96,12 +96,12 @@ const Footer: React.FC = () => {
   ];
 
   const services = [
-    { name: 'Web Development', key: 'web-development' },
-    { name: 'AI - Chatbot / Voice Assistant', key: 'ai-chatbot' },
-    { name: 'Billing Software', key: 'billing-software' },
-    { name: 'Final Year Projects', key: 'final-year-projects' },
-    { name: 'Video Editing', key: 'video-editing' },
-    { name: 'Digital Marketing', key: 'digital-marketing' },
+    { name: 'Web Application Development', key: 'web-development' },
+    { name: 'AI Product & Automation', key: 'ai-automation' },
+    { name: 'Custom Software & SaaS', key: 'software-saas' },
+    { name: 'Digital Marketing & Branding', key: 'digital-marketing' },
+    { name: 'Education & Student Services', key: 'education-services' },
+    { name: 'Cloud Deployment & Support', key: 'cloud-deployment' },
   ];
 
   return (

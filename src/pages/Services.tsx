@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { Code, Brain, FileText, TrendingUp, Megaphone, Search, Globe, Shield, MessageCircle } from 'lucide-react';
+import { Code, Brain, FileText, Megaphone, Search, Globe, Shield, MessageCircle } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -33,111 +33,91 @@ const Services = () => {
   const coreServices = [
     {
       key: 'web-development',
-      category: 'Web Development',
+      category: 'Web Application Development',
       icon: <Code className="h-12 w-12" />,
       color: 'emerald' as const,
-      description: 'Professional websites with responsive design and modern features',
+      description: 'We design and develop secure, scalable web solutions for businesses and startups',
       features: [
-        'Static & Dynamic Website Design',
-        'Responsive & Mobile-Ready Designs',
-        'Free/Paid Hosting Options',
-        'School/Business Packages',
-        'E-commerce Solutions',
-        'CMS Integration',
-        'SEO Optimization',
-        'Performance Optimization'
+        'Static websites',
+        'Dynamic web applications',
+        'Database integrations',
+        'Admin dashboards',
+        'API integrations',
+        'Performance optimization'
       ]
     },
     {
-      key: 'ai-chatbot',
-      category: 'AI - Chatbot / Voice Assistant',
-      icon: <MessageCircle className="h-12 w-12" />,
+      key: 'ai-automation',
+      category: 'AI Product & Automation Services',
+      icon: <Brain className="h-12 w-12" />,
       color: 'purple' as const,
-      description: 'Intelligent AI chatbots and voice assistants for your business',
+      description: 'We build intelligent AI solutions to automate workflows and improve business efficiency',
       features: [
-        'Custom AI Chatbots',
-        'Voice Assistant Integration',
-        'Natural Language Processing',
-        'Multi-platform Deployment',
-        '24/7 Customer Support Bots',
-        'Conversational AI Solutions'
+        'AI chatbots',
+        'Voice assistants',
+        'NLP solutions',
+        'Computer vision',
+        'AI process automation',
+        'Smart data insights'
       ]
     },
     {
-      key: 'billing-software',
-      category: 'Billing Software Development',
+      key: 'software-saas',
+      category: 'Custom Software & SaaS Product Development',
       icon: <FileText className="h-12 w-12" />,
       color: 'blue' as const,
-      description: 'Custom billing and invoicing software solutions',
+      description: 'We create custom software and SaaS platforms tailored to real business needs',
       features: [
-        'Custom Invoice Generation',
-        'Payment Gateway Integration',
-        'Inventory Management',
-        'Tax Calculation & Reports',
-        'Multi-currency Support',
-        'Cloud-based Solutions'
-      ]
-    },
-    {
-      key: 'final-year-projects',
-      category: 'Final Year Projects',
-      icon: <Brain className="h-12 w-12" />,
-      color: 'pink' as const,
-      description: 'AI, ML, DL, NLP, Data Analysis Projects with Documentation',
-      features: [
-        'Machine Learning Projects',
-        'Deep Learning Solutions',
-        'Natural Language Processing',
-        'Data Analysis Projects',
-        'Complete Documentation',
-        'Presentation Support'
-      ]
-    },
-    {
-      key: 'video-editing',
-      category: 'Video Editing',
-      icon: <TrendingUp className="h-12 w-12" />,
-      color: 'indigo' as const,
-      description: 'Professional video editing and post-production services',
-      features: [
-        'Professional Video Editing',
-        'YouTube Content Creation',
-        'Social Media Videos',
-        'Corporate Presentations',
-        'Motion Graphics',
-        'Color Correction & Grading'
+        'Billing software',
+        'SaaS platforms',
+        'Data analytics dashboards',
+        'PDF auto-generation',
+        'Business automation tools',
+        'Role-based systems'
       ]
     },
     {
       key: 'digital-marketing',
-      category: 'Digital Marketing',
+      category: 'Digital Marketing & Branding Services',
       icon: <Megaphone className="h-12 w-12" />,
-      color: 'cyan' as const,
-      description: 'Strategic social media planning, branding and SEO services',
+      color: 'pink' as const,
+      description: 'We help brands grow their online presence and generate high-quality leads',
       features: [
-        'Social Media Marketing',
-        'Logo Creation & Branding',
-        'SEO (Search Engine Optimization)',
-        'Content Strategy',
-        'Brand Awareness Campaigns',
-        'Lead Generation',
-        'Analytics & Reporting',
-        'Email Marketing'
+        'SEO optimization',
+        'Social media marketing',
+        'Video editing',
+        'Logo & brand identity',
+        'Creative poster design'
       ]
     },
     {
-      key: 'portfolio-services',
-      category: 'Portfolio Services',
+      key: 'education-services',
+      category: 'Education & Student Services',
       icon: <Globe className="h-12 w-12" />,
-      color: 'emerald' as const,
-      description: 'Professional portfolio websites for work, professionals, and students',
+      color: 'indigo' as const,
+      description: 'We support students and working professionals with industry-ready solutions',
       features: [
-        'Personal Portfolio Websites',
-        'Professional Work Showcase',
-        'Student Project Portfolios',
-        'Interactive Resume Sites',
-        'Creative Professional Profiles',
-        'Academic Achievement Displays'
+        'Final year projects',
+        'Student portfolios',
+        'Professional portfolios',
+        'ATS-friendly resumes',
+        'Project documentation',
+        'Career guidance'
+      ]
+    },
+    {
+      key: 'cloud-deployment',
+      category: 'Cloud Deployment & Technical Support',
+      icon: <Shield className="h-12 w-12" />,
+      color: 'cyan' as const,
+      description: 'We provide reliable cloud hosting and ongoing technical support for your applications',
+      features: [
+        'Cloud deployment',
+        'Server configuration',
+        'Website hosting setup',
+        'Domain & SSL setup',
+        'Performance monitoring',
+        'Ongoing maintenance'
       ]
     }
   ];
@@ -257,29 +237,13 @@ const Services = () => {
 
           {filteredServices.length > 0 ? (
             <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-6 gap-8 mb-16"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.1 }}
             >
-              {filteredServices.map((service, idx) => {
-                // Calculation for 2-3-2 layout
-                // Total 7 items
-                // Row 1: 0, 1 -> col-span-3 (2 items)
-                // Row 2: 2, 3, 4 -> col-span-2 (3 items)
-                // Row 3: 5, 6 -> col-span-3 (2 items)
-
-                let colSpanClass = "lg:col-span-2"; // Default fallback
-
-                if (idx === 0 || idx === 1) {
-                  colSpanClass = "lg:col-span-3";
-                } else if (idx === 2 || idx === 3 || idx === 4) {
-                  colSpanClass = "lg:col-span-2";
-                } else if (idx >= 5) {
-                  colSpanClass = "lg:col-span-3";
-                }
-
+              {filteredServices.map((service) => {
                 return (
                   <motion.div
                     key={service.key}
@@ -292,7 +256,7 @@ const Services = () => {
                       rotateY: 5,
                       transition: { type: "spring", stiffness: 300, damping: 20 }
                     }}
-                    className={`group ${colSpanClass}`}
+                    className="group"
                   >
                     <div className={`
                     relative p-8 rounded-2xl backdrop-blur-lg border transition-all duration-500 h-full

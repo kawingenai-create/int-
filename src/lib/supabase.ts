@@ -334,3 +334,43 @@ export const getApprovedReviews = async () => {
         return [];
     }
 };
+
+// Update an approved review (admin)
+export const updateApprovedReview = async (id: number, data: Partial<PendingReview>): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('pending_reviews')
+            .update({
+                name: data.name,
+                company: data.company,
+                rating: data.rating,
+                review: data.review,
+                services: data.services,
+            })
+            .eq('id', id)
+            .eq('status', 'approved');
+
+        if (error) throw error;
+        return true;
+    } catch (err) {
+        console.error('Error updating approved review:', err);
+        return false;
+    }
+};
+
+// Delete an approved review (admin)
+export const deleteApprovedReview = async (id: number): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('pending_reviews')
+            .delete()
+            .eq('id', id)
+            .eq('status', 'approved');
+
+        if (error) throw error;
+        return true;
+    } catch (err) {
+        console.error('Error deleting approved review:', err);
+        return false;
+    }
+};

@@ -78,6 +78,8 @@ const Admin: React.FC = () => {
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState<'reviews' | 'analytics' | 'enquiries'>('reviews');
     const [reviews, setReviews] = useState<Review[]>([]);
+    const [approvedReviews, setApprovedReviews] = useState<Review[]>([]); // Approved reviews state
+    const [editingReview, setEditingReview] = useState<Review | null>(null); // Track review being edited
     const [enquiries, setEnquiries] = useState<Enquiry[]>([]); // Added enquiries state
     const [replyText, setReplyText] = useState<{ [key: number]: string }>({}); // Added replyText state
     const [expandedReply, setExpandedReply] = useState<number | null>(null); // Track which enquiry's reply is expanded
@@ -131,10 +133,11 @@ const Admin: React.FC = () => {
         setIsLoading(true);
         try {
             // Import Supabase functions dynamically
-            const { getPendingReviews, getAnalytics, getContactEnquiries } = await import('../lib/supabase');
+            const { getPendingReviews, getAnalytics, getContactEnquiries, getApprovedReviews } = await import('../lib/supabase');
 
             // Load pending reviews from Supabase
             const reviewsData = await getPendingReviews();
+            const approvedData = await getApprovedReviews(); // Fetch approved reviews
             const enquiriesData = await getContactEnquiries(); // Fetch enquiries
             setReviews(reviewsData.map((r: any) => ({
                 id: r.id,
@@ -161,6 +164,19 @@ const Admin: React.FC = () => {
                     created_at: e.created_at || new Date().toISOString(),
                 }));
             setEnquiries(mappedEnquiries);
+
+            // Map approved reviews data
+            setApprovedReviews(approvedData.map((r: any) => ({
+                id: r.id,
+                name: r.name,
+                company: r.company,
+                email: r.email,
+                rating: r.rating,
+                review: r.review,
+                service: r.services,
+                image: r.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}`,
+                status: 'approved' as const,
+            })));
 
             // Load analytics from Supabase
             const users = await getAnalytics();
@@ -338,6 +354,59 @@ const Admin: React.FC = () => {
                 console.error('Error deleting enquiry:', error);
                 alert('An error occurred while deleting the enquiry.');
             }
+        }
+    };
+
+    // Handle editing approved review
+    const handleEditApprovedReview = async (review: Review) => {
+        if (!editingReview) {
+            setEditingReview(review);
+            return;
+        }
+
+        // Save the edited review
+        try {
+            const { updateApprovedReview } = await import('../lib/supabase');
+            const success = await updateApprovedReview(editingReview.id, {
+                name: editingReview.name,
+                company: editingReview.company,
+                rating: editingReview.rating,
+                review: editingReview.review,
+                services: editingReview.service,
+            });
+
+            if (success) {
+                setApprovedReviews(approvedReviews.map(r =>
+                    r.id === editingReview.id ? editingReview : r
+                ));
+                setEditingReview(null);
+            } else {
+                alert('Failed to update review');
+            }
+        } catch (error) {
+            console.error('Error updating approved review:', error);
+            alert('An error occurred while updating the review');
+        }
+    };
+
+    // Handle deleting approved review
+    const handleDeleteApprovedReview = async (id: number) => {
+        if (!window.confirm('Are you sure you want to permanently delete this approved review?')) {
+            return;
+        }
+
+        try {
+            const { deleteApprovedReview } = await import('../lib/supabase');
+            const success = await deleteApprovedReview(id);
+
+            if (success) {
+                setApprovedReviews(approvedReviews.filter(r => r.id !== id));
+            } else {
+                alert('Failed to delete review');
+            }
+        } catch (error) {
+            console.error('Error deleting approved review:', error);
+            alert('An error occurred while deleting the review');
         }
     };
 
@@ -707,6 +776,147 @@ const Admin: React.FC = () => {
                                             </div>
                                         </InteractiveCard>
                                     ))}
+                                </div>
+                            )}
+
+                            {/* Approved Reviews Section */}
+                            {approvedReviews.length > 0 && (
+                                <div className="mt-8">
+                                    <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                        ✅ Approved Reviews ({approvedReviews.length})
+                                    </h3>
+                                    <div className="overflow-x-auto">
+                                        <table className={`w-full border-collapse rounded-lg overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+                                            <thead>
+                                                <tr className={isDark ? 'bg-gray-700' : 'bg-gray-100'}>
+                                                    <th className={`px-4 py-3 text-left text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Client</th>
+                                                    <th className={`px-4 py-3 text-left text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Company</th>
+                                                    <th className={`px-4 py-3 text-left text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Rating</th>
+                                                    <th className={`px-4 py-3 text-left text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Service</th>
+                                                    <th className={`px-4 py-3 text-left text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Review</th>
+                                                    <th className={`px-4 py-3 text-center text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {approvedReviews.map((review) => (
+                                                    <tr key={review.id} className={`border-t ${isDark ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                                                        <td className="px-4 py-3">
+                                                            <div className="flex items-center gap-2">
+                                                                <img
+                                                                    src={review.image}
+                                                                    alt={review.name}
+                                                                    className="w-8 h-8 rounded-full object-cover"
+                                                                />
+                                                                {editingReview?.id === review.id ? (
+                                                                    <input
+                                                                        type="text"
+                                                                        value={editingReview.name}
+                                                                        onChange={(e) => setEditingReview({ ...editingReview, name: e.target.value })}
+                                                                        className={`px-2 py-1 rounded border text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                                                    />
+                                                                ) : (
+                                                                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{review.name}</span>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-4 py-3">
+                                                            {editingReview?.id === review.id ? (
+                                                                <input
+                                                                    type="text"
+                                                                    value={editingReview.company || ''}
+                                                                    onChange={(e) => setEditingReview({ ...editingReview, company: e.target.value })}
+                                                                    className={`px-2 py-1 rounded border text-sm w-full ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                                                />
+                                                            ) : (
+                                                                <span className={`text-sm ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>{review.company || '-'}</span>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-4 py-3">
+                                                            {editingReview?.id === review.id ? (
+                                                                <select
+                                                                    value={editingReview.rating}
+                                                                    onChange={(e) => setEditingReview({ ...editingReview, rating: Number(e.target.value) })}
+                                                                    className={`px-2 py-1 rounded border text-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                                                >
+                                                                    {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} ⭐</option>)}
+                                                                </select>
+                                                            ) : (
+                                                                <div className="flex items-center gap-1">
+                                                                    {[...Array(5)].map((_, i) => (
+                                                                        <Star key={i} className={`h-4 w-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-4 py-3">
+                                                            {editingReview?.id === review.id ? (
+                                                                <input
+                                                                    type="text"
+                                                                    value={editingReview.service}
+                                                                    onChange={(e) => setEditingReview({ ...editingReview, service: e.target.value })}
+                                                                    className={`px-2 py-1 rounded border text-sm w-full ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                                                />
+                                                            ) : (
+                                                                <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{review.service}</span>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-4 py-3 max-w-xs">
+                                                            {editingReview?.id === review.id ? (
+                                                                <textarea
+                                                                    value={editingReview.review}
+                                                                    onChange={(e) => setEditingReview({ ...editingReview, review: e.target.value })}
+                                                                    className={`px-2 py-1 rounded border text-sm w-full resize-none ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'}`}
+                                                                    rows={2}
+                                                                />
+                                                            ) : (
+                                                                <p className={`text-sm truncate ${isDark ? 'text-gray-300' : 'text-gray-600'}`} title={review.review}>
+                                                                    "{review.review}"
+                                                                </p>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-4 py-3">
+                                                            <div className="flex items-center justify-center gap-2">
+                                                                {editingReview?.id === review.id ? (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() => handleEditApprovedReview(review)}
+                                                                            className="flex items-center gap-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm transition-all"
+                                                                        >
+                                                                            <CheckCircle className="h-4 w-4" />
+                                                                            Save
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => setEditingReview(null)}
+                                                                            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-all ${isDark ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-gray-300 hover:bg-gray-400 text-gray-800'}`}
+                                                                        >
+                                                                            <XCircle className="h-4 w-4" />
+                                                                            Cancel
+                                                                        </button>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() => handleEditApprovedReview(review)}
+                                                                            className="flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm transition-all"
+                                                                        >
+                                                                            Edit
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleDeleteApprovedReview(review.id)}
+                                                                            className="flex items-center gap-1 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm transition-all"
+                                                                        >
+                                                                            <Trash2 className="h-4 w-4" />
+                                                                            Delete
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
                         </motion.div>

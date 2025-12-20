@@ -7,7 +7,6 @@ import webdevImg from '../assets/serivice caosel/webdev_services.webp';
 import aiImg from '../assets/serivice caosel/ai_services.webp';
 import softwareImg from '../assets/serivice caosel/software_services.webp';
 import finalyrImg from '../assets/serivice caosel/finalyr_services.webp';
-import videoImg from '../assets/serivice caosel/video_edit_services.webp';
 import digitalMarketingImg from '../assets/serivice caosel/digital marketing_services.webp';
 
 const ServiceCarousel = () => {
@@ -24,34 +23,29 @@ const ServiceCarousel = () => {
 
   const services = [
     {
-      title: 'Web Development',
-      description: 'Professional websites with responsive design and modern features',
+      title: 'Web Application Development',
+      description: 'We design and develop secure, scalable web solutions for businesses and startups.',
       image: webdevImg,
     },
     {
-      title: 'AI projects / intgeration (chatbot, voice assistant)',
-      description: 'Intelligent AI chatbots and voice assistants for your business',
+      title: 'AI Product & Automation Services',
+      description: 'We build intelligent AI solutions to automate workflows and improve business efficiency.',
       image: aiImg,
     },
     {
-      title: 'Billing Software Development',
-      description: 'Custom billing and invoicing software solutions',
+      title: 'Custom Software & SaaS Product Development',
+      description: 'We create custom software and SaaS platforms tailored to real business needs.',
       image: softwareImg,
     },
     {
-      title: 'Final Year Projects',
-      description: 'AI / ML, Web Development, Data Analysis Projects with Documentation',
-      image: finalyrImg,
-    },
-    {
-      title: 'Video Editing',
-      description: 'Professional video editing and post-production services',
-      image: videoImg,
-    },
-    {
-      title: 'Digital Marketing',
-      description: 'Strategic social media planning and content creation',
+      title: 'Digital Marketing & Branding Services',
+      description: 'We help brands grow their online presence and generate high-quality leads.',
       image: digitalMarketingImg,
+    },
+    {
+      title: 'Education & Student Services',
+      description: 'We support students and working professionals with industry-ready solutions.',
+      image: finalyrImg,
     },
   ];
 
@@ -120,10 +114,6 @@ const ServiceCarousel = () => {
     isDraggingRef.current = false;
     setTimeout(() => setIsPaused(false), 200);
   };
-
-  // Removed handleMouseEnter/Leave pause logic to keep it rotating on hover as requested
-  // Hover effect will be handled by CSS only
-
   // Optimized animation: faster rotation speed
   useEffect(() => {
     if (!isIntersecting || !carouselRef.current || isPaused) return;

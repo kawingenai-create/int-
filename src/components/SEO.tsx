@@ -11,9 +11,9 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = "Integer.IO Services - Professional Web Development, AI/ML Solutions & Digital Marketing in Tamil Nadu, India",
-  description = "Leading technology solutions provider in Tamil Nadu, India. We specialize in custom web development, artificial intelligence and machine learning projects, professional logo design, digital marketing, data analytics, and business automation. Serving businesses, educational institutions, and students with affordable, innovative, and scalable digital solutions. Expert team with proven track record in delivering high-quality projects across multiple industries including healthcare, e-commerce, education, and consulting.",
-  keywords = "web development Tamil Nadu, AI ML projects India, machine learning solutions, professional logo design, digital marketing services, business automation, data analytics, custom software development, student projects, academic projects, React development, Python AI projects, e-commerce websites, business websites, healthcare technology, educational technology, consulting services Tamil Nadu, affordable web solutions India, Integer.IO Services",
+  title = "Integer.IO Services - Web Development, AI Automation, SaaS & Cloud Solutions in Tamil Nadu, India",
+  description = "Leading technology solutions provider in Tamil Nadu, India. We specialize in web application development, AI product & automation services, custom software & SaaS development, digital marketing & branding, education & student services, and cloud deployment & technical support. Serving businesses, startups, and students with innovative digital solutions.",
+  keywords = "web application development Tamil Nadu, AI automation services India, SaaS development, custom software development, digital marketing branding, student services India, cloud deployment, technical support, final year projects, portfolio websites, AI chatbots, voice assistants, billing software, React development, Integer.IO Services",
   image = logoAsset,
   url = "https://integer-io.vercel.app"
 }) => {
@@ -86,60 +86,60 @@ const SEO: React.FC<SEOProps> = ({
             "name": "Tamil Nadu"
           },
           "knowsAbout": [
-            "Web Development",
-            "Logo & Poster Design",
-            "AI & ML Projects",
-            "Data Analytics",
-            "Business Automation",
-            "Digital Marketing"
+            "Web Application Development",
+            "AI Product & Automation",
+            "Custom Software & SaaS",
+            "Digital Marketing & Branding",
+            "Education & Student Services",
+            "Cloud Deployment & Technical Support"
           ],
           "offers": [
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Web Development",
-                "description": "Custom website development using modern technologies including React, Node.js, and responsive design"
+                "name": "Web Application Development",
+                "description": "Secure, scalable web solutions including static websites, dynamic web apps, admin dashboards, and API integrations"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Logo & Poster Design",
-                "description": "Professional logo design, branding, and creative poster design for businesses"
+                "name": "AI Product & Automation Services",
+                "description": "Intelligent AI solutions including chatbots, voice assistants, NLP, computer vision, and process automation"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "AI & ML Projects",
-                "description": "Artificial intelligence and machine learning projects including predictive analytics, computer vision, and NLP"
+                "name": "Custom Software & SaaS Development",
+                "description": "Custom software and SaaS platforms including billing software, analytics dashboards, and business automation tools"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Data Analytics",
-                "description": "Comprehensive data analysis, visualization, and business intelligence solutions"
+                "name": "Digital Marketing & Branding",
+                "description": "SEO optimization, social media marketing, video editing, logo design, and creative poster design"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Business Automation",
-                "description": "Streamline business operations with intelligent automation and workflow optimization"
+                "name": "Education & Student Services",
+                "description": "Final year projects, student portfolios, ATS-friendly resumes, project documentation, and career guidance"
               }
             },
             {
               "@type": "Offer",
               "itemOffered": {
                 "@type": "Service",
-                "name": "Digital Marketing",
-                "description": "Comprehensive digital marketing including SEO, social media marketing, and content strategy"
+                "name": "Cloud Deployment & Technical Support",
+                "description": "Cloud deployment, server configuration, website hosting, domain & SSL setup, and ongoing maintenance"
               }
             }
           ]
@@ -163,12 +163,12 @@ const SEO: React.FC<SEOProps> = ({
           "email": "mskawin2004@gmail.com",
           "priceRange": "$$",
           "serviceType": [
-            "Web Development",
-            "Logo & Poster Design",
-            "AI & ML Projects",
-            "Data Analytics",
-            "Business Automation",
-            "Digital Marketing"
+            "Web Application Development",
+            "AI Product & Automation",
+            "Custom Software & SaaS",
+            "Digital Marketing & Branding",
+            "Education & Student Services",
+            "Cloud Deployment & Technical Support"
           ]
         })}
       </script>
