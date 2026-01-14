@@ -134,7 +134,10 @@ const Footer: React.FC = () => {
           >
             <div className="flex items-center space-x-3 mb-4">
               <img src={logo} alt="Logo" className="h-10 w-10 object-contain" />
-              <span className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+              <span className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${isDark
+                ? 'from-emerald-400 to-purple-400'
+                : 'from-purple-600 via-purple-500 to-emerald-500'
+                }`}>
                 Integer.IO
               </span>
             </div>
@@ -337,8 +340,8 @@ const Footer: React.FC = () => {
               className={`text-sm flex items-center ${isDark ? 'text-gray-400' : 'text-gray-500'
                 }`}
             >
-              © 2024 Integer.IO Services. Crafted with{' '}
-              <Heart className="h-4 w-4 text-red-500 mx-1 animate-pulse" /> by
+              © 2026Integer.IO Services. Crafted with{' '}
+              <Heart className={`h-4 w-4 mx-1 animate-pulse ${isDark ? 'text-red-400' : 'text-red-600'}`} /> by
               <Link
                 to="/admin"
                 className={`ml-1 hover:text-emerald-400 transition-colors ${isDark ? 'text-gray-200' : 'text-gray-600'}`}

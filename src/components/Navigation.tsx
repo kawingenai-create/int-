@@ -64,17 +64,13 @@ const Navigation: React.FC = () => {
             }`}
         >
           {/* Logo Section - Dark mode with visible dark glass, Light mode with white glass */}
+          {/* Logo Section - Enhanced Visibility */}
           <Link
             to="/"
-            className={`flex items-center space-x-0.5 group relative z-10 flex-shrink-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl transition-all duration-300 ${isDark
-                ? 'bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 shadow-lg'
-                : 'bg-white/90 backdrop-blur-md border border-gray-200/50 shadow-md'
+            className={`flex items-center space-x-2 group relative z-10 flex-shrink-0 px-3 py-2 rounded-xl transition-all duration-300 ${isDark
+              ? 'bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 shadow-lg'
+              : 'bg-white/80 backdrop-blur-xl border border-white/50 shadow-md'
               }`}
-            style={{
-              boxShadow: isDark
-                ? '0 4px 20px rgba(16, 185, 129, 0.2), 0 2px 8px rgba(139, 92, 246, 0.15)'
-                : '0 4px 15px rgba(139, 92, 246, 0.12), 0 2px 6px rgba(16, 185, 129, 0.08)',
-            }}
           >
             <div
               className={`transition-all duration-200 ease-out ${isScrolled ? 'scale-90' : 'scale-100'
@@ -84,8 +80,8 @@ const Navigation: React.FC = () => {
                 src={logo}
                 alt="Logo"
                 className={`object-contain transition-all duration-200 ease-out ${isScrolled
-                  ? 'h-8 w-8 sm:h-10 sm:w-10'
-                  : 'h-10 w-10 sm:h-12 sm:w-12'
+                  ? 'h-9 w-9 sm:h-10 sm:w-10'
+                  : 'h-12 w-12 sm:h-14 sm:w-14'
                   }`}
               />
             </div>
@@ -96,7 +92,7 @@ const Navigation: React.FC = () => {
                 className={`font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-200 ease-out ${isScrolled ? 'text-lg sm:text-xl' : 'text-xl sm:text-2xl'
                   } ${isDark
                     ? 'from-emerald-300 via-emerald-400 to-purple-400'
-                    : 'from-purple-600 via-purple-500 to-emerald-500'
+                    : 'from-purple-800 via-indigo-700 to-emerald-700'
                   }`}
                 style={{
                   letterSpacing: '0.01em',

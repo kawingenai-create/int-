@@ -13,6 +13,7 @@ import {
   Globe,
   Users,
   Star,
+  XCircle,
 } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
@@ -145,7 +146,7 @@ const Contact = () => {
 
   const services = [
     'Web Development',
-    
+
     'AI Apps & Integration (Chatbot)',
     'Final Year Projects',
     'Digital Marketing',
@@ -167,7 +168,7 @@ const Contact = () => {
         >
           <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
             ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
-            : 'text-gray-900'
+            : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
             }`}>
             Contact Us
           </h1>
@@ -185,7 +186,10 @@ const Contact = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col"
           >
-            <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className={`text-3xl font-bold mb-8 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}>
               Get In Touch
             </h2>
 
@@ -232,7 +236,7 @@ const Contact = () => {
 
               <InteractiveCard glowColor="pink" className="hover-3d">
                 <div className="flex items-center space-x-4">
-                  <Youtube className="h-8 w-8 text-red-400" />
+                  <Youtube className={`h-8 w-8 ${isDark ? 'text-red-400' : 'text-red-600'}`} />
                   <div>
                     <h3
                       className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'
@@ -244,7 +248,7 @@ const Contact = () => {
                       href="https://youtube.com/@integerio"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-red-400 hover:text-red-300 transition-colors"
+                      className={`transition-colors ${isDark ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-500'}`}
                     >
                       @integerio
                     </a>
@@ -498,6 +502,15 @@ const Contact = () => {
                               : 'bg-white border-gray-300'
                               }`}
                           >
+                            <div className="sticky top-0 right-0 flex justify-end p-2 bg-inherit z-20 border-b border-inherit">
+                              <button
+                                type="button"
+                                onClick={() => setShowServiceDropdown(false)}
+                                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                              >
+                                <XCircle className="w-5 h-5" />
+                              </button>
+                            </div>
                             {services.map((service) => (
                               <label
                                 key={service}
@@ -605,7 +618,10 @@ const Contact = () => {
           className="mt-16"
         >
           <InteractiveCard className="p-8 text-center hover-3d">
-            <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className={`text-2xl font-bold mb-6 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}>
               Business Hours
             </h2>
             <div className="grid md:grid-cols-2 gap-8">

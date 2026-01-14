@@ -284,7 +284,7 @@ const ReviewCarousel: React.FC = () => {
       </div>
 
       <div className="relative flex items-center justify-center h-[350px] sm:h-96 mb-8 w-full overflow-hidden">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {reviews.length > 0 &&
             getVisibleReviews().map((review) => {
               const position = review.position;

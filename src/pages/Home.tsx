@@ -1,16 +1,11 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Sparkles,
-  Zap,
-  Target,
-  Palette,
   Globe,
   Users,
   Award,
-  Brain,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import InteractiveCard from '../components/InteractiveCard';
 
@@ -123,7 +118,10 @@ const Home = () => {
             <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 sm:mb-6">
               <motion.span variants={slideR} className="flex items-center justify-center gap-2 sm:gap-4">
                 <img src={halfLogo} alt="Integer.IO" className="h-16 sm:h-14 md:h-24 w-auto object-contain" />
-                <span className="bg-gradient-to-r from-emerald-300 via-purple-300 to-pink-300 bg-clip-text text-transparent pb-1 sm:pb-2 text-xl sm:text-3xl md:text-5xl drop-shadow-sm" style={{ lineHeight: '1.3' }}>
+                <span className={`bg-gradient-to-r bg-clip-text text-transparent pb-1 sm:pb-2 text-xl sm:text-3xl md:text-5xl drop-shadow-sm ${isDark
+                  ? 'from-emerald-300 via-purple-300 to-pink-300'
+                  : 'from-purple-900 via-indigo-800 to-emerald-800'
+                  }`} style={{ lineHeight: '1.3' }}>
                   Integer.IO Services
                 </span>
               </motion.span>
@@ -187,7 +185,10 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={slideL}
-            className="text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
+            className={`text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}
           >
             Our Premium Products
           </motion.h2>
@@ -288,7 +289,10 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={slideL}
-            className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
+            className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}
           >
             Our Core Services
           </motion.h2>
@@ -329,7 +333,10 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={slideR}
-            className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
+            className={`text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}
           >
             Why Choose Integer.IO Services?
           </motion.h2>
@@ -376,7 +383,10 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={slideL}
-            className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent"
+            className={`text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}
           >
             Featured Projects
           </motion.h2>

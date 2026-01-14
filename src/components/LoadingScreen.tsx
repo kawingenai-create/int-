@@ -15,18 +15,22 @@ const LoadingScreen: React.FC<{ onComplete: () => void }> = ({
   useEffect(() => {
     // Optimized for faster loading
     const isMobile = window.innerWidth < 768;
-    const updateInterval = isMobile ? 60 : 45;
-    const progressIncrement = isMobile ? 2.5 : 2;
+    const updateInterval = isMobile ? 40 : 30; // Faster interval
+    const progressIncrement = isMobile ? 3 : 2.5; // Larger increments
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        const newProgress = Math.min(prev + progressIncrement, 100);
+        // Ensure we don't get stuck at 99.x
+        const increment = prev > 90 ? 5 : progressIncrement;
+        const newProgress = Math.min(prev + increment, 100);
 
-        if (newProgress === 100) {
+        if (newProgress >= 100) {
+          clearInterval(interval);
           setTimeout(() => {
             setShowLoading(false);
-            setTimeout(onComplete, 150);
-          }, 200);
+            setTimeout(onComplete, 100);
+          }, 150);
+          return 100;
         }
 
         return newProgress;

@@ -11,7 +11,6 @@ import {
     Users,
     BarChart3,
     Clock,
-    Monitor,
     TrendingUp,
     RefreshCw,
     Download,
@@ -416,57 +415,96 @@ const Admin: React.FC = () => {
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
-            let yPosition = 20;
+            let yPosition = 0;
 
-            // Header
-            pdf.setFontSize(24);
+            // Professional Header with Background
+            pdf.setFillColor(16, 185, 129); // Emerald Green
+            pdf.rect(0, 0, pageWidth, 40, 'F');
+
+            yPosition = 25;
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFontSize(26);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Integer.IO Analytics Report', pageWidth / 2, yPosition, { align: 'center' });
+            pdf.text('Integer.IO', 20, yPosition);
 
-            yPosition += 10;
-            pdf.setFontSize(10);
+            pdf.setFontSize(14);
             pdf.setFont('helvetica', 'normal');
-            pdf.setTextColor(100);
-            pdf.text(`Generated on ${new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, pageWidth / 2, yPosition, { align: 'center' });
+            pdf.text('Analytics Report', pageWidth - 20, yPosition, { align: 'right' });
+
+            yPosition += 30;
+
+            // Report Meta Data
+            pdf.setTextColor(50, 50, 50);
+            pdf.setFontSize(10);
+            pdf.text(`Generated on: ${new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, 20, yPosition);
+            pdf.text(`Report ID: #${Math.floor(Math.random() * 10000)}`, pageWidth - 20, yPosition, { align: 'right' });
 
             yPosition += 15;
+            pdf.setDrawColor(200, 200, 200);
             pdf.setLineWidth(0.5);
             pdf.line(20, yPosition, pageWidth - 20, yPosition);
-            yPosition += 10;
+            yPosition += 15;
 
-            // Executive Summary
-            pdf.setFontSize(16);
+            // Executive Summary Title
+            pdf.setFontSize(18);
             pdf.setFont('helvetica', 'bold');
-            pdf.setTextColor(0);
+            pdf.setTextColor(16, 185, 129); // Emerald
             pdf.text('Executive Summary', 20, yPosition);
             yPosition += 8;
 
-            pdf.setFontSize(10);
+            pdf.setFontSize(11);
             pdf.setFont('helvetica', 'normal');
+            pdf.setTextColor(60, 60, 60);
 
+            // Summary Grid Logic
             const summaryData = [
-                [`Total Visits: ${analytics.totalVisits.toLocaleString()}`, `Unique Visitors: ${analytics.uniqueVisitors.toLocaleString()}`],
-                [`Today's Visits: ${analytics.todayVisits}`, `Avg. Time: ${Math.floor(analytics.avgTimeSpent / 60)}m ${analytics.avgTimeSpent % 60}s`],
-                [`Mobile: ${analytics.mobileVisits} (${Math.round((analytics.mobileVisits / analytics.totalVisits) * 100)}%)`, `Desktop: ${analytics.desktopVisits} (${Math.round((analytics.desktopVisits / analytics.totalVisits) * 100)}%)`],
+                { label: 'Total Visits', value: analytics.totalVisits.toLocaleString() },
+                { label: 'Unique Visitors', value: analytics.uniqueVisitors.toLocaleString() },
+                { label: "Today's Visits", value: analytics.todayVisits.toString() },
+                { label: 'Avg. Time', value: `${Math.floor(analytics.avgTimeSpent / 60)}m ${analytics.avgTimeSpent % 60}s` },
+                { label: 'Mobile Traffic', value: `${Math.round((analytics.mobileVisits / (analytics.totalVisits || 1)) * 100)}%` },
+                { label: 'Desktop Traffic', value: `${Math.round((analytics.desktopVisits / (analytics.totalVisits || 1)) * 100)}%` },
             ];
 
-            summaryData.forEach(row => {
-                pdf.text(row[0], 25, yPosition);
-                pdf.text(row[1], pageWidth / 2 + 10, yPosition);
-                yPosition += 6;
+            let xPos = 20;
+            summaryData.forEach((item, index) => {
+                if (index % 2 === 0 && index !== 0) {
+                    yPosition += 12;
+                    xPos = 20;
+                }
+
+                // Label
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text(item.label + ':', xPos, yPosition);
+
+                // Value
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(11);
+                pdf.setTextColor(0, 0, 0);
+                pdf.text(item.value, xPos + 40, yPosition);
+
+                xPos += 80;
             });
 
-            yPosition += 10;
+            yPosition += 20;
 
-            // Capture charts if dashboard ref exists
+            // Capture charts
             if (dashboardRef.current) {
                 const charts = dashboardRef.current.querySelectorAll('.recharts-wrapper');
 
                 for (let i = 0; i < Math.min(charts.length, 2); i++) {
-                    if (yPosition > pageHeight - 80) {
+                    if (yPosition > pageHeight - 100) {
                         pdf.addPage();
                         yPosition = 20;
                     }
+
+                    pdf.setFontSize(14);
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setTextColor(16, 185, 129);
+                    pdf.text(i === 0 ? 'Traffic Trends' : 'Monthly Overview', 20, yPosition);
+                    yPosition += 10;
 
                     const chart = charts[i] as HTMLElement;
                     const canvas = await html2canvas(chart, {
@@ -481,35 +519,54 @@ const Admin: React.FC = () => {
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                     pdf.addImage(imgData, 'PNG', 20, yPosition, imgWidth, imgHeight);
-                    yPosition += imgHeight + 10;
+                    yPosition += imgHeight + 15;
                 }
             }
 
-            // Page Performance Table
+            // Top Pages Table
             if (yPosition > pageHeight - 60) {
                 pdf.addPage();
-                yPosition = 20;
+                yPosition = 30;
             }
 
-            pdf.setFontSize(14);
+            pdf.setFontSize(16);
             pdf.setFont('helvetica', 'bold');
-            pdf.text('Top Pages Performance', 20, yPosition);
-            yPosition += 8;
+            pdf.setTextColor(16, 185, 129);
+            pdf.text('Top Content Performance', 20, yPosition);
+            yPosition += 10;
 
-            pdf.setFontSize(9);
-            pdf.setFont('helvetica', 'normal');
+            // Table Header
+            pdf.setFillColor(240, 240, 240);
+            pdf.rect(20, yPosition, pageWidth - 40, 10, 'F');
+            pdf.setFontSize(10);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Page Name', 25, yPosition + 7);
+            pdf.text('Views', pageWidth - 80, yPosition + 7);
+            pdf.text('Avg. Time', pageWidth - 40, yPosition + 7);
+            yPosition += 10;
 
-            analytics.pageViews.slice(0, 5).forEach((page, idx) => {
-                pdf.text(`${idx + 1}. ${page.page}`, 25, yPosition);
-                pdf.text(`${page.views} visits`, pageWidth / 2, yPosition);
-                pdf.text(`${page.avgTime}s avg`, pageWidth - 50, yPosition);
-                yPosition += 6;
+            // Table Rows
+            analytics.pageViews.slice(0, 8).forEach((page, idx) => {
+                const rowY = yPosition + 7;
+                pdf.setFont('helvetica', 'normal');
+                pdf.text(page.page, 25, rowY);
+                pdf.text(page.views.toString(), pageWidth - 80, rowY);
+                pdf.text(`${page.avgTime}s`, pageWidth - 40, rowY);
+
+                pdf.setDrawColor(230, 230, 230);
+                pdf.line(20, yPosition + 10, pageWidth - 20, yPosition + 10);
+                yPosition += 10;
             });
 
             // Footer
-            pdf.setFontSize(8);
-            pdf.setTextColor(150);
-            pdf.text('Integer.IO Services - Confidential', pageWidth / 2, pageHeight - 10, { align: 'center' });
+            const pageCount = pdf.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                pdf.setPage(i);
+                pdf.setFontSize(8);
+                pdf.setTextColor(150);
+                pdf.text('Integer.IO - Confidential - Internal Use Only', pageWidth / 2, pageHeight - 10, { align: 'center' });
+                pdf.text(`Page ${i} of ${pageCount}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
+            }
 
             // Save PDF
             pdf.save(`Integer-IO-Analytics-${new Date().toISOString().split('T')[0]}.pdf`);
@@ -934,73 +991,59 @@ const Admin: React.FC = () => {
                             className="space-y-6"
                         >
                             {/* Stats Grid */}
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                <InteractiveCard glowColor="emerald" className="p-4 sm:p-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 sm:p-3 rounded-lg ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
-                                            <Users className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <InteractiveCard glowColor="emerald" className="p-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
+                                            <Users className={`h-6 w-6 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Visitors</p>
-                                            <p className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                {analytics.uniqueVisitors}
+                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Visitors</p>
+                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                                {analytics.uniqueVisitors.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
                                 </InteractiveCard>
 
 
-                                <InteractiveCard glowColor="blue" className="p-4 sm:p-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 sm:p-3 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                                            <BarChart3 className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                                <InteractiveCard glowColor="blue" className="p-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
+                                            <BarChart3 className={`h-6 w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Total Page Views</p>
-                                            <p className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                {analytics.totalVisits}
+                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Page Views</p>
+                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                                {analytics.totalVisits.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
                                 </InteractiveCard>
 
-                                <InteractiveCard glowColor="blue" className="p-4 sm:p-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 sm:p-3 rounded-lg ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                                            <TrendingUp className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                                <InteractiveCard glowColor="purple" className="p-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
+                                            <TrendingUp className={`h-6 w-6 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Today's Page Views</p>
-                                            <p className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                {analytics.todayVisits}
+                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Today's Page Views</p>
+                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                                {analytics.todayVisits.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
                                 </InteractiveCard>
 
-                                <InteractiveCard glowColor="purple" className="p-4 sm:p-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 sm:p-3 rounded-lg ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
-                                            <Clock className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                                <InteractiveCard glowColor="pink" className="p-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-pink-500/20' : 'bg-pink-100'}`}>
+                                            <Clock className={`h-6 w-6 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Avg Time</p>
-                                            <p className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Avg Time</p>
+                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                                 {Math.floor(analytics.avgTimeSpent / 60)}m {analytics.avgTimeSpent % 60}s
-                                            </p>
-                                        </div>
-                                    </div>
-                                </InteractiveCard>
-
-                                <InteractiveCard glowColor="pink" className="p-4 sm:p-6">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 sm:p-3 rounded-lg ${isDark ? 'bg-pink-500/20' : 'bg-pink-100'}`}>
-                                            <Monitor className={`h-5 w-5 sm:h-6 sm:w-6 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
-                                        </div>
-                                        <div>
-                                            <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Desktop</p>
-                                            <p className={`text-xl sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                                {analytics.desktopVisits}
                                             </p>
                                         </div>
                                     </div>

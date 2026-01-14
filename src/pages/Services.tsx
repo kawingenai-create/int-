@@ -68,12 +68,13 @@ const Services = () => {
       color: 'blue' as const,
       description: 'We create custom software and SaaS platforms tailored to real business needs',
       features: [
-        'Billing software',
-        'SaaS platforms',
-        'Data analytics dashboards',
-        'PDF auto-generation',
-        'Business automation tools',
-        'Role-based systems'
+        'Billing Software',
+        'CRM Solutions',
+        'SaaS Platforms',
+        'Data Analytics Dashboards',
+        'PDF Auto-generation',
+        'Business Automation Tools',
+        'Role-based Systems'
       ]
     },
     {
@@ -182,9 +183,9 @@ const Services = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
-            ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
-            : 'text-gray-900'
+          <h1 className={`text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 via-purple-400 to-pink-400'
+            : 'from-purple-900 via-indigo-800 to-emerald-800'
             }`}>
             Our Services
           </h1>
@@ -227,7 +228,10 @@ const Services = () => {
           className="mb-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+              ? 'from-emerald-400 to-purple-400'
+              : 'from-purple-800 to-emerald-700'
+              }`}>
               🏆 Our Services
             </h2>
             <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>

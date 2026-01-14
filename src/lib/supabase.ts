@@ -51,6 +51,27 @@ export interface PendingReview {
     created_at: string;
 }
 
+// Helper to update existing analytics record
+const performUpdate = async (existingRecord: any, columnName: string, visitorId: string) => {
+    const currentCount = (existingRecord[columnName] as number) || 0;
+    const { data, error } = await supabase
+        .from('user_analytics')
+        .update({
+            [columnName]: currentCount + 1,
+            last_visit: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        })
+        .eq('user_id', visitorId)
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error updating user analytics:', error);
+        return existingRecord.id as number;
+    }
+    return (data?.id as number) || (existingRecord.id as number);
+};
+
 // Track page visit with user_analytics table (one row per user)
 export const trackPageVisit = async (pagePath: string, visitorId: string): Promise<number | null> => {
     const deviceType = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
@@ -81,24 +102,7 @@ export const trackPageVisit = async (pagePath: string, visitorId: string): Promi
 
         if (existing) {
             // Update existing user - increment page visit count
-            const existingRecord = existing as Record<string, unknown>;
-            const currentCount = (existingRecord[columnName] as number) || 0;
-            const { data, error } = await supabase
-                .from('user_analytics')
-                .update({
-                    [columnName]: currentCount + 1,
-                    last_visit: new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                })
-                .eq('user_id', visitorId)
-                .select()
-                .single();
-
-            if (error) {
-                console.error('Error updating user analytics:', error);
-                return existingRecord.id as number;
-            }
-            return (data?.id as number) || (existingRecord.id as number);
+            return await performUpdate(existing, columnName, visitorId);
         } else {
             // Create new user record
             const { data, error } = await supabase
@@ -115,6 +119,20 @@ export const trackPageVisit = async (pagePath: string, visitorId: string): Promi
                 .single();
 
             if (error) {
+                // If duplicate key error (User created by another request in the meantime)
+                if (error.code === '23505') {
+                    // Fetch the record that was just created by the other request
+                    const { data: retryExisting } = await supabase
+                        .from('user_analytics')
+                        .select('id, ' + columnName)
+                        .eq('user_id', visitorId)
+                        .maybeSingle();
+
+                    if (retryExisting) {
+                        return await performUpdate(retryExisting, columnName, visitorId);
+                    }
+                }
+
                 console.error('Error creating user analytics:', error);
                 return null;
             }

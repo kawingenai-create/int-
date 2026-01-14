@@ -130,7 +130,7 @@ const About = () => {
           <h1
             className={`text-4xl md:text-6xl font-bold ${isDark
               ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
-              : 'text-gray-900'
+              : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
               }`}
             style={{ lineHeight: '1.3', paddingBottom: '0.4rem', letterSpacing: '0.02em' }}
           >
@@ -145,7 +145,10 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 to-purple-400'
+            : 'from-purple-800 to-emerald-700'
+            }`}>
             Our Mission
           </h2>
           <InteractiveCard glowColor="emerald" className="p-6 sm:p-8 md:p-12">
@@ -216,7 +219,10 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="mb-16 pt-8"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 to-purple-400'
+            : 'from-purple-800 to-emerald-700'
+            }`}>
             Our Team
           </h2>
 
@@ -320,7 +326,10 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="mb-16 scroll-mt-24"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 to-purple-400'
+            : 'from-purple-800 to-emerald-700'
+            }`}>
             Client Reviews
           </h2>
           <ReviewCarousel />
@@ -333,7 +342,10 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 to-purple-400'
+            : 'from-purple-800 to-emerald-700'
+            }`}>
             Our Values
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">

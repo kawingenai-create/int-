@@ -61,7 +61,7 @@ const Products = () => {
                     <h1
                         className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
                             ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
-                            : 'text-gray-900'
+                            : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
                             }`}
                     >
                         Our Products
@@ -167,7 +167,10 @@ const Products = () => {
                     className="mt-20"
                 >
                     <InteractiveCard className="p-12 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+                        <h2 className={`text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+                            ? 'from-emerald-400 to-purple-400'
+                            : 'from-purple-800 to-emerald-700'
+                            }`}>
                             Need a Custom Solution?
                         </h2>
                         <p

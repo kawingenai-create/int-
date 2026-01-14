@@ -9,6 +9,7 @@ interface Star {
   speed: number;
   opacity: number;
   twinkle: number;
+  color?: string;
 }
 
 interface Asteroid {
@@ -249,8 +250,8 @@ const SpaceBackground: React.FC = () => {
       className="fixed inset-0 w-full h-full pointer-events-none z-0"
       style={{
         background: isDark
-          ? 'radial-gradient(ellipse at 20% 30%, rgba(30, 41, 82, 0.4) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(59, 28, 82, 0.3) 0%, transparent 50%), linear-gradient(135deg, #0a0a1a 0%, #0f0f23 25%, #1a1a2e 50%, #16213e 75%, #0a0a1a 100%)'
-          : 'radial-gradient(ellipse at 30% 40%, rgba(199, 210, 254, 0.5) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(221, 214, 254, 0.4) 0%, transparent 50%), linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #cbd5e1 70%, #94a3b8 100%)'
+          ? 'radial-gradient(ellipse at 20% 30%, rgba(30, 50, 100, 0.3) 0%, transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(40, 30, 80, 0.3) 0%, transparent 60%), linear-gradient(135deg, #050510 0%, #0a1025 35%, #101530 70%, #050510 100%)'
+          : 'radial-gradient(ellipse at 30% 40%, rgba(199, 210, 254, 0.6) 0%, transparent 70%), radial-gradient(ellipse at 70% 60%, rgba(221, 214, 254, 0.5) 0%, transparent 70%), linear-gradient(135deg, #f0f4f8 0%, #eef2ff 40%, #e0e7ff 100%)'
       }}
     />
   );

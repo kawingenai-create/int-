@@ -195,7 +195,7 @@ const Projects = () => {
         >
           <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
             ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
-            : 'text-gray-900'
+            : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
             }`}>
             Our Projects
           </h1>
@@ -213,7 +213,10 @@ const Projects = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-20"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            ? 'from-emerald-400 to-purple-400'
+            : 'from-purple-800 to-emerald-700'
+            }`}>
             Our Client Projects
           </h2>
 

@@ -373,9 +373,10 @@ button:hover {
   }
 
   /* Disable will-change on mobile for better performance */
-  * {
-    will-change: auto !important;
-  }
+  /* Selective hardware acceleration for mobile */
+  /* * {
+    will-change: auto; 
+  } */
 
   /* Only apply will-change to actively animating elements */
   .actively-animating {
