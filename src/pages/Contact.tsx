@@ -245,7 +245,7 @@ const Contact = () => {
                       YouTube Channel
                     </h3>
                     <a
-                      href="https://youtube.com/@integerio"
+                      href="https://www.youtube.com/@integer-io"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`transition-colors ${isDark ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-500'}`}
