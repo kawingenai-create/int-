@@ -81,7 +81,7 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
         ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700/50'
         : 'bg-white border border-gray-200'
         }`}>
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={currentIndex}
             custom={direction}
@@ -89,6 +89,8 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
             initial="enter"
             animate="center"
             exit="exit"
+            className="w-full" // Ensure it takes width
+
             transition={{
               x: { type: 'spring', stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },

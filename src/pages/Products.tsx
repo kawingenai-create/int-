@@ -1,12 +1,104 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
 
 // Import product images
 import chatzImg from '../assets/products/chatz.io.webp';
+import chatzImg2 from '../assets/products/chatzio 2.webp';
+import chatzLogo from '../assets/products/chatz-logo.webp';
+import crmImg1 from '../assets/products/crm1.webp';
+import crmImg2 from '../assets/products/crm2.webp';
+import crmLogo from '../assets/products/crm_logo.webp';
 import imgGenImg from '../assets/products/img_gen.webp';
+import imgGenImg2 from '../assets/products/img_gen2.webp';
+import dispLogo from '../assets/products/disp-logo.webp';
+
+
+const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images: string[], title: string, color: string, badge: string, isDark: boolean }) => {
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [isHovered, setIsHovered] = React.useState(false);
+
+    // Auto-scroll logic (pauses on hover)
+    React.useEffect(() => {
+        if (isHovered) return; // Pause if hovered
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % images.length);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [images.length, isHovered]);
+
+    const paginate = (newDirection: number) => {
+        setCurrentIndex((prev) => {
+            let next = prev + newDirection;
+            if (next < 0) next = images.length - 1;
+            if (next >= images.length) next = 0;
+            return next;
+        });
+    };
+
+    const swipePower = (offset: number, velocity: number) => {
+        return Math.abs(offset) * velocity;
+    };
+
+    return (
+        <div
+            className="relative overflow-hidden rounded-2xl group cursor-grab active:cursor-grabbing"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
+            <div className="relative h-56 sm:h-64 lg:h-80 w-full bg-white dark:bg-gray-900/50">
+                <AnimatePresence mode="popLayout" initial={false}>
+                    <motion.img
+                        key={currentIndex}
+                        src={images[currentIndex]}
+                        alt={title}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-contain p-6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, zIndex: 1 }}
+                        exit={{ opacity: 0, zIndex: 0 }}
+                        transition={{ duration: 0.5 }}
+                        drag="x"
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={1}
+                        onDragEnd={(_, { offset, velocity }) => {
+                            const swipe = swipePower(offset.x, velocity.x);
+                            if (swipe < -10000) {
+                                paginate(1);
+                            } else if (swipe > 10000) {
+                                paginate(-1);
+                            }
+                        }}
+                    />
+                </AnimatePresence>
+
+                {/* Badge */}
+                <div className="absolute top-3 right-3 z-20">
+                    <span className={`px-3 py-1.5 ${color === 'emerald' ? 'bg-emerald-500' : color === 'blue' ? 'bg-blue-500' : 'bg-purple-500'} text-white text-xs font-bold rounded-full shadow-lg`}>
+                        {badge}
+                    </span>
+                </div>
+
+                {/* Dots */}
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-20 pointer-events-none">
+                    {images.map((_, idx) => (
+                        <div
+                            key={idx}
+                            className={`w-2 h-2 rounded-full transition-all shadow-sm ${idx === currentIndex
+                                ? (isDark ? 'bg-white w-4' : 'bg-gray-800 w-4')
+                                : (isDark ? 'bg-white/30' : 'bg-gray-800/30')
+                                }`}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Products = () => {
     const { isDark } = useTheme();
@@ -15,8 +107,9 @@ const Products = () => {
         {
             id: 1,
             title: 'Chatz.IO',
+            logo: chatzLogo,
             subtitle: 'AI Chat Assistant for Students',
-            image: chatzImg,
+            images: [chatzImg, chatzImg2],
             description: 'An intelligent AI-powered chat assistant designed specifically for students. Get instant help with your studies, research assistance, exam preparation, and academic guidance. Features smart conversation, knowledge base integration, and study support tools.',
             features: [
                 'AI-powered study assistance and tutoring',
@@ -31,18 +124,37 @@ const Products = () => {
         },
         {
             id: 2,
-            title: 'Dips.IO',
-            subtitle: 'Next-Gen Digital Platform',
-            image: imgGenImg,
-            description: 'An innovative digital platform coming soon! Dips.IO will revolutionize how you interact with digital content. Stay tuned for more exciting features and capabilities that will transform your digital experience.',
+            title: 'Integrio Project Portal (CRM)',
+            logo: crmLogo,
+            subtitle: 'Comprehensive Project Management',
+            images: [crmImg1, crmImg2],
+            description: 'A powerful Project Management System designed to streamline your workflow. Manage projects, track progress, collaborate with teams, and handle client communications all in one place. Perfect for agencies and development teams.',
             features: [
-                'Revolutionary digital experience',
-                'Advanced AI integration',
-                'Seamless user interface',
-                'Cross-platform compatibility',
+                'Project Lifecycle Management',
+                'Client & Team Collaboration Tools',
+                'Task Tracking & Progress Monitoring',
+                'Automated Reporting & Analytics',
+            ],
+            visitUrl: 'https://integer-io-projectportal.netlify.app/',
+            color: 'emerald' as const,
+            badge: 'NEW',
+            isComingSoon: false,
+        },
+        {
+            id: 3,
+            title: 'Dips.IO',
+            logo: dispLogo,
+            subtitle: 'AI Image Generation & Documentation',
+            images: [imgGenImg, imgGenImg2],
+            description: 'An innovative AI-powered platform for image generation and documentation management. Dips.IO combines cutting-edge AI technology with intuitive documentation tools to streamline your creative and organizational workflows.',
+            features: [
+                'AI-Powered Image Generation',
+                'Smart Documentation Management',
+                'Seamless Workflow Integration',
+                'Advanced Export Options',
             ],
             visitUrl: '',
-            color: 'purple' as const,
+            color: 'emerald' as const,
             badge: 'COMING SOON',
             isComingSoon: true,
         },
@@ -84,48 +196,43 @@ const Products = () => {
                             transition={{ duration: 0.8, delay: index * 0.2 }}
                         >
                             <InteractiveCard glowColor={product.color} className="overflow-hidden">
-                                <div className={`flex flex-col lg:flex-row ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-8 p-6 lg:p-8`}>
-                                    {/* Product Image - Simple Clean Display */}
+                                <div className={`flex flex-col lg:flex-row ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''} gap-6 lg:gap-8 p-4 sm:p-6 lg:p-8`}>
+                                    {/* Product Image Carousel */}
                                     <div className="lg:w-1/2">
-                                        <div className="relative overflow-hidden rounded-2xl">
-                                            <img
-                                                src={product.image}
-                                                alt={product.title}
-                                                loading="lazy"
-                                                className="w-full h-64 sm:h-80 lg:h-96 object-cover transition-transform duration-500 hover:scale-105"
-                                            />
-                                            <div className="absolute top-3 right-3">
-                                                <span className={`px-3 py-1.5 ${product.color === 'emerald' ? 'bg-emerald-500' : 'bg-purple-500'} text-white text-xs font-bold rounded-full shadow-lg`}>
-                                                    {product.badge}
-                                                </span>
-                                            </div>
-                                        </div>
+                                        <ProductImageCarousel images={product.images} title={product.title} color={product.color} badge={product.badge} isDark={isDark} />
                                     </div>
 
                                     {/* Product Details */}
                                     <div className="lg:w-1/2 flex flex-col justify-center">
-                                        <span className={`text-${product.color}-400 text-sm font-semibold uppercase tracking-wider mb-2`}>
+                                        <span className={`text-${product.color}-400 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2`}>
                                             {product.subtitle}
                                         </span>
-                                        <h2
-                                            className={`text-3xl lg:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
-                                                }`}
-                                        >
-                                            {product.title}
-                                        </h2>
+                                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                                            <img
+                                                src={product.logo}
+                                                alt={`${product.title} logo`}
+                                                className={`w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg shadow-lg ${isDark
+                                                    ? 'bg-white border-2 border-white'
+                                                    : 'bg-white border-2 border-gray-200'
+                                                    }`}
+                                            />
+                                            <h2 className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                {product.title}
+                                            </h2>
+                                        </div>
                                         <p
-                                            className={`text-base lg:text-lg leading-relaxed mb-6 ${isDark ? 'text-gray-300' : 'text-gray-600'
+                                            className={`text-sm sm:text-base lg:text-lg leading-relaxed mb-4 sm:mb-6 ${isDark ? 'text-gray-300' : 'text-gray-600'
                                                 }`}
                                         >
                                             {product.description}
                                         </p>
 
                                         {/* Features List */}
-                                        <ul className={`space-y-3 mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        <ul className={`space-y-2 sm:space-y-3 mb-6 sm:mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                                             {product.features.map((feature, idx) => (
-                                                <li key={idx} className="flex items-center gap-3">
-                                                    <div className={`w-2 h-2 ${product.color === 'emerald' ? 'bg-emerald-400' : 'bg-purple-400'} rounded-full flex-shrink-0`} />
-                                                    <span>{feature}</span>
+                                                <li key={idx} className="flex items-start gap-2 sm:gap-3">
+                                                    <div className={`w-2 h-2 mt-1.5 ${product.color === 'emerald' ? 'bg-emerald-400' : product.color === 'blue' ? 'bg-blue-400' : 'bg-purple-400'} rounded-full flex-shrink-0`} />
+                                                    <span className="text-sm sm:text-base">{feature}</span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -133,7 +240,7 @@ const Products = () => {
                                         {/* Visit Button or Coming Soon */}
                                         {product.isComingSoon ? (
                                             <div
-                                                className={`inline-flex items-center justify-center gap-2 bg-gray-500 cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold shadow-lg w-full sm:w-auto`}
+                                                className={`inline-flex items-center justify-center gap-2 bg-gray-500 cursor-not-allowed text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold shadow-lg w-full sm:w-auto text-sm sm:text-base`}
                                             >
                                                 Coming Soon
                                             </div>
@@ -144,12 +251,13 @@ const Products = () => {
                                                 rel="noopener noreferrer"
                                                 className={`inline-flex items-center justify-center gap-2 ${product.color === 'emerald'
                                                     ? 'bg-emerald-500 hover:bg-emerald-600'
-                                                    : 'bg-purple-500 hover:bg-purple-600'
-                                                    } text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg w-full sm:w-auto`}
+                                                    : product.color === 'blue' ? 'bg-blue-500 hover:bg-blue-600'
+                                                        : 'bg-purple-500 hover:bg-purple-600'
+                                                    } text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg w-full sm:w-auto text-sm sm:text-base`}
                                             >
-                                                <ExternalLink className="h-5 w-5" />
+                                                <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
                                                 Visit Product
-                                                <ArrowRight className="h-5 w-5" />
+                                                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                                             </a>
                                         )}
                                     </div>

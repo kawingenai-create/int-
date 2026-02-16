@@ -21,11 +21,15 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
+    AreaChart,
+    Area,
     ResponsiveContainer,
     BarChart,
     Bar,
-    AreaChart,
-    Area,
+    PieChart,
+    Pie,
+    Cell,
+    Legend,
 } from 'recharts';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -64,7 +68,7 @@ interface AnalyticsData {
     pageViews: { page: string; views: number; avgTime: number }[];
     browserStats: { browser: string; count: number }[];
     weeklyVisits: { day: string; visits: number }[];
-    hourlyVisits: { hour: string; visits: number }[];
+    hourlyVisits: { hour: string; today: number; yesterday: number; isCurrentHour: boolean }[];
     avgTimeSpent: number;
     timeOfDay: { morning: number; afternoon: number; evening: number; night: number };
 }
@@ -97,6 +101,8 @@ const Admin: React.FC = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const [deviceFilter, setDeviceFilter] = useState<'today' | 'lastMonth' | 'overall'>('overall');
+    const [allUsers, setAllUsers] = useState<any[]>([]);
     const dashboardRef = useRef<HTMLDivElement>(null);
 
     const ADMIN_PASSWORD = 'kawin235';
@@ -182,6 +188,7 @@ const Admin: React.FC = () => {
 
             if (users && users.length > 0) {
                 const today = new Date().toDateString();
+                setAllUsers(users);
 
                 // Total unique visitors
                 const uniqueVisitors = users.length;
@@ -267,18 +274,35 @@ const Admin: React.FC = () => {
                     });
                 }
 
-                // Hourly visits (simplified - using last_visit hour)
-                const hourlyCounts = new Array(24).fill(0);
+                // Hourly visits - Comparative (Today vs Yesterday)
+                const currentHour = new Date().getHours();
+                const todayHourlyCounts = new Array(24).fill(0);
+                const yesterdayHourlyCounts = new Array(24).fill(0);
+
+                // Get yesterday's date string
+                const yesterdayDate = new Date();
+                yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+                const yesterday = yesterdayDate.toDateString();
+
                 users.forEach((u: any) => {
                     const date = new Date(u.last_visit);
-                    const hour = date.getHours();
-                    hourlyCounts[hour]++;
+                    const dateStr = date.toDateString();
+
+                    if (dateStr === today) {
+                        todayHourlyCounts[date.getHours()]++;
+                    } else if (dateStr === yesterday) {
+                        yesterdayHourlyCounts[date.getHours()]++;
+                    }
                 });
 
-                const hourlyVisits = hourlyCounts.map((count, hour) => ({
-                    hour: `${hour}:00`,
-                    visits: count
-                }));
+                const hourlyVisits = todayHourlyCounts.map((count, hour) => {
+                    return {
+                        hour: `${hour}:00`,
+                        today: count,
+                        yesterday: yesterdayHourlyCounts[hour],
+                        isCurrentHour: hour === currentHour
+                    };
+                });
 
                 setAnalytics({
                     totalVisits,
@@ -546,7 +570,7 @@ const Admin: React.FC = () => {
             yPosition += 10;
 
             // Table Rows
-            analytics.pageViews.slice(0, 8).forEach((page, idx) => {
+            analytics.pageViews.slice(0, 8).forEach((page) => {
                 const rowY = yPosition + 7;
                 pdf.setFont('helvetica', 'normal');
                 pdf.text(page.page, 25, rowY);
@@ -1053,16 +1077,32 @@ const Admin: React.FC = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 {/* Hourly Visits Chart */}
                                 <InteractiveCard className="p-6">
-                                    <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                        Visits by Hour (24h)
-                                    </h3>
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                            Visits Comparison (Last 24 Hours)
+                                        </h3>
+                                        <div className="flex items-center gap-4 text-xs">
+                                            <div className="flex items-center gap-1">
+                                                <div className="w-3 h-3 rounded-full bg-gray-400"></div>
+                                                <span className={isDark ? 'text-gray-400' : 'text-gray-500'}>Yesterday</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                                <span className={isDark ? 'text-gray-200' : 'text-gray-700'}>Today</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
                                         <ResponsiveContainer width="100%" height={256} minWidth={200}>
                                             <AreaChart data={analytics.hourlyVisits}>
                                                 <defs>
-                                                    <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
+                                                    <linearGradient id="colorToday" x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
                                                         <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                                                    </linearGradient>
+                                                    <linearGradient id="colorYesterday" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#9ca3af" stopOpacity={0.3} />
+                                                        <stop offset="95%" stopColor="#9ca3af" stopOpacity={0} />
                                                     </linearGradient>
                                                 </defs>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} vertical={false} />
@@ -1090,11 +1130,32 @@ const Admin: React.FC = () => {
                                                 />
                                                 <Area
                                                     type="monotone"
-                                                    dataKey="visits"
-                                                    stroke="#10b981"
+                                                    dataKey="yesterday"
+                                                    stroke="#9ca3af"
+                                                    fill="url(#colorYesterday)"
                                                     fillOpacity={1}
-                                                    fill="url(#colorVisits)"
                                                     strokeWidth={2}
+                                                    name="Yesterday"
+                                                />
+                                                <Area
+                                                    type="monotone"
+                                                    dataKey="today"
+                                                    stroke="#10b981"
+                                                    fill="url(#colorToday)"
+                                                    fillOpacity={1}
+                                                    strokeWidth={2}
+                                                    name="Today"
+                                                    dot={(props) => {
+                                                        const { cx, cy, payload } = props;
+                                                        if (payload.isCurrentHour) {
+                                                            return (
+                                                                <circle cx={cx} cy={cy} r={4} fill="#10b981" stroke="#fff" strokeWidth={2}>
+                                                                    <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite" />
+                                                                </circle>
+                                                            );
+                                                        }
+                                                        return null;
+                                                    }}
                                                 />
                                             </AreaChart>
                                         </ResponsiveContainer>
@@ -1139,7 +1200,7 @@ const Admin: React.FC = () => {
                                 </InteractiveCard>
                             </div>
 
-                            {/* Updated Page Views & Time of Day */}
+                            {/* Updated Page Views & Device Stats */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 {/* Page Views with Time */}
                                 <InteractiveCard className="p-6">
@@ -1170,6 +1231,76 @@ const Admin: React.FC = () => {
                                             ))}
                                         </div>
                                     )}
+                                </InteractiveCard>
+
+                                {/* Device Stats Pie Chart */}
+                                <InteractiveCard className="p-6">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                            Device Distribution
+                                        </h3>
+                                        <select
+                                            value={deviceFilter || 'overall'}
+                                            onChange={(e) => setDeviceFilter(e.target.value as 'today' | 'lastMonth' | 'overall')}
+                                            className={`px-3 py-1.5 rounded-lg border text-sm font-medium outline-none cursor-pointer ${isDark
+                                                ? 'bg-gray-800 border-gray-600 text-white'
+                                                : 'bg-gray-100 border-gray-300 text-gray-800'
+                                                }`}
+                                        >
+                                            <option value="today">Today</option>
+                                            <option value="lastMonth">Last Month</option>
+                                            <option value="overall">Overall</option>
+                                        </select>
+                                    </div>
+                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
+                                            <PieChart>
+                                                <Pie
+                                                    data={(() => {
+                                                        const filteredUsers = allUsers.filter((u: any) => {
+                                                            if (deviceFilter === 'today') {
+                                                                return new Date(u.last_visit).toDateString() === new Date().toDateString();
+                                                            } else if (deviceFilter === 'lastMonth') {
+                                                                const monthAgo = new Date();
+                                                                monthAgo.setMonth(monthAgo.getMonth() - 1);
+                                                                return new Date(u.last_visit) >= monthAgo;
+                                                            }
+                                                            return true; // overall
+                                                        });
+                                                        const mobile = filteredUsers.filter((u: any) => u.device_type === 'mobile' || u.device_type === 'tablet').length;
+                                                        const desktop = filteredUsers.length - mobile;
+                                                        return [
+                                                            { name: 'Mobile', value: mobile },
+                                                            { name: 'Desktop', value: desktop }
+                                                        ];
+                                                    })()}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    labelLine={true}
+                                                    label={({ name, value, percent, x, y }) => (
+                                                        <text x={x} y={y} fill={isDark ? '#ffffff' : '#1f2937'} textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={600}>
+                                                            {`${name}: ${value} (${((percent || 0) * 100).toFixed(0)}%)`}
+                                                        </text>
+                                                    )}
+                                                    outerRadius={80}
+                                                    fill="#8884d8"
+                                                    dataKey="value"
+                                                >
+                                                    <Cell fill="#8b5cf6" />
+                                                    <Cell fill="#10b981" />
+                                                </Pie>
+                                                <Tooltip
+                                                    contentStyle={{
+                                                        backgroundColor: isDark ? '#1f2937' : '#ffffff',
+                                                        borderColor: isDark ? '#374151' : '#e5e7eb',
+                                                        borderRadius: '0.5rem',
+                                                        color: isDark ? '#ffffff' : '#000000',
+                                                    }}
+                                                />
+                                                <Legend />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </InteractiveCard>
                             </div>
                         </motion.div>

@@ -76,7 +76,7 @@ const SaturnPlanet: React.FC = () => {
         {/* Saturn Core with realistic appearance */}
         <div className={`absolute inset-0 rounded-full overflow-hidden shadow-2xl z-10 ${isDark
           ? 'bg-gradient-to-br from-yellow-400 via-orange-500 to-yellow-600'
-          : 'bg-gradient-to-br from-amber-500 via-orange-600 to-red-700'
+          : 'bg-gradient-to-br from-amber-400 via-orange-500 to-red-600'
           }`}>
 
           {/* Saturn's characteristic bands - More realistic */}

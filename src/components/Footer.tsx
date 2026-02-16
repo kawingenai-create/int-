@@ -7,6 +7,7 @@ import {
   Heart,
   Instagram,
   Linkedin,
+  Youtube,
   ArrowRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -156,6 +157,17 @@ const Footer: React.FC = () => {
                   }`}
               >
                 <Phone className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.youtube.com/@integer-io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-1.5 rounded-lg transition-colors border ${isDark
+                  ? 'text-gray-200 border-white/10 hover:text-red-500'
+                  : 'text-gray-600 border-gray-200 hover:text-red-600'
+                  }`}
+              >
+                <Youtube className="h-4 w-4" />
               </a>
               <a
                 href="mailto:integer.io.ai@gmail.com"

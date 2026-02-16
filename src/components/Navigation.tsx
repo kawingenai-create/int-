@@ -79,7 +79,7 @@ const Navigation: React.FC = () => {
               <img
                 src={logo}
                 alt="Logo"
-                className={`object-contain transition-all duration-200 ease-out ${isScrolled
+                className={`object-contain rounded-full transition-all duration-200 ease-out will-change-transform ${isScrolled
                   ? 'h-9 w-9 sm:h-10 sm:w-10'
                   : 'h-12 w-12 sm:h-14 sm:w-14'
                   }`}

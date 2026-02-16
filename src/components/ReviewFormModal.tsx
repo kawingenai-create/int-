@@ -37,12 +37,15 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
     });
 
     const serviceOptions = [
-        'Web Services',
+        'Web Development',
+        'AI Apps & Integration (Chatbot)',
+        'Final Year Projects',
         'Digital Marketing',
-        'Video Editing',
-        'Logo & Poster Design',
-        'AI & ML Projects',
-        'Data Analytics Projects',
+        'Video/Logo Designing',
+        'Portfolio (Students/Employees)',
+        'Billing Software',
+        'Mobile App Development',
+        'Data Analytics'
     ];
 
     const handleServiceToggle = (service: string) => {
