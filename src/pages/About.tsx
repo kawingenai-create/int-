@@ -119,16 +119,16 @@ const About = () => {
       {/* Inject flip card styles */}
       <style>{flipCardStyles}</style>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         {/* Page Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-10 pb-8"
+          className="text-center mb-6 sm:mb-10 pb-4 sm:pb-8"
         >
           <h1
-            className={`text-4xl md:text-6xl font-bold ${isDark
+            className={`text-2xl sm:text-4xl md:text-6xl font-bold ${isDark
               ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
               : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
               }`}
@@ -145,19 +145,19 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-16"
         >
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+          <h2 className={`text-xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
             ? 'from-emerald-400 to-purple-400'
             : 'from-purple-800 to-emerald-700'
             }`}>
             Our Mission
           </h2>
-          <InteractiveCard glowColor="emerald" className="p-6 sm:p-8 md:p-12">
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          <InteractiveCard glowColor="emerald" className="!p-4 sm:!p-6 md:!p-12">
+            <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-8 lg:gap-12">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 flex-shrink-0"
+                className="w-24 h-24 sm:w-32 sm:h-32 md:w-44 md:h-44 flex-shrink-0"
               >
                 <div
                   className={`w-full h-full rounded-full flex items-center justify-center border-4 overflow-hidden shadow-xl ${isDark
@@ -175,16 +175,16 @@ const About = () => {
 
               <div className="flex-1">
                 <div className="text-center lg:text-left mb-6">
-                  <h3 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                  <h3 className={`text-lg sm:text-2xl font-bold mb-2 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                     Empowering Digital Transformation
                   </h3>
-                  <p className={`text-base sm:text-lg leading-relaxed mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+                  <p className={`text-xs sm:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                     Integer.IO Services is a leading digital solutions provider founded with a vision to
                     <span className="text-emerald-400 font-semibold"> democratize technology</span> for
                     businesses of all sizes. We specialize in web development, AI/ML solutions, billing software,
                     and digital marketing.
                   </p>
-                  <p className={`text-base sm:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <p className={`text-xs sm:text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     Our mission is to make cutting-edge technology
                     <span className="text-purple-400 font-semibold"> accessible and affordable</span> for
                     everyone—from startups and small businesses to students working on their final year projects.
@@ -193,18 +193,18 @@ const About = () => {
                 </div>
 
                 {/* Key Stats */}
-                <div className="grid grid-cols-3 gap-4 mt-6">
-                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20">
-                    <div className="text-2xl md:text-3xl font-bold text-emerald-400">30+</div>
-                    <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Happy Clients</div>
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">
+                  <div className="text-center p-2 sm:p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-emerald-400">30+</div>
+                    <div className={`text-[10px] sm:text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Happy Clients</div>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20">
-                    <div className="text-2xl md:text-3xl font-bold text-purple-400">50+</div>
-                    <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Projects Done</div>
+                  <div className="text-center p-2 sm:p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-400">50+</div>
+                    <div className={`text-[10px] sm:text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Projects Done</div>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20">
-                    <div className="text-2xl md:text-3xl font-bold text-cyan-400">24/7</div>
-                    <div className={`text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Support</div>
+                  <div className="text-center p-2 sm:p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-400">24/7</div>
+                    <div className={`text-[10px] sm:text-xs md:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Support</div>
                   </div>
                 </div>
               </div>
@@ -217,9 +217,9 @@ const About = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-16 pt-8"
+          className="mb-10 sm:mb-16 pt-4 sm:pt-8"
         >
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+          <h2 className={`text-xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
             ? 'from-emerald-400 to-purple-400'
             : 'from-purple-800 to-emerald-700'
             }`}>
@@ -227,7 +227,7 @@ const About = () => {
           </h2>
 
           {/* Square Cards - 3 in a row on PC */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
             {teamMembers.map((member, index) => (
               <motion.div
                 key={member.name}
@@ -238,7 +238,7 @@ const About = () => {
               >
                 <div
                   className={`relative w-full transition-transform duration-700 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
-                  style={{ minHeight: '320px' }}
+                  style={{ minHeight: '280px' }}
                 >
                   {/* Front Face - Square Card with Border */}
                   <div
@@ -248,17 +248,17 @@ const About = () => {
                       } shadow-lg`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-6 h-full flex flex-col items-center text-center">
-                      <div className={`w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 mb-4 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
+                    <div className="p-4 sm:p-6 h-full flex flex-col items-center text-center">
+                      <div className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
                         <img src={member.image} alt={member.name} className="w-full h-full object-cover object-center" />
                       </div>
-                      <h3 className={`text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                      <h3 className={`text-lg sm:text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                         {member.name}
                       </h3>
                       <p className={`text-sm font-medium mb-3 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                         {member.role}
                       </p>
-                      <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} line-clamp-3`}>
+                      <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} line-clamp-3`}>
                         {member.description}
                       </p>
                     </div>
@@ -272,8 +272,8 @@ const About = () => {
                       } shadow-lg`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-6 h-full flex flex-col justify-center">
-                      <h3 className={`text-xl font-bold mb-4 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                    <div className="p-4 sm:p-6 h-full flex flex-col justify-center">
+                      <h3 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                         Contact Details
                       </h3>
                       <div className="space-y-4">
@@ -342,13 +342,13 @@ const About = () => {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+          <h2 className={`text-xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
             ? 'from-emerald-400 to-purple-400'
             : 'from-purple-800 to-emerald-700'
             }`}>
             Our Values
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -356,15 +356,15 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <InteractiveCard glowColor={value.color as 'emerald' | 'purple' | 'pink' | 'blue'} className="p-6 h-full">
+                <InteractiveCard glowColor={value.color as 'emerald' | 'purple' | 'pink' | 'blue'} className="h-full">
                   <div className="flex flex-col items-center text-center">
-                    <div className={`mb-4 text-${value.color}-400`}>
-                      {value.icon}
+                    <div className={`mb-2 sm:mb-4 text-${value.color}-400`}>
+                      {React.cloneElement(value.icon, { className: 'h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10' })}
                     </div>
-                    <h3 className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                    <h3 className={`text-sm sm:text-base md:text-lg font-bold mb-1 sm:mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                       {value.title}
                     </h3>
-                    <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <p className={`text-[10px] sm:text-xs md:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       {value.description}
                     </p>
                   </div>

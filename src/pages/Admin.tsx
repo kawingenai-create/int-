@@ -670,7 +670,7 @@ const Admin: React.FC = () => {
 
     // Admin Dashboard
     return (
-        <div className="min-h-screen pt-20 px-4 pb-12">
+        <div className="min-h-screen pt-20 px-2 sm:px-4 pb-8 sm:pb-12">
             <div className="max-w-7xl mx-auto">
                 {/* Print-Only Report Header (hidden on screen, visible on print) */}
                 <div className="hidden print:block text-center mb-8 pb-6 border-b-2 border-gray-300">
@@ -697,40 +697,40 @@ const Admin: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="flex gap-2 printable-hidden">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 printable-hidden">
                         <button
                             onClick={generatePDF}
                             disabled={isGeneratingPDF || activeTab !== 'analytics'}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isDark
+                            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${isDark
                                 ? 'bg-emerald-600 hover:bg-emerald-700 text-white disabled:bg-gray-700 disabled:text-gray-500'
                                 : 'bg-emerald-500 hover:bg-emerald-600 text-white disabled:bg-gray-300 disabled:text-gray-500'
                                 } disabled:cursor-not-allowed`}
                         >
                             {isGeneratingPDF ? (
                                 <>
-                                    <RefreshCw className="h-4 w-4 animate-spin" />
+                                    <RefreshCw className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin" />
                                     Generating...
                                 </>
                             ) : (
                                 <>
-                                    <Download className="h-4 w-4" />
+                                    <Download className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                     Export PDF
                                 </>
                             )}
                         </button>
                         <button
                             onClick={handleLogout}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${isDark
+                            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${isDark
                                 ? 'bg-gray-800 hover:bg-gray-700 text-gray-200'
                                 : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                                 }`}
                         >
-                            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                            <RefreshCw className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isLoading ? 'animate-spin' : ''}`} />
                             Refresh
                         </button>
                         <button
                             onClick={handleLogout}
-                            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all"
+                            className="px-2.5 py-1.5 sm:px-4 sm:py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs sm:text-sm font-medium transition-all"
                         >
                             Logout
                         </button>
@@ -738,41 +738,41 @@ const Admin: React.FC = () => {
                 </motion.div>
 
                 {/* Tabs */}
-                <div className="flex gap-2 mb-6">
+                <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-1">
                     <button
                         onClick={() => setActiveTab('reviews')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'reviews'
+                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'reviews'
                             ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <Star className="h-4 w-4" />
+                        <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         Reviews ({reviews.length})
                     </button>
                     <button
                         onClick={() => setActiveTab('analytics')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'analytics'
+                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'analytics'
                             ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <BarChart3 className="h-4 w-4" />
+                        <BarChart3 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         Analytics
                     </button>
                     <button
                         onClick={() => setActiveTab('enquiries')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'enquiries'
+                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'enquiries'
                             ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' // Changed color for enquiries tab
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <Mail className="h-4 w-4" />
+                        <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         Enquiries ({enquiries.length})
                     </button>
                 </div>
@@ -786,9 +786,9 @@ const Admin: React.FC = () => {
                             className="space-y-4"
                         >
                             {reviews.length === 0 ? (
-                                <InteractiveCard className="p-8 text-center">
-                                    <Star className={`h-12 w-12 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
-                                    <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                                <InteractiveCard className="p-4 sm:p-8 text-center">
+                                    <Star className={`h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+                                    <p className={`text-sm sm:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                         No reviews yet
                                     </p>
                                 </InteractiveCard>
@@ -862,8 +862,8 @@ const Admin: React.FC = () => {
 
                             {/* Approved Reviews Section */}
                             {approvedReviews.length > 0 && (
-                                <div className="mt-8">
-                                    <h3 className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                <div className="mt-6 sm:mt-8">
+                                    <h3 className={`text-base sm:text-xl font-bold mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         ✅ Approved Reviews ({approvedReviews.length})
                                     </h3>
                                     <div className="overflow-x-auto">
@@ -1015,15 +1015,15 @@ const Admin: React.FC = () => {
                             className="space-y-6"
                         >
                             {/* Stats Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <InteractiveCard glowColor="emerald" className="p-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
-                                            <Users className={`h-6 w-6 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+                                <InteractiveCard glowColor="emerald" className="!p-3 sm:!p-6">
+                                    <div className="flex items-center gap-2 sm:gap-4">
+                                        <div className={`p-2 sm:p-3 rounded-xl ${isDark ? 'bg-emerald-500/20' : 'bg-emerald-100'}`}>
+                                            <Users className={`h-4 w-4 sm:h-6 sm:w-6 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Visitors</p>
-                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            <p className={`text-[10px] sm:text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Visitors</p>
+                                            <p className={`text-lg sm:text-2xl font-bold mt-0.5 sm:mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                                 {analytics.uniqueVisitors.toLocaleString()}
                                             </p>
                                         </div>
@@ -1031,42 +1031,42 @@ const Admin: React.FC = () => {
                                 </InteractiveCard>
 
 
-                                <InteractiveCard glowColor="blue" className="p-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                                            <BarChart3 className={`h-6 w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                                <InteractiveCard glowColor="blue" className="!p-3 sm:!p-6">
+                                    <div className="flex items-center gap-2 sm:gap-4">
+                                        <div className={`p-2 sm:p-3 rounded-xl ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
+                                            <BarChart3 className={`h-4 w-4 sm:h-6 sm:w-6 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Page Views</p>
-                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            <p className={`text-[10px] sm:text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Page Views</p>
+                                            <p className={`text-lg sm:text-2xl font-bold mt-0.5 sm:mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                                 {analytics.totalVisits.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
                                 </InteractiveCard>
 
-                                <InteractiveCard glowColor="purple" className="p-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
-                                            <TrendingUp className={`h-6 w-6 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                                <InteractiveCard glowColor="purple" className="!p-3 sm:!p-6">
+                                    <div className="flex items-center gap-2 sm:gap-4">
+                                        <div className={`p-2 sm:p-3 rounded-xl ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
+                                            <TrendingUp className={`h-4 w-4 sm:h-6 sm:w-6 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Today's Page Views</p>
-                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            <p className={`text-[10px] sm:text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Today's Page Views</p>
+                                            <p className={`text-lg sm:text-2xl font-bold mt-0.5 sm:mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                                 {analytics.todayVisits.toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
                                 </InteractiveCard>
 
-                                <InteractiveCard glowColor="pink" className="p-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl ${isDark ? 'bg-pink-500/20' : 'bg-pink-100'}`}>
-                                            <Clock className={`h-6 w-6 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
+                                <InteractiveCard glowColor="pink" className="!p-3 sm:!p-6">
+                                    <div className="flex items-center gap-2 sm:gap-4">
+                                        <div className={`p-2 sm:p-3 rounded-xl ${isDark ? 'bg-pink-500/20' : 'bg-pink-100'}`}>
+                                            <Clock className={`h-4 w-4 sm:h-6 sm:w-6 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
                                         </div>
                                         <div>
-                                            <p className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Avg Time</p>
-                                            <p className={`text-2xl font-bold mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                            <p className={`text-[10px] sm:text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Avg Time</p>
+                                            <p className={`text-lg sm:text-2xl font-bold mt-0.5 sm:mt-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                                                 {Math.floor(analytics.avgTimeSpent / 60)}m {analytics.avgTimeSpent % 60}s
                                             </p>
                                         </div>
@@ -1074,11 +1074,11 @@ const Admin: React.FC = () => {
                                 </InteractiveCard>
                             </div>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6">
                                 {/* Hourly Visits Chart */}
-                                <InteractiveCard className="p-6">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                <InteractiveCard className="!p-3 sm:!p-6">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 sm:mb-6">
+                                        <h3 className={`text-sm sm:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                             Visits Comparison (Last 24 Hours)
                                         </h3>
                                         <div className="flex items-center gap-4 text-xs">
@@ -1092,8 +1092,8 @@ const Admin: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
-                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
+                                    <div className="h-48 sm:h-64 w-full" style={{ minHeight: '192px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={200}>
                                             <AreaChart data={analytics.hourlyVisits}>
                                                 <defs>
                                                     <linearGradient id="colorToday" x1="0" y1="0" x2="0" y2="1">
@@ -1163,12 +1163,12 @@ const Admin: React.FC = () => {
                                 </InteractiveCard>
 
                                 {/* Monthly Visits Bar Chart */}
-                                <InteractiveCard className="p-6">
-                                    <h3 className={`text-lg font-semibold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                <InteractiveCard className="!p-3 sm:!p-6">
+                                    <h3 className={`text-sm sm:text-lg font-semibold mb-3 sm:mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         Monthly Overview (Last 30 Days)
                                     </h3>
-                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
-                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
+                                    <div className="h-48 sm:h-64 w-full" style={{ minHeight: '192px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={200}>
                                             <BarChart data={analytics.weeklyVisits}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} vertical={false} />
                                                 <XAxis
@@ -1201,10 +1201,10 @@ const Admin: React.FC = () => {
                             </div>
 
                             {/* Updated Page Views & Device Stats */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6">
                                 {/* Page Views with Time */}
-                                <InteractiveCard className="p-6">
-                                    <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                <InteractiveCard className="!p-3 sm:!p-6">
+                                    <h3 className={`text-sm sm:text-lg font-semibold mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                         Top Pages by Views
                                     </h3>
                                     {analytics.pageViews.length === 0 ? (
@@ -1234,9 +1234,9 @@ const Admin: React.FC = () => {
                                 </InteractiveCard>
 
                                 {/* Device Stats Pie Chart */}
-                                <InteractiveCard className="p-6">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                <InteractiveCard className="!p-3 sm:!p-6">
+                                    <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                        <h3 className={`text-sm sm:text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                             Device Distribution
                                         </h3>
                                         <select
@@ -1252,8 +1252,8 @@ const Admin: React.FC = () => {
                                             <option value="overall">Overall</option>
                                         </select>
                                     </div>
-                                    <div className="h-64 w-full" style={{ minHeight: '256px', minWidth: '200px' }}>
-                                        <ResponsiveContainer width="100%" height={256} minWidth={200}>
+                                    <div className="h-48 sm:h-64 w-full" style={{ minHeight: '192px', minWidth: '200px' }}>
+                                        <ResponsiveContainer width="100%" height="100%" minWidth={200}>
                                             <PieChart>
                                                 <Pie
                                                     data={(() => {
@@ -1316,12 +1316,12 @@ const Admin: React.FC = () => {
                         >
                             <div className="grid gap-6">
                                 {enquiries.length === 0 ? (
-                                    <InteractiveCard className="p-12 text-center">
-                                        <Mail className={`h-16 w-16 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
-                                        <h3 className={`text-xl font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                    <InteractiveCard className="p-6 sm:p-12 text-center">
+                                        <Mail className={`h-10 w-10 sm:h-16 sm:w-16 mx-auto mb-3 sm:mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+                                        <h3 className={`text-base sm:text-xl font-semibold mb-1.5 sm:mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                                             No Enquiries Yet
                                         </h3>
-                                        <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                                        <p className={`text-xs sm:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                                             Contact form submissions will appear here
                                         </p>
                                     </InteractiveCard>

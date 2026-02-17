@@ -181,26 +181,26 @@ const Projects = () => {
   const handleEmailRequest = (pdfName: string, categoryName: string) => {
     const subject = `Request for ${categoryName} Projects PDF`;
     const body = `Hi,%0D%0A%0D%0AI would like to request the ${categoryName} projects PDF (${pdfName}).%0D%0A%0D%0APlease send me the detailed project list and information.%0D%0A%0D%0AThank you!`;
-    window.open(`mailto:mskawin2004@gmail.com?subject=${subject}&body=${body}`);
+    window.open(`mailto:integer.io.ai@gmail.com?subject=${subject}&body=${body}`);
   };
 
   return (
     <div className="relative min-h-screen pt-20">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-16"
         >
-          <h1 className={`text-4xl md:text-6xl font-bold mb-6 ${isDark
+          <h1 className={`text-2xl sm:text-4xl md:text-6xl font-bold mb-3 sm:mb-6 ${isDark
             ? 'bg-gradient-to-r from-emerald-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'
             : 'bg-gradient-to-r from-purple-900 via-indigo-800 to-emerald-800 bg-clip-text text-transparent'
             }`}>
             Our Projects
           </h1>
           <p
-            className={`text-xl max-w-3xl mx-auto font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'
+            className={`text-xs sm:text-lg md:text-xl max-w-3xl mx-auto font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'
               }`}
           >
             Explore our portfolio and download comprehensive project collections
@@ -211,9 +211,9 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-20"
+          className="mb-12 sm:mb-20"
         >
-          <h2 className={`text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
+          <h2 className={`text-xl sm:text-3xl md:text-4xl font-bold text-center mb-6 sm:mb-12 bg-gradient-to-r bg-clip-text text-transparent ${isDark
             ? 'from-emerald-400 to-purple-400'
             : 'from-purple-800 to-emerald-700'
             }`}>
@@ -229,13 +229,13 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
+          className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 sm:mb-12"
         >
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg ${selectedCategory === category
+              className={`px-3 py-1.5 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-base font-medium transition-all duration-300 shadow-lg ${selectedCategory === category
                 ? 'bg-emerald-500 text-white shadow-emerald-500/25'
                 : isDark
                   ? 'bg-gray-800 text-gray-200 hover:bg-gray-700 shadow-gray-800/25'
@@ -248,7 +248,7 @@ const Projects = () => {
         </motion.div>
 
         {/* Project Categories */}
-        <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-16">
           {filteredCategories.map((category, index) => (
             <motion.div
               key={category.name}
@@ -257,44 +257,44 @@ const Projects = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <InteractiveCard glowColor={category.color as 'emerald' | 'purple' | 'blue'} className="h-full">
-                <div className="mb-6">
+                <div className="mb-3 sm:mb-6">
                   <h3
-                    className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'
+                    className={`text-base sm:text-xl md:text-2xl font-bold mb-1.5 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-800'
                       }`}
                   >
                     {category.name}
                   </h3>
                   <p
-                    className={`mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'
+                    className={`text-[11px] sm:text-sm md:text-base mb-2 sm:mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'
                       }`}
                   >
                     {category.description}
                   </p>
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-3 sm:mb-6">
                   <h4
-                    className={`text-lg font-semibold mb-3 ${isDark ? 'text-gray-100' : 'text-gray-800'
+                    className={`text-sm sm:text-base md:text-lg font-semibold mb-2 sm:mb-3 ${isDark ? 'text-gray-100' : 'text-gray-800'
                       }`}
                   >
                     Sample Projects:
                   </h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1 sm:space-y-2">
                     {category.projects.slice(0, 4).map((project, idx) => (
                       <li
                         key={idx}
-                        className={`flex items-center text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'
+                        className={`flex items-center text-[11px] sm:text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'
                           }`}
                       >
                         <div
-                          className={`w-2 h-2 bg-${category.color}-400 rounded-full mr-3`}
+                          className={`w-1.5 h-1.5 sm:w-2 sm:h-2 bg-${category.color}-400 rounded-full mr-2 sm:mr-3`}
                         />
                         {project}
                       </li>
                     ))}
                     {category.projects.length > 4 && (
                       <li
-                        className={`text-sm italic ${isDark ? 'text-gray-400' : 'text-gray-500'
+                        className={`text-[10px] sm:text-sm italic ${isDark ? 'text-gray-400' : 'text-gray-500'
                           }`}
                       >
                         +{category.projects.length - 4} more projects...
@@ -304,7 +304,7 @@ const Projects = () => {
                 </div>
 
                 {/* Download Buttons */}
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   <button
                     onClick={() =>
                       handlePdfDownload(
@@ -314,7 +314,7 @@ const Projects = () => {
                       )
                     }
                     disabled={downloading === category.pdfName}
-                    className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg btn-hover-effect disabled:opacity-50 disabled:cursor-not-allowed ${category.color === 'emerald'
+                    className={`w-full flex items-center justify-center gap-1.5 sm:gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 shadow-lg btn-hover-effect disabled:opacity-50 disabled:cursor-not-allowed ${category.color === 'emerald'
                       ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/25'
                       : category.color === 'purple'
                         ? 'bg-purple-500 hover:bg-purple-600 text-white shadow-purple-500/25'
@@ -330,13 +330,13 @@ const Projects = () => {
                             repeat: Infinity,
                             ease: 'linear',
                           }}
-                          className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
+                          className="h-4 w-4 sm:h-5 sm:w-5 border-2 border-white border-t-transparent rounded-full"
                         />
                         Downloading...
                       </>
                     ) : (
                       <>
-                        <Download className="h-5 w-5" />
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5" />
                         Download PDF
                       </>
                     )}
@@ -346,12 +346,12 @@ const Projects = () => {
                     onClick={() =>
                       handleEmailRequest(category.pdfName, category.name)
                     }
-                    className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-300 border-2 ${isDark
+                    className={`w-full flex items-center justify-center gap-1.5 sm:gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 border-2 ${isDark
                       ? 'border-gray-600 text-gray-200 hover:border-gray-500 hover:bg-gray-800'
                       : 'border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-100'
                       }`}
                   >
-                    <FileText className="h-5 w-5" />
+                    <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
                     Request via Email
                   </button>
                 </div>
@@ -365,31 +365,31 @@ const Projects = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mt-16"
+          className="text-center mt-8 sm:mt-16"
         >
           <div
-            className={`p-8 rounded-2xl ${isDark ? 'bg-gray-800/50' : 'bg-gray-100/50'
+            className={`p-4 sm:p-6 md:p-8 rounded-2xl ${isDark ? 'bg-gray-800/50' : 'bg-gray-100/50'
               } backdrop-blur-sm`}
           >
             <h3
-              className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
+              className={`text-lg sm:text-xl md:text-2xl font-bold mb-2 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'
                 }`}
             >
               Need a Custom Project?
             </h3>
-            <p className={`mb-6 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+            <p className={`text-xs sm:text-sm md:text-base mb-3 sm:mb-6 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
               Let's discuss your requirements and create something amazing
               together
             </p>
             <a
               href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-purple-500 hover:from-emerald-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-5 py-2.5 sm:px-8 sm:py-4 bg-gradient-to-r from-emerald-500 to-purple-500 hover:from-emerald-600 hover:to-purple-600 text-white text-sm sm:text-base font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               onClick={(e) => {
                 e.preventDefault();
                 window.location.href = '/contact#contact-form';
               }}
             >
-              <ExternalLink className="h-5 w-5" />
+              <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
               Get in Touch
             </a>
           </div>
