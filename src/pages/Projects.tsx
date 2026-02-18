@@ -49,7 +49,7 @@ const portfolioProjects = [
     description:
       "Modern React website showcasing Sri Karpagam's premium product highlights and brand story. Features interactive product galleries, brand heritage sections, and customer testimonials with smooth animations.",
     image: karpagamImg,
-    link: 'https://sri-karpagam.netlify.app/',
+    link: 'https://srikarpagambrand.in/',
     category: 'Web Development',
     technologies: ['React', 'Tailwind CSS', 'JSX', 'Framer Motion'],
   },

@@ -50,7 +50,7 @@ const sampleProjects = [
     description:
       'A product showcase website featuring traditional flours and food mixes with a clean product gallery',
     image: karpagamImg,
-    link: 'https://sri-karpagam.netlify.app/',
+    link: 'https://srikarpagambrand.in/',
     category: 'Web Development',
   },
 ];
