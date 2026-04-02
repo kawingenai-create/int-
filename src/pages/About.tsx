@@ -16,7 +16,7 @@ import logo from '../assets/company_logo/hand.webp';
 import ReviewCarousel from '../components/ReviewCarousel';
 import kawin from '../assets/team/kawin.webp'
 import livan from '../assets/team/livan.webp'
-import muthulakshmi from '../assets/team/muthulakshmi.webp'
+import hemanth from '../assets/team/heamnth.png'
 
 // Add these styles to your CSS file or add as a style tag in your component
 const flipCardStyles = `
@@ -45,7 +45,7 @@ const About = () => {
     {
       name: 'Kawin M.S.',
       role: 'Founder & CEO',
-      description: 'Leads the company vision, projects, and development. Expert in AI/ML, web development, and business strategy.',
+      description: 'Leads the company vision, projects, and development. Expert in AI Automation, web development, and business strategy.',
       email: 'integeriokawin@gmail.com',
       phone: '+91 8015355914',
       linkedin: 'https://www.linkedin.com/in/kawin-m-s-570961285/',
@@ -64,13 +64,13 @@ const About = () => {
       color: 'indigo',
     },
     {
-      name: 'Muthulakshmi',
+      name: 'Hemanth',
       role: 'Operations & QA Executive',
       description: 'Oversees profit/loss and supports client communication. Manages financial planning and stakeholder relations.',
-      email: 'integeriofinance@gmail.com',
-      phone: '+91 8015355914',
-      linkedin: 'https://linkedin.com/in/muthulakshmi',
-      image: muthulakshmi,
+      email: 'integeriohemanth@gmail.com',
+      phone: '+91 6385279258',
+      linkedin: '#',
+      image: hemanth,
       color: 'pink',
     },
   ];
@@ -181,7 +181,7 @@ const About = () => {
                   <p className={`text-xs sm:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                     Integer.IO Services is a leading digital solutions provider founded with a vision to
                     <span className="text-emerald-400 font-semibold"> democratize technology</span> for
-                    businesses of all sizes. We specialize in web development, AI/ML solutions, billing software,
+                    businesses of all sizes. We specialize in web development, AI Automation solutions, billing software,
                     and digital marketing.
                   </p>
                   <p className={`text-xs sm:text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -238,7 +238,7 @@ const About = () => {
               >
                 <div
                   className={`relative w-full transition-transform duration-700 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
-                  style={{ minHeight: '280px' }}
+                  style={{ minHeight: '340px' }}
                 >
                   {/* Front Face - Square Card with Border */}
                   <div
@@ -248,9 +248,9 @@ const About = () => {
                       } shadow-lg`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-4 sm:p-6 h-full flex flex-col items-center text-center">
-                      <div className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
-                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-center" />
+                    <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-center text-center">
+                      <div className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 bg-white/50 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
+                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
                       </div>
                       <h3 className={`text-lg sm:text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                         {member.name}
@@ -258,7 +258,7 @@ const About = () => {
                       <p className={`text-sm font-medium mb-3 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                         {member.role}
                       </p>
-                      <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'} line-clamp-3`}>
+                      <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         {member.description}
                       </p>
                     </div>

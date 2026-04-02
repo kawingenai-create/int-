@@ -51,7 +51,7 @@ const SEO: React.FC<SEOProps> = ({
           "@type": "Organization",
           "name": "Integer.IO Services",
           "alternateName": "Integer IO",
-          "description": "Professional technology solutions provider specializing in web development, AI/ML projects, digital marketing, and business automation services in Tamil Nadu, India",
+          "description": "Professional technology solutions provider specializing in web development, AI Automation projects, digital marketing, and business automation services in Tamil Nadu, India",
           "url": url,
           "logo": image,
           "image": image,

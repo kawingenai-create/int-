@@ -390,7 +390,7 @@ const Footer: React.FC = () => {
             <div className={`flex items-center space-x-3 text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
               <span>Web Dev</span>
               <span>•</span>
-              <span>AI/ML</span>
+              <span>AI Automation</span>
               <span>•</span>
               <span>Marketing</span>
             </div>

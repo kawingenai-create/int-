@@ -9,7 +9,7 @@ const WhatsAppWidget: React.FC = () => {
 
   const quickMessages = [
     "Hi! I need help with web development",
-    "I'm interested in AI/ML projects",
+    "I'm interested in AI Automation projects",
     "Can you help with logo design?",
     "I need a final year project",
     "What are your pricing options?"
@@ -38,14 +38,15 @@ const WhatsAppWidget: React.FC = () => {
           animate={{
             boxShadow: [
               "0 0 0 0 rgba(34, 197, 94, 0.7)",
-              "0 0 0 10px rgba(34, 197, 94, 0)",
-              "0 0 0 20px rgba(34, 197, 94, 0)"
-            ]
+              "0 0 0 15px rgba(34, 197, 94, 0)",
+              "0 0 0 30px rgba(34, 197, 94, 0)"
+            ],
+            scale: [1, 1.05, 1]
           }}
           transition={{
-            duration: 2.5,
+            duration: 2,
             repeat: Infinity,
-            ease: "easeOut"
+            ease: "easeInOut"
           }}
         >
           {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}

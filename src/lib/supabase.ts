@@ -320,19 +320,30 @@ export const updateEnquiryStatus = async (enquiryId: number, status: string): Pr
     }
 };
 
-// Delete contact enquiry
-export const deleteContactEnquiry = async (enquiryId: number): Promise<boolean> => {
+// Delete contact enquiry (permanently from DB)
+export const deleteContactEnquiry = async (enquiryId: number): Promise<{ success: boolean; error?: string }> => {
     try {
+        // Try primary table first
         const { error } = await supabase
             .from('contact_enquiries')
             .delete()
             .eq('id', enquiryId);
 
-        if (error) throw error;
-        return true;
-    } catch (err) {
+        if (!error) return { success: true };
+
+        // If primary failed, try fallback 'enquiries' table
+        const { error: fallbackError } = await supabase
+            .from('enquiries')
+            .delete()
+            .eq('id', enquiryId);
+
+        if (!fallbackError) return { success: true };
+
+        console.error('[Supabase] Delete error (both tables):', error.message, fallbackError.message);
+        return { success: false, error: error.message };
+    } catch (err: any) {
         console.error('Error deleting enquiry:', err);
-        return false;
+        return { success: false, error: err?.message || 'Unknown error' };
     }
 };
 
@@ -389,6 +400,93 @@ export const deleteApprovedReview = async (id: number): Promise<boolean> => {
         return true;
     } catch (err) {
         console.error('Error deleting approved review:', err);
+        return false;
+    }
+};
+
+// --- CHATBOT LEADS --- //
+export interface ChatbotLead {
+    id?: number;
+    session_id: string;
+    name?: string;
+    email?: string;
+    message_count: number;
+    unhandled_queries?: string;
+    chat_history?: any[];
+    created_at?: string;
+}
+
+export const logChatbotLead = async (leadData: Partial<ChatbotLead>): Promise<boolean> => {
+    try {
+        if (!leadData.session_id) return false;
+
+        // Check if lead already exists for this session
+        const { data: existing } = await supabase
+            .from('chatbot_leads')
+            .select('id, unhandled_queries, message_count, chat_history')
+            .eq('session_id', leadData.session_id)
+            .maybeSingle();
+
+        if (existing) {
+            // Update existing record
+            const updatedUnhandled = leadData.unhandled_queries
+                ? (existing.unhandled_queries ? existing.unhandled_queries + '\n' + leadData.unhandled_queries : leadData.unhandled_queries)
+                : existing.unhandled_queries;
+
+            const { error } = await supabase
+                .from('chatbot_leads')
+                .update({
+                    name: leadData.name || undefined,
+                    email: leadData.email || undefined,
+                    message_count: (existing.message_count || 0) + (leadData.message_count || 0),
+                    unhandled_queries: updatedUnhandled,
+                    chat_history: leadData.chat_history || existing.chat_history,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('session_id', leadData.session_id);
+            
+            if (error) throw error;
+        } else {
+            // Insert new record
+            const { error } = await supabase
+                .from('chatbot_leads')
+                .insert([{
+                    ...leadData,
+                    unhandled_queries: leadData.unhandled_queries || ''
+                }]);
+            if (error) throw error;
+        }
+        return true;
+    } catch (err) {
+        console.error('Error logging chatbot lead:', err);
+        return false;
+    }
+};
+
+export const getChatbotLeads = async (): Promise<ChatbotLead[]> => {
+    try {
+        const { data, error } = await supabase
+            .from('chatbot_leads')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    } catch (err) {
+        console.error('Error fetching chatbot leads:', err);
+        return [];
+    }
+};
+export const deleteChatbotLead = async (leadId: number): Promise<boolean> => {
+    try {
+        const { error } = await supabase
+            .from('chatbot_leads')
+            .delete()
+            .eq('id', leadId);
+        if (error) throw error;
+        return true;
+    } catch (err) {
+        console.error('Error deleting chatbot lead:', err);
         return false;
     }
 };

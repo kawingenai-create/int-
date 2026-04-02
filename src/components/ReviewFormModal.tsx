@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
-import { Star, X } from 'lucide-react';
+import { Star, X, Share2, Check } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import StatusPopup from './StatusPopup';
 
-interface Review {
-    id: number;
-    name: string;
-    company?: string;
-    service: string;
-    rating: number;
-    review: string;
-    image: string;
-    email: string;
-}
 
 interface ReviewFormModalProps {
     isOpen: boolean;
@@ -24,6 +14,15 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
     const [showStatusPopup, setShowStatusPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState('');
     const [popupType, setPopupType] = useState<'success' | 'error'>('success');
+    const [copied, setCopied] = useState(false);
+
+    const handleShare = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const shareLink = window.location.origin + '/contact#review';
+        navigator.clipboard.writeText(shareLink);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     const [formData, setFormData] = useState({
         name: '',
@@ -37,15 +36,12 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
     });
 
     const serviceOptions = [
-        'Web Development',
-        'AI Apps & Integration (Chatbot)',
-        'Final Year Projects',
+        'Web Application Development',
+        'AI Automation & Chatbots',
+        'Custom Software & SaaS',
         'Digital Marketing',
-        'Video/Logo Designing',
-        'Portfolio (Students/Employees)',
-        'Billing Software',
-        'Mobile App Development',
-        'Data Analytics'
+        'Student Projects & Services',
+        'Cloud Deployment'
     ];
 
     const handleServiceToggle = (service: string) => {
@@ -115,30 +111,30 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
     return (
         <>
             <div
-                className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4"
+                className="fixed inset-0 bg-black/60 flex items-start justify-center z-[100] p-4 pt-24 pb-10 sm:p-6 sm:pt-28"
                 onClick={onClose}
             >
                 <div
                     onClick={(e) => e.stopPropagation()}
-                    className={`w-full max-w-sm sm:max-w-lg lg:max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto rounded-xl shadow-2xl ${isDark
+                    className={`relative w-full max-w-sm sm:max-w-lg lg:max-w-2xl max-h-[100%] overflow-y-auto rounded-xl shadow-2xl [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isDark
                         ? 'bg-gray-900 border border-gray-700'
                         : 'bg-white border border-gray-200'
                         }`}
                 >
-                    <div className="p-3 sm:p-6">
-                        <div className="flex justify-between items-center mb-3 sm:mb-4">
+                    <div className="p-3 sm:p-6 lg:p-8">
+                        <div className="flex justify-between items-center mb-4 sm:mb-6">
                             <h2
-                                className={`text-base sm:text-xl font-bold ${isDark ? 'text-white' : 'text-gray-800'
+                                className={`text-lg sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-gray-900'
                                     }`}
                             >
                                 Give Your Review
                             </h2>
                             <button
                                 onClick={onClose}
-                                className={`p-1 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                                className={`p-1.5 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
                                     }`}
                             >
-                                <X className="h-5 w-5" />
+                                <X className="h-5 w-5 sm:h-6 sm:w-6" />
                             </button>
                         </div>
 
@@ -270,17 +266,17 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
                                     >
                                         Services *
                                     </label>
-                                    <div className="grid grid-cols-2 gap-1">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5 rounded">
                                         {serviceOptions.map((service) => (
-                                            <label key={service} className="flex items-center">
+                                            <label key={service} className="flex items-start cursor-pointer p-0.5 transition-colors">
                                                 <input
                                                     type="checkbox"
                                                     checked={formData.services.includes(service)}
                                                     onChange={() => handleServiceToggle(service)}
-                                                    className="mr-1.5 h-3 w-3"
+                                                    className="mr-2 mt-0.5 h-3.5 w-3.5 shrink-0 accent-emerald-500 rounded border-gray-300"
                                                 />
                                                 <span
-                                                    className={`text-xs ${isDark ? 'text-gray-200' : 'text-gray-700'
+                                                    className={`text-xs leading-tight ${isDark ? 'text-gray-300' : 'text-gray-700'
                                                         }`}
                                                 >
                                                     {service}
@@ -336,12 +332,29 @@ const ReviewFormModal: React.FC<ReviewFormModalProps> = ({ isOpen, onClose }) =>
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base"
-                            >
-                                Submit Review
-                            </button>
+                            <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className={`flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base border ${isDark ? 'border-gray-600 hover:bg-gray-800 text-gray-200' : 'border-gray-300 hover:bg-gray-100 text-gray-700'}`}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleShare}
+                                    className={`flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base border ${isDark ? 'border-gray-600 hover:bg-gray-800 text-gray-200' : 'border-gray-300 hover:bg-gray-100 text-gray-700'}`}
+                                >
+                                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4" />}
+                                    <span className="hidden sm:inline">{copied ? 'Copied!' : 'Share'}</span>
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-4 py-2.5 sm:py-3 rounded-lg font-medium transition-all duration-300 text-sm sm:text-base"
+                                >
+                                    Submit Review
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

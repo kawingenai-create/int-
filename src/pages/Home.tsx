@@ -148,7 +148,7 @@ const Home = () => {
               className={`text-xs sm:text-lg mb-6 sm:mb-12 max-w-3xl mx-auto font-medium ${isDark ? 'text-gray-300' : 'text-gray-800'
                 }`}
             >
-              We specialize in cutting-edge web development, AI/ML solutions,
+              We specialize in cutting-edge web development, AI Automation solutions,
               professional branding, and data analytics for businesses,
               institutions, and students across the globe.
             </motion.p>
@@ -212,7 +212,7 @@ const Home = () => {
               variants={slideL}
             >
               <InteractiveCard glowColor="emerald" className="h-full overflow-hidden">
-                <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+                <div className={`relative rounded-t-xl ${isDark ? 'bg-gray-800/40' : 'bg-gray-50/50'}`}>
                   <img
                     src={chatzImg}
                     alt="Chatz.IO - AI Chat for Students"
@@ -249,7 +249,7 @@ const Home = () => {
               variants={slideR}
             >
               <InteractiveCard glowColor="purple" className="h-full overflow-hidden">
-                <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+                <div className={`relative rounded-t-xl ${isDark ? 'bg-gray-800/40' : 'bg-gray-50/50'}`}>
                   <img
                     src={imgGenImg}
                     alt="Dips.IO - Coming Soon"

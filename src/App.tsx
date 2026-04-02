@@ -11,8 +11,9 @@ import Spaceship from './components/Spaceship';
 import Footer from './components/Footer';
 import CookieConsent from './components/CookieConsent';
 import ScrollToTop from './components/ScrollToTop';
-import WhatsAppWidget from './components/WhatsAppWidget';
+import ChatbotWidget from './components/ChatbotWidget';
 import Analytics from './components/Analytics';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import SEO from './components/SEO';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -48,13 +49,14 @@ function App() {
               >
                 <SEO />
                 <Analytics />
+                <VercelAnalytics debug={false} />
                 <SpaceBackground />
                 <JupiterPlanet />
                 <Spaceship />
                 <Navigation />
 
                 <main className="relative z-10">
-                  <Routes future={{ v7_relativeSplatPath: true }}>
+                  <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/services" element={<Services />} />
@@ -69,7 +71,7 @@ function App() {
 
                 <Footer />
                 <ScrollToTop />
-                <WhatsAppWidget />
+                <ChatbotWidget />
                 <CookieConsent />
               </motion.div>
             )}

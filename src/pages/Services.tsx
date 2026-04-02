@@ -359,10 +359,10 @@ const Services = () => {
                 <span className={`text-[10px] sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Duration: 1-3 weeks</span>
               </InteractiveCard>
 
-              {/* AI/ML & GenAI */}
+              {/* AI Automation & GenAI */}
               <InteractiveCard glowColor="purple">
                 <Brain className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 text-purple-400 mb-2 sm:mb-4" />
-                <h3 className={`text-sm sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>AI/ML & GenAI</h3>
+                <h3 className={`text-sm sm:text-lg md:text-xl font-bold mb-1.5 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>AI Automation & GenAI</h3>
                 <ul className={`space-y-1 sm:space-y-2 mb-2 sm:mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   <li className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-sm"><div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-purple-400 rounded-full" />Machine Learning Models</li>
                   <li className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-sm"><div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-purple-400 rounded-full" />Generative AI Apps</li>

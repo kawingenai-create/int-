@@ -43,6 +43,8 @@ const Contact = () => {
           block: 'center'
         });
       }, 100);
+    } else if (window.location.hash === '#review') {
+      setShowReviewForm(true);
     }
   }, []);
 
@@ -506,7 +508,7 @@ const Contact = () => {
                               <button
                                 type="button"
                                 onClick={() => setShowServiceDropdown(false)}
-                                className={`p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                                className={`p-1 rounded-full transition-colors ${isDark ? 'text-gray-400 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-200'}`}
                               >
                                 <XCircle className="w-5 h-5" />
                               </button>

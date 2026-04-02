@@ -32,7 +32,7 @@ const InteractiveCard: React.FC<InteractiveCardProps> = ({
         relative p-3 sm:p-5 md:p-6 rounded-xl backdrop-blur-lg border transition-all duration-300
         ${isDark
           ? 'bg-gray-900/60 border-gray-700/50 hover:bg-gray-800/70'
-          : 'bg-white/80 border-gray-300/50 hover:bg-white/90'
+          : 'bg-white/90 border-gray-200/70 hover:bg-white shadow-sm'
         }
         hover:shadow-xl ${glowColors[glowColor]}
         ${className}

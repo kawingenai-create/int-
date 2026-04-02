@@ -15,6 +15,7 @@ import {
     RefreshCw,
     Download,
     Mail,
+    Bot,
 } from 'lucide-react';
 import {
     XAxis,
@@ -79,7 +80,8 @@ const Admin: React.FC = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
-    const [activeTab, setActiveTab] = useState<'reviews' | 'analytics' | 'enquiries'>('reviews');
+    const [activeTab, setActiveTab] = useState<'reviews' | 'analytics' | 'enquiries' | 'chatbot'>('reviews');
+    const [chatbotLeads, setChatbotLeads] = useState<any[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [approvedReviews, setApprovedReviews] = useState<Review[]>([]); // Approved reviews state
     const [editingReview, setEditingReview] = useState<Review | null>(null); // Track review being edited
@@ -138,7 +140,7 @@ const Admin: React.FC = () => {
         setIsLoading(true);
         try {
             // Import Supabase functions dynamically
-            const { getPendingReviews, getAnalytics, getContactEnquiries, getApprovedReviews } = await import('../lib/supabase');
+            const { getPendingReviews, getAnalytics, getContactEnquiries, getApprovedReviews, getChatbotLeads } = await import('../lib/supabase');
 
             // Load pending reviews from Supabase
             const reviewsData = await getPendingReviews();
@@ -182,6 +184,12 @@ const Admin: React.FC = () => {
                 image: r.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(r.name)}`,
                 status: 'approved' as const,
             })));
+
+            // Load chatbot leads
+            try {
+                const leadsData = await getChatbotLeads();
+                setChatbotLeads(leadsData || []);
+            } catch { /* table may not exist yet */ }
 
             // Load analytics from Supabase
             const users = await getAnalytics();
@@ -364,18 +372,18 @@ const Admin: React.FC = () => {
     };
 
     const handleDeleteEnquiry = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this enquiry?')) {
+        if (window.confirm('Are you sure you want to permanently delete this enquiry?')) {
             try {
                 const { deleteContactEnquiry } = await import('../lib/supabase');
-                const success = await deleteContactEnquiry(id);
-                if (success) {
+                const result = await deleteContactEnquiry(id);
+                if (result.success) {
                     setEnquiries(enquiries.filter(e => e.id !== id));
                 } else {
-                    alert('Failed to delete enquiry.');
+                    alert(`Failed to delete enquiry.\n\nReason: ${result.error || 'Unknown error'}\n\nNote: You may need to enable DELETE permission for the anon role in Supabase Table Editor → Policies.`);
                 }
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Error deleting enquiry:', error);
-                alert('An error occurred while deleting the enquiry.');
+                alert(`An error occurred: ${error?.message || 'Unknown error'}`);
             }
         }
     };
@@ -774,6 +782,18 @@ const Admin: React.FC = () => {
                     >
                         <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         Enquiries ({enquiries.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('chatbot')}
+                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'chatbot'
+                            ? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white'
+                            : isDark
+                                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                            }`}
+                    >
+                        <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        Chatbot Leads ({chatbotLeads.length})
                     </button>
                 </div>
 
@@ -1407,7 +1427,7 @@ const Admin: React.FC = () => {
                                             )}
 
                                             {/* Action buttons at the end */}
-                                            <div className="flex gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                                            <div className={`flex gap-2 mt-3 pt-3 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                                                 <button
                                                     onClick={() => setExpandedReply(expandedReply === enquiry.id ? null : enquiry.id)}
                                                     className="flex items-center gap-1 px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors"
@@ -1427,6 +1447,125 @@ const Admin: React.FC = () => {
                                     ))
                                 )}
                             </div>
+                        </motion.div>
+                    )
+                }
+
+                {/* Chatbot Leads Tab */}
+                {
+                    activeTab === 'chatbot' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="space-y-6"
+                        >
+                            {/* Analytics Summary Cards */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                <InteractiveCard glowColor="cyan" className="!p-3 sm:!p-4 text-center">
+                                    <Bot className={`h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`} />
+                                    <p className={`text-lg sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                        {chatbotLeads.length}
+                                    </p>
+                                    <p className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Leads</p>
+                                </InteractiveCard>
+                                <InteractiveCard glowColor="emerald" className="!p-3 sm:!p-4 text-center">
+                                    <TrendingUp className={`h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                                    <p className={`text-lg sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                        {chatbotLeads.reduce((sum: number, l: any) => sum + (l.message_count || 0), 0)}
+                                    </p>
+                                    <p className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Total Messages</p>
+                                </InteractiveCard>
+                                <InteractiveCard glowColor="purple" className="!p-3 sm:!p-4 text-center">
+                                    <Clock className={`h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                                    <p className={`text-lg sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                        {chatbotLeads.filter((l: any) => {
+                                            if (!l.created_at) return false;
+                                            const d = new Date(l.created_at);
+                                            const today = new Date();
+                                            return d.toDateString() === today.toDateString();
+                                        }).length}
+                                    </p>
+                                    <p className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Today's Chats</p>
+                                </InteractiveCard>
+                                <InteractiveCard glowColor="pink" className="!p-3 sm:!p-4 text-center">
+                                    <Users className={`h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 ${isDark ? 'text-pink-400' : 'text-pink-600'}`} />
+                                    <p className={`text-lg sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                        {chatbotLeads.filter((l: any) => l.name && l.email).length}
+                                    </p>
+                                    <p className={`text-[10px] sm:text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Verified Leads</p>
+                                </InteractiveCard>
+                            </div>
+
+                            {/* Leads Table */}
+                            {chatbotLeads.length === 0 ? (
+                                <InteractiveCard className="p-4 sm:p-8 text-center">
+                                    <Bot className={`h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
+                                    <p className={`text-sm sm:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                                        No chatbot leads yet. Leads will appear here when visitors chat with Integer Helper AI.
+                                    </p>
+                                </InteractiveCard>
+                            ) : (
+                                <InteractiveCard className="!p-0 overflow-hidden">
+                                    <div className={`p-3 sm:p-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                                        <h3 className={`font-bold text-sm sm:text-base ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                            🤖 Integer Chat Leads — Detailed View
+                                        </h3>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left">
+                                            <thead>
+                                                <tr className={isDark ? 'bg-gray-800/50' : 'bg-gray-50'}>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>#</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Name</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Msgs</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>User Query</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Date & Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {chatbotLeads.map((lead: any, index: number) => (
+                                                    <tr key={lead.id} className={`border-t transition-colors ${isDark ? 'border-gray-700/50 hover:bg-gray-800/30' : 'border-gray-100 hover:bg-gray-50'}`}>
+                                                        <td className={`px-3 sm:px-4 py-2.5 text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{index + 1}</td>
+                                                        <td className="px-3 sm:px-4 py-2.5">
+                                                            <span className={`text-xs sm:text-sm font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                                {lead.name || '—'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-4 py-2.5">
+                                                            <span className={`text-xs sm:text-sm ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>
+                                                                {lead.email || '—'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-4 py-2.5">
+                                                            <span className={`inline-flex items-center justify-center min-w-[28px] px-2 py-0.5 rounded-full text-xs font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                                {lead.message_count || 0}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-4 py-2.5">
+                                                            {lead.unhandled_queries ? (
+                                                                <span className={`text-xs sm:text-sm ${isDark ? 'text-yellow-300' : 'text-yellow-700'}`}>
+                                                                    {lead.unhandled_queries}
+                                                                </span>
+                                                            ) : (
+                                                                <span className={`text-[10px] ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>—</span>
+                                                            )}
+                                                        </td>
+                                                        <td className={`px-3 sm:px-4 py-2.5 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                            {lead.created_at ? (
+                                                                <div>
+                                                                    <div>{new Date(lead.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+                                                                    <div className="text-[10px] opacity-70">{new Date(lead.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
+                                                                </div>
+                                                            ) : '—'}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </InteractiveCard>
+                            )}
                         </motion.div>
                     )
                 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -19,6 +19,7 @@ import dispLogo from '../assets/products/disp-logo.webp';
 const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images: string[], title: string, color: string, badge: string, isDark: boolean }) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [isHovered, setIsHovered] = React.useState(false);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
 
     // Auto-scroll logic (pauses on hover)
     React.useEffect(() => {
@@ -45,12 +46,14 @@ const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images:
     };
 
     return (
-        <div
-            className="relative overflow-hidden rounded-2xl group cursor-grab active:cursor-grabbing"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <div className="relative h-44 sm:h-56 lg:h-72 w-full bg-white dark:bg-gray-900/50">
+        <>
+            <div
+                className={`relative overflow-hidden rounded-2xl group active:cursor-grabbing border-2 border-emerald-500/80 hover:border-violet-500/80 transition-colors duration-300 shadow-md ${isModalOpen ? '' : 'cursor-pointer'}`}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={() => !isModalOpen && setIsModalOpen(true)}
+            >
+                <div className={`relative h-44 sm:h-56 lg:h-72 w-full rounded-2xl ${isDark ? 'bg-gray-900/50' : 'bg-gray-50'}`}>
                 <AnimatePresence mode="popLayout" initial={false}>
                     <motion.img
                         key={currentIndex}
@@ -95,8 +98,67 @@ const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images:
                         />
                     ))}
                 </div>
+                </div>
             </div>
-        </div>
+
+        {/* Slider Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90"
+                        onClick={() => setIsModalOpen(false)}
+                    >
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setIsModalOpen(false); }}
+                            className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <X className="w-6 h-6 sm:w-8 sm:h-8" />
+                        </button>
+                        
+                        <button
+                            onClick={(e) => { e.stopPropagation(); paginate(-1); }}
+                            className="absolute left-2 sm:left-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <ChevronLeft className="w-6 h-6 sm:w-10 sm:h-10" />
+                        </button>
+                        
+                        <div 
+                            className="relative w-full max-w-5xl h-[60vh] sm:h-[80vh] flex items-center justify-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <img
+                                key={currentIndex}
+                                src={images[currentIndex]}
+                                alt={title}
+                                className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
+                            />
+                        </div>
+                        
+                        <button
+                            onClick={(e) => { e.stopPropagation(); paginate(1); }}
+                            className="absolute right-2 sm:right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                        >
+                            <ChevronRight className="w-6 h-6 sm:w-10 sm:h-10" />
+                        </button>
+
+                        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3">
+                            {images.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={(e) => { e.stopPropagation(); setCurrentIndex(idx); }}
+                                    className={`w-3 h-3 rounded-full transition-all shadow-md ${
+                                        idx === currentIndex ? 'bg-emerald-500 w-6' : 'bg-white/50 hover:bg-white/80'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Scale, AlertCircle, CheckCircle } from 'lucide-react';
+import { Scale, AlertCircle, CheckCircle } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import SEO from '../components/SEO';
 import { useTheme } from '../contexts/ThemeContext';
@@ -39,7 +39,7 @@ const TermsOfService = () => {
               </h2>
               <p className={`mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 By using Integer.IO Services, you agree to these terms and conditions. 
-                We provide web development, AI/ML projects, logo design, and digital marketing services.
+                We provide web development, AI Automation projects, logo design, and digital marketing services.
               </p>
               <ul className={`list-disc list-inside space-y-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                 <li>Services are provided on a project basis</li>

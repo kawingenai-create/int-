@@ -8,12 +8,22 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(true); // Default to dark theme for space effect
+  const [isDark, setIsDark] = useState(() => {
+    // One-time migration: force light mode for existing dark-mode users
+    const migrated = localStorage.getItem('theme_v2_migrated');
+    if (!migrated) {
+      localStorage.setItem('theme', 'light');
+      localStorage.setItem('theme_v2_migrated', 'true');
+      return false; // light mode
+    }
+    // After migration, respect user's choice
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark';
+  });
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDark(savedTheme === 'dark');
+    if (!localStorage.getItem('theme')) {
+      localStorage.setItem('theme', 'light');
     }
   }, []);
 

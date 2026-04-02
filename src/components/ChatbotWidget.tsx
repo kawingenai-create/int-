@@ -1,0 +1,856 @@
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Send, Languages, ExternalLink, MessageCircle, ArrowRight } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { logChatbotLead } from '../lib/supabase';
+
+import logo from '../assets/company_logo/tiitle-logo.webp';
+
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  links?: { label: string; url: string }[];
+  navButtons?: { label: string; path: string; icon?: string }[];
+  isIntake?: boolean;
+  isWhatsAppFallback?: boolean;
+}
+
+const SYSTEM_PROMPT = `═══════════════════════════════════════
+TEAM MEMBERS
+═══════════════════════════════════════
+1. Kawin M.S. — Founder & CEO
+   - Expert in AI Automation, Full-Stack Web Development, and Business Strategy
+   - Email: integeriokawin@gmail.com
+   - Phone: +91 8015355914
+   - LinkedIn: https://www.linkedin.com/in/kawin-m-s-570961285/
+   - Portfolio: https://kawin-portfolio.netlify.app/
+   - Leads the company vision, projects, and development
+
+2. Livan — Creative Director
+   - Manages video editing, YouTube content, Instagram marketing, and creative design
+   - Email: integeriolivan@gmail.com
+   - Phone: +91 6385243064
+
+3. Hemanth — Operations & QA Executive
+   - Oversees profit/loss, client communication, financial planning, and stakeholder relations
+   - Email: integeriohemanth@gmail.com
+   - Phone: +91 6385279258
+
+═══════════════════════════════════════
+SERVICES (6 CORE CATEGORIES)
+═══════════════════════════════════════
+1. Web Application Development
+   - Static websites, Dynamic web apps, Database integrations, Admin dashboards, API integrations, Performance optimization
+
+2. AI Product & Automation Services
+   - AI chatbots, Voice assistants, NLP solutions, Computer vision, AI process automation, Smart data insights
+
+3. Custom Software & SaaS Product Development
+   - Billing Software, CRM Solutions, SaaS Platforms, Data Analytics Dashboards, PDF Auto-generation, Business Automation Tools, Role-based Systems
+
+4. Digital Marketing & Branding Services
+   - SEO optimization, Social media marketing, Video editing, Logo & brand identity, Creative poster design
+
+5. Education & Student Services
+   - Final year projects (B.E/B.Tech/MCA/MBA), Student portfolios, Professional portfolios, ATS-friendly resumes, Project documentation, Career guidance
+   - Student Project Portal: https://integer-io-projectportal.netlify.app/
+   - Web Dev projects: 1-3 weeks, AI Automation projects: 2-4 weeks, Data Science: 1-2 weeks
+
+6. Cloud Deployment & Technical Support
+   - Cloud deployment, Server configuration, Website hosting setup, Domain & SSL setup, Performance monitoring, Ongoing maintenance
+
+═══════════════════════════════════════
+PRODUCTS
+═══════════════════════════════════════
+1. Chatz.IO — AI Chat Assistant for Students (LIVE!)
+   - AI-powered study assistance and tutoring
+   - Research and academic writing support
+   - Exam preparation and practice questions
+   - Multi-subject knowledge integration
+   - URL: https://chatz-io.netlify.app/
+
+2. Dips.IO — AI Image Generation & Documentation (COMING SOON)
+   - AI-powered image generation
+   - Smart documentation management
+   - Seamless workflow integration
+   - Advanced export options
+
+═══════════════════════════════════════
+FEATURED CLIENT PROJECTS
+═══════════════════════════════════════
+1. SAS Impex — Import-export consultancy website: https://sas-impex.netlify.app/
+2. Sri Karpagam Brand — Traditional foods showcase: https://srikarpagambrand.in/
+3. Multi Brand Cooling Services — Home appliance repairs: https://multibrandwashingmachineservice.in/
+4. PVR Tiles — Business website: https://pvrtiles.netlify.app/
+5. Chatz.IO — Student AI assistant: https://chatz-io.netlify.app/
+
+═══════════════════════════════════════
+COMPANY VALUES
+═══════════════════════════════════════
+- Innovation: Embrace cutting-edge technologies
+- Passion: Every project crafted with dedication
+- Excellence: Quality in every line of code
+- Growth: Help businesses scale and reach new heights
+
+═══════════════════════════════════════
+RESPONSE RULES
+═══════════════════════════════════════
+- Be concise but informative (2-4 sentences max)
+- Use **bold text** for the most important keywords or titles.
+- Use link format [label](url) if providing contact details (e.g., [integeriokawin@gmail.com](mailto:integeriokawin@gmail.com) or [+91 8015355914](tel:+918015355914)).
+- Always stay professional and project-oriented.
+- Use common web design terms: Scalable, UI/UX, Automation, Generative AI.
+- If asked about pricing, say "Pricing depends on the project scope. Connect with us on WhatsApp for a free consultation!"
+- Always be professional, friendly, and helpful
+- If user speaks in Tamil/Tanglish, respond in Tanglish (Tamil words in English script mixed with English)
+- For detailed inquiries, suggest contacting via WhatsApp (+91 8015355914) or email
+- IMPORTANT: Naturally try to collect the user's phone number during conversation. Use human-like approaches after 2-3 messages.
+- Never make up information not listed above
+- When asked about team, mention all 3 members with their roles
+- When asked about services, list all 6 categories briefly
+- You are the Integer Helper AI — always introduce yourself as such`;
+
+const DAILY_MSG_LIMIT = 6;
+
+const getSessionId = (): string => {
+  let sid = localStorage.getItem('integer_session_id');
+  if (!sid) {
+    sid = 'integer_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    localStorage.setItem('integer_session_id', sid);
+  }
+  return sid;
+};
+
+const getTodayKey = (): string => {
+  const d = new Date();
+  return `integer_count_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+};
+
+const getDailyCount = (): number => parseInt(localStorage.getItem(getTodayKey()) || '0', 10);
+
+const incrementDailyCount = (): number => {
+  const key = getTodayKey();
+  const next = getDailyCount() + 1;
+  localStorage.setItem(key, next.toString());
+  return next;
+};
+
+// Detect phone number in text
+const extractPhone = (text: string): string | null => {
+  const match = text.match(/(\+?\d[\d\s\-]{7,14}\d)/);
+  return match ? match[1].replace(/[\s\-]/g, '') : null;
+};
+
+const ChatbotWidget: React.FC = () => {
+  const navigate = useNavigate();
+  const { isDark } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isTamil, setIsTamil] = useState(false);
+  const [input, setInput] = useState('');
+  const [intakeStep, setIntakeStep] = useState<'name' | 'email' | 'done'>('name');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPhone, setUserPhone] = useState('');
+  const [isLimited, setIsLimited] = useState(false);
+  const [msgCount, setMsgCount] = useState(0);
+  const sessionId = useRef(getSessionId());
+
+  // ── Rotating tooltip phrases ──
+  const tooltipPhrases = [
+    'Need AI help? 🤖',
+    'Free consultation! 🌟',
+    'Got a project? 🚀',
+    'Automate it now ⚡',
+    'Talk to us now! 💬',
+    'Build with AI 🌟',
+  ];
+  const [tipIdx, setTipIdx] = useState(() => Math.floor(Math.random() * 6));
+  const [tipVisible, setTipVisible] = useState(false);
+
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      text: "👋 **Hi!** I'm Integer Helper AI, your personal assistant.\n\nBefore we dive into your requirements, may I know your **Name**?",
+      sender: 'bot',
+      timestamp: new Date(),
+      isIntake: true,
+    },
+  ]);
+  const [isTyping, setIsTyping] = useState(false);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('integer_user_name');
+    const savedEmail = localStorage.getItem('integer_user_email');
+    const savedPhone = localStorage.getItem('integer_user_phone');
+    if (savedName && savedEmail) {
+      setUserName(savedName);
+      setUserEmail(savedEmail);
+      if (savedPhone) setUserPhone(savedPhone);
+      setIntakeStep('done');
+      setMessages([{
+        id: '1',
+        text: `Welcome back, ${savedName}! 👋\nI'm Integer Helper AI. How can I help you today?`,
+        sender: 'bot',
+        timestamp: new Date(),
+        navButtons: [
+          { label: 'Our Services', path: '/services', icon: '🛠️' },
+          { label: 'Products', path: '/products', icon: '📦' },
+          { label: 'Projects', path: '/projects', icon: '🚀' },
+          { label: 'Contact Us', path: '/contact', icon: '📞' },
+        ],
+      }]);
+    }
+    if (getDailyCount() >= DAILY_MSG_LIMIT) setIsLimited(true);
+  }, []);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isTyping]);
+
+  // Tooltip fade-in then cycle
+  useEffect(() => {
+    const show = setTimeout(() => setTipVisible(true), 1800);
+    return () => clearTimeout(show);
+  }, []);
+  useEffect(() => {
+    if (!tipVisible) return;
+    const timer = setInterval(() => {
+      setTipVisible(false);
+      setTimeout(() => {
+        setTipIdx(prev => (prev + 1) % tooltipPhrases.length);
+        setTipVisible(true);
+      }, 500);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [tipVisible]);
+
+  const toggleLanguage = () => {
+    setIsTamil(!isTamil);
+    setMessages(prev => [...prev, {
+      id: Date.now().toString(),
+      text: !isTamil
+        ? "🌐 **Tanglish mode activated!** Ippo Tamil-la pesalaam.\n\nEnna help venum? Illa enna **Project details** theriyanum?"
+        : "🌐 **English mode activated!** How can I assist you today?",
+      sender: 'bot',
+      timestamp: new Date(),
+      isIntake: true,
+    }]);
+  };
+
+  // ── GROQ API ──
+  const callGroqAPI = async (userMessage: string): Promise<string> => {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+    if (!apiKey) throw new Error('VITE_GROQ_API_KEY is missing in .env');
+    
+    const history = messages.filter(m => !m.isIntake).slice(-6).map(m => ({
+      role: m.sender === 'user' ? 'user' as const : 'assistant' as const,
+      content: m.text
+    }));
+    
+    const lang = isTamil ? '\nRespond in Tanglish.' : '';
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'system', content: SYSTEM_PROMPT + lang }, ...history, { role: 'user', content: userMessage }],
+        temperature: 0.7,
+        max_tokens: 300,
+      }),
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.text();
+      throw new Error(`Groq fail (${res.status}): ${errorData}`);
+    }
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || '';
+  };
+
+  // ── GEMINI API ──
+  const callGeminiAPI = async (userMessage: string): Promise<string> => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY_HERE') throw new Error('VITE_GEMINI_API_KEY is missing/invalid');
+    
+    const lang = isTamil ? ' Respond in Tanglish.' : '';
+    // Confirmed available for this key: gemini-2.5-flash
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: SYSTEM_PROMPT + lang + '\n\nUser: ' + userMessage }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+        }),
+      }
+    );
+    
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Gemini fail (${res.status}): ${errorText}`);
+    }
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  };
+
+  // ── DUAL AI fallback ── 
+  const BOTH_FAILED = '__BOTH_FAILED__';
+  const callAIWithFallback = async (userMessage: string): Promise<string> => {
+    const useGroqFirst = Math.random() < 0.5;
+    const pFn = useGroqFirst ? callGroqAPI : callGeminiAPI;
+    const sFn = useGroqFirst ? callGeminiAPI : callGroqAPI;
+
+    try {
+      const res = await pFn(userMessage);
+      if (!res) throw new Error('Empty response');
+      return res;
+    } catch (e1: any) {
+      try {
+        const res = await sFn(userMessage);
+        if (!res) throw new Error('Empty response');
+        return res;
+      } catch (e2: any) {
+        return BOTH_FAILED;
+      }
+    }
+  };
+
+  // Determine navigation buttons based on query
+  const getNavButtons = (query: string): { label: string; path: string; icon: string }[] | undefined => {
+    const q = query.toLowerCase();
+    if (q.includes('service') || q.includes('offer') || q.includes('what do')) {
+      return [
+        { label: 'View All Services', path: '/services', icon: '🛠️' },
+        { label: 'Student Corner', path: '/services?service=education-services', icon: '🎓' },
+      ];
+    }
+    if (q.includes('product') || q.includes('chatz') || q.includes('dips')) {
+      return [
+        { label: 'View Products', path: '/products', icon: '📦' },
+        { label: 'Try Chatz.IO', path: 'https://chatz-io.netlify.app/', icon: '💬' },
+      ];
+    }
+    if (q.includes('project') || q.includes('work') || q.includes('portfolio') || q.includes('client')) {
+      return [
+        { label: 'View Projects', path: '/projects', icon: '🚀' },
+      ];
+    }
+    if (q.includes('about team') || q.includes('about the team') || q.includes('ceo') || q.includes('kawin') || q.includes('who is') || q.includes('who are')) {
+      return [
+        { label: 'Meet Our Team', path: '/about', icon: '👥' },
+      ];
+    }
+    if (q.includes('contact') || q.includes('reach') || q.includes('email')) {
+      return [
+        { label: 'Contact Form', path: '/contact', icon: '📝' },
+      ];
+    }
+    if (q.includes('student') || q.includes('final year') || q.includes('resume')) {
+      return [
+        { label: 'Student Services', path: '/services?service=education-services', icon: '🎓' },
+        { label: 'Register Project', path: 'https://integer-io-projectportal.netlify.app/', icon: '📋' },
+      ];
+    }
+    return [
+      { label: 'Services', path: '/services', icon: '🛠️' },
+      { label: 'Products', path: '/products', icon: '📦' },
+      { label: 'Projects', path: '/projects', icon: '🚀' },
+      { label: 'Contact', path: '/contact', icon: '📞' },
+    ];
+  };
+
+  const handleSend = async (text: string) => {
+    if (!text.trim()) return;
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      text,
+      sender: 'user',
+      timestamp: new Date(),
+      isIntake: intakeStep !== 'done',
+    };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsTyping(true);
+
+    const phone = extractPhone(text);
+    const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/i);
+    const extractedEmailGlobal = emailMatch ? emailMatch[1] : null;
+
+    if (phone && !userPhone) {
+      setUserPhone(phone);
+      localStorage.setItem('integer_user_phone', phone);
+      logChatbotLead({
+        session_id: sessionId.current,
+        name: userName || 'Visitor',
+        email: userEmail || 'Not Provided',
+        message_count: 0,
+        unhandled_queries: `Phone: ${phone}`,
+      });
+    }
+
+    if (extractedEmailGlobal && !userEmail) {
+      setUserEmail(extractedEmailGlobal);
+      localStorage.setItem('integer_user_email', extractedEmailGlobal);
+    }
+
+    if (intakeStep === 'name') {
+      const words = text.trim().split(/\s+/);
+      const isQuestion = words.length > 2 || text.includes('?');
+      const finalName = isQuestion ? "Visitor" : text.trim();
+      setUserName(finalName);
+      localStorage.setItem('integer_user_name', finalName);
+
+      if (isQuestion) {
+        setIntakeStep('done');
+      } else {
+        setTimeout(() => {
+          const persuasiveText = isTamil
+            ? `Nice to meet you, **${finalName}**! 😊\n\nOru **important info**: I can send you a **Direct Consultation Link** and our **Project Portfolios** directly. Share your **Email or WhatsApp** so I can send the links! 🚀`
+            : `Nice to meet you, **${finalName}**! 😊\n\nI have something **very important** to share: I can send you a **Priority Consultation Link** and our **Exclusive Project Brochure** for our upcoming **AI Tools**. \n\nCould you share your **Email or WhatsApp** number so I can send it to you?`;
+
+          setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            text: persuasiveText,
+            sender: 'bot',
+            timestamp: new Date(),
+            isIntake: true,
+          }]);
+          setIntakeStep('email');
+          setIsTyping(false);
+        }, 800);
+        return;
+      }
+    } else if (intakeStep === 'email') {
+      const isQuestion = text.trim().split(/\s+/).length > 2 || text.includes('?');
+      const finalEmail = extractedEmailGlobal || (isQuestion ? "Not Provided" : text.trim());
+      setUserEmail(finalEmail);
+      localStorage.setItem('integer_user_email', finalEmail);
+
+      if (isQuestion && !extractedEmailGlobal && !phone) {
+        setIntakeStep('done');
+      } else {
+        const displayEmail = finalEmail !== "Not Provided" ? finalEmail : (phone || "Not Provided");
+        logChatbotLead({ session_id: sessionId.current, name: userName || 'Visitor', email: displayEmail, message_count: 0 });
+        setTimeout(() => {
+          setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            text: `**Perfect!** 🎉 You're all set. Our team will share the important links soon.\n\nNow, how can I help you regarding **Integer.IO Services**?`,
+            sender: 'bot',
+            timestamp: new Date(),
+            isIntake: true,
+            navButtons: getNavButtons(''),
+          }]);
+          setIntakeStep('done');
+          setIsTyping(false);
+        }, 800);
+        return;
+      }
+    }
+
+    const newCount = incrementDailyCount();
+    setMsgCount(prev => prev + 1);
+    const responseText = await callAIWithFallback(text);
+
+    // Both AIs failed — show WhatsApp fallback message
+    if (responseText === BOTH_FAILED) {
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        text: "**Connect with us directly on WhatsApp** — our team will reply within minutes! 🚀",
+        sender: 'bot',
+        timestamp: new Date(),
+        isWhatsAppFallback: true,
+      }]);
+      setIsTyping(false);
+      return;
+    }
+
+    const botResponse: Message = {
+      id: (Date.now() + 1).toString(),
+      text: responseText,
+      sender: 'bot',
+      timestamp: new Date(),
+      navButtons: getNavButtons(text),
+    };
+
+    const q = text.toLowerCase();
+    if (q.includes('project') || q.includes('portfolio') || q.includes('client')) {
+      botResponse.links = [
+        { label: 'SAS Impex', url: 'https://sas-impex.netlify.app/' },
+        { label: 'Sri Karpagam', url: 'https://srikarpagambrand.in/' },
+        { label: 'Cooling Services', url: 'https://multibrandwashingmachineservice.in/' },
+        { label: 'Chatz.IO', url: 'https://chatz-io.netlify.app/' },
+      ];
+    }
+
+    setMessages(prev => [...prev, botResponse]);
+    setIsTyping(false);
+
+    const skipRegex = /^(hi|hello|hey|thanks|thank you|bye|ok|okay|vanakkam|nandri|tqs|ok bro|bro)( \w+)*$/i;
+    const isImportantQuery = !skipRegex.test(text.trim()) && text.trim().length > 4;
+
+    logChatbotLead({
+      session_id: sessionId.current,
+      name: userName || 'Visitor',
+      email: userEmail || 'Not Provided',
+      message_count: 1,
+      unhandled_queries: isImportantQuery ? `[${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}] ${text}` : undefined,
+    });
+
+    if (newCount >= DAILY_MSG_LIMIT) {
+      setIsLimited(true);
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 2).toString(),
+          text: `Thanks for chatting, ${userName || 'friend'}! 💬\nFor detailed assistance, connect with our CEO Kawin M.S. on WhatsApp!`,
+          sender: 'bot',
+          timestamp: new Date(),
+        }]);
+      }, 1500);
+    }
+  };
+
+  const openWhatsApp = (customMsg?: string) => {
+    const msg = encodeURIComponent(
+      customMsg || `Hi! I'm ${userName || 'a visitor'} (${userEmail || 'no email'}). I chatted with Integer Helper AI and need more help.`
+    );
+    window.open(`https://wa.me/918015355914?text=${msg}`, '_blank');
+  };
+
+  const handleNavClick = (path: string) => {
+    if (path.startsWith('http')) {
+      window.open(path, '_blank');
+    } else {
+      navigate(path);
+    }
+  };
+
+  const renderMessageText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-bold">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('[') && part.includes('](')) {
+        const label = part.match(/\[(.*?)\]/)?.[1];
+        const url = part.match(/\((.*?)\)/)?.[1];
+        if (label && url) {
+          return (
+            <a
+              key={i}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-400 font-bold hover:underline underline-offset-2"
+              onClick={(e) => {
+                if (url.startsWith('mailto:') || url.startsWith('tel:')) {
+                  e.preventDefault();
+                  window.location.href = url;
+                }
+              }}
+            >
+              {label}
+            </a>
+          );
+        }
+      }
+      return part;
+    });
+  };
+
+  return (
+    <>
+      {/* ── CHATBOT FLOATING BUTTON ── */}
+      <motion.div
+        className="fixed bottom-6 left-4 sm:left-6 z-[60]"
+        style={{ position: 'fixed', bottom: 24, left: 16 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.5, type: 'spring' }}
+      >
+        {/* Cycling tooltip — absolutely above the button, doesn't affect button position */}
+        <AnimatePresence mode="wait">
+          {!isOpen && tipVisible && (
+            <motion.div
+              key={tipIdx}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.35, ease: 'easeOut' }}
+              style={{ position: 'absolute', bottom: '100%', left: 0, marginBottom: 8, zIndex: 10 }}
+              className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg ${
+                isDark
+                  ? 'bg-gray-800 text-white border border-gray-700'
+                  : 'bg-white text-gray-800 border border-gray-100'
+              }`}
+            >
+              {tooltipPhrases[tipIdx]}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* The button with wave rings — always at the same position */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 64, height: 64 }}>
+
+          {/* Green outer wave ring */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              borderRadius: '50%',
+              border: '2px solid rgba(16,185,129,0.6)',
+              width: 64, height: 64,
+            }}
+            animate={!isOpen ? { scale: [1, 1.7, 1.7], opacity: [0.7, 0, 0] } : {}}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+          />
+
+          {/* Violet inner wave ring — slightly delayed */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              borderRadius: '50%',
+              border: '2px solid rgba(139,92,246,0.6)',
+              width: 64, height: 64,
+            }}
+            animate={!isOpen ? { scale: [1, 1.5, 1.5], opacity: [0.6, 0, 0] } : {}}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 0.6 }}
+          />
+
+          {!isOpen ? (
+            <motion.button
+              onClick={() => setIsOpen(true)}
+              className="relative flex items-center justify-center rounded-full bg-white shadow-xl"
+              style={{ width: 56, height: 56, border: '2px solid rgba(139,92,246,0.3)' }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.94 }}
+            >
+              <img src={logo} alt="Chatbot" className="w-9 h-9 object-contain" />
+              {/* Live dot */}
+              <span style={{
+                position: 'absolute', top: 2, right: 2,
+                width: 10, height: 10, borderRadius: '50%',
+                background: '#10b981', border: '1.5px solid #fff',
+                boxShadow: '0 0 6px #10b981',
+              }} />
+            </motion.button>
+          ) : (
+            <motion.button
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center rounded-full bg-red-500 text-white shadow-2xl"
+              style={{ width: 56, height: 56 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+          )}
+        </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 50 }}
+            className={`fixed bottom-24 left-[4vw] sm:left-6 w-[92vw] sm:w-[420px] h-[72vh] sm:h-[580px] z-[60] overflow-hidden flex flex-col rounded-2xl border shadow-2xl ${
+              isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+            }`}
+            style={{ boxShadow: isDark ? '0 25px 60px rgba(0,0,0,0.5)' : '0 25px 60px rgba(0,0,0,0.15)' }}
+          >
+            <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-indigo-700 p-3.5 shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="bg-white p-1.5 rounded-xl shadow-md">
+                    <img src={logo} alt="Integer.IO" className="h-7 w-auto" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-sm leading-tight">Integer Helper AI</h3>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                      <span className="text-white/70 text-[10px]">Integer.IO Services</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => openWhatsApp()}
+                    className="relative p-1.5 rounded-lg bg-green-500/90 hover:bg-green-500 text-white transition-colors shadow-none"
+                    title="Chat on WhatsApp"
+                  >
+                    <span className="absolute inset-0 rounded-lg bg-green-400 animate-ping opacity-50"></span>
+                    <MessageCircle className="relative w-4 h-4 z-10" />
+                  </button>
+                  <button
+                    onClick={toggleLanguage}
+                    className={`p-1.5 rounded-lg text-white transition-colors ${isTamil ? 'bg-white/30' : 'bg-white/10 hover:bg-white/20'}`}
+                    title={isTamil ? "Switch to English" : "Switch to Tanglish"}
+                  >
+                    <Languages className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className={`flex-1 overflow-y-auto p-3 space-y-3 ${isDark ? 'bg-gray-900/60' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+              {messages.map((m) => (
+                <div key={m.id} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'} gap-2`}>
+                  {m.sender === 'bot' && (
+                    <div className="w-8 h-8 rounded-full flex flex-shrink-0 mt-1 shadow-sm overflow-hidden bg-white items-center justify-center">
+                      <img src={logo} alt="AI" className="w-[85%] h-[85%] object-contain mt-0.5" />
+                    </div>
+                  )}
+                  <div className="max-w-[80%] space-y-2">
+                    <div className={`rounded-2xl p-3 shadow-sm ${
+                      m.sender === 'user'
+                        ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-tr-sm'
+                        : (isDark ? 'bg-gray-800 text-gray-100 border border-gray-700' : 'bg-white text-gray-800 border border-gray-100') + ' rounded-tl-sm'
+                    }`}>
+                      <p className="text-[13px] leading-relaxed whitespace-pre-line">{renderMessageText(m.text)}</p>
+                      <span className="text-[9px] opacity-40 mt-1 block">
+                        {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+
+                    {m.navButtons && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {m.navButtons.map((btn, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleNavClick(btn.path)}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-200 hover:scale-105 shadow-sm ${
+                              isDark
+                                ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30'
+                                : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                            }`}
+                          >
+                            <span>{btn.icon}</span>
+                            {btn.label}
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* WhatsApp fallback — shown when both AIs fail */}
+                    {m.isWhatsAppFallback && (
+                      <a
+                        href="https://wa.me/918015355914?text=Hi%20Integer.IO%2C%20I%20need%20help!"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-white font-semibold text-sm shadow-md transition-all hover:scale-[1.02] active:scale-95"
+                        style={{ background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        Chat on WhatsApp Now
+                      </a>
+                    )}
+
+                    {m.links && (
+                      <div className="space-y-1">
+                        {m.links.map(link => (
+                          <a
+                            key={link.url}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex items-center justify-between p-2 rounded-lg text-[11px] font-medium border transition-all hover:scale-[1.02] ${
+                              isDark ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-700'
+                            }`}
+                          >
+                            {link.label}
+                            <ExternalLink className="w-3 h-3 opacity-50" />
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="flex justify-start gap-2">
+                  <div className="w-7 h-7 rounded-full flex flex-shrink-0 shadow-sm overflow-hidden bg-white items-center justify-center p-0.5">
+                    <img src={logo} alt="AI" className="w-full h-full object-contain" />
+                  </div>
+                  <div className={`rounded-full px-4 py-2 ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white shadow-sm border border-gray-100'}`}>
+                    <div className="flex gap-1">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={lastMessageRef} />
+            </div>
+
+            {isLimited ? (
+              <div className={`p-4 border-t space-y-2 ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+                <button
+                  onClick={() => openWhatsApp()}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  Continue on WhatsApp
+                </button>
+                <p className={`text-[10px] text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                  Connect directly with our team
+                </p>
+              </div>
+            ) : (
+              <div className={`p-3 border-t ${isDark ? 'bg-gray-900/80 border-gray-700' : 'bg-white border-gray-100'}`}>
+                <div className={`flex items-center gap-2 rounded-xl px-3 py-2 ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
+                    placeholder={
+                      intakeStep === 'name' ? "Your name..."
+                        : intakeStep === 'email' ? "Your email..."
+                          : isTamil ? "Type pannunga..." : "Ask me anything..."
+                    }
+                    className={`flex-1 bg-transparent border-none outline-none text-sm ${isDark ? 'text-white placeholder:text-gray-500' : 'text-gray-800 placeholder:text-gray-400'}`}
+                  />
+                  <button
+                    onClick={() => handleSend(input)}
+                    disabled={!input.trim()}
+                    className={`p-2 rounded-lg transition-all ${
+                      input.trim()
+                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:shadow-lg hover:scale-105'
+                        : (isDark ? 'text-gray-600' : 'text-gray-300')
+                    }`}
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between mt-2 px-1">
+                  <p className="text-[9px] text-gray-400">Powered by Integer Helper AI</p>
+                  <button
+                    onClick={() => openWhatsApp()}
+                    className="flex items-center gap-1 text-[9px] text-green-500 hover:text-green-400 transition-colors"
+                  >
+                    <MessageCircle className="w-3 h-3" />
+                    WhatsApp
+                  </button>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default ChatbotWidget;

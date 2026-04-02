@@ -111,7 +111,9 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
             <div className="flex flex-col">
 
               {/* TOP: Full Width Image - Shows COMPLETE image */}
-              <div className="relative h-56 sm:h-72 md:h-80 lg:h-[400px] overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+              <div className={`relative h-56 sm:h-72 md:h-80 lg:h-[400px] overflow-hidden ${
+                isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gray-100/50'
+              }`}>
                 <motion.img
                   src={currentProject.image}
                   alt={currentProject.title}
@@ -122,7 +124,9 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
                   transition={{ duration: 0.5 }}
                 />
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className={`absolute inset-0 bg-gradient-to-t ${
+                  isDark ? 'from-black/70 via-black/20 to-transparent' : 'from-black/10 via-transparent to-transparent'
+                }`} />
 
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4">
