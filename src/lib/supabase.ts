@@ -388,19 +388,18 @@ export const updateApprovedReview = async (id: number, data: Partial<PendingRevi
 };
 
 // Delete an approved review (admin)
-export const deleteApprovedReview = async (id: number): Promise<boolean> => {
+export const deleteApprovedReview = async (id: number): Promise<{ success: boolean; error?: string }> => {
     try {
         const { error } = await supabase
             .from('pending_reviews')
             .delete()
-            .eq('id', id)
-            .eq('status', 'approved');
+            .eq('id', id);
 
-        if (error) throw error;
-        return true;
-    } catch (err) {
+        if (!error) return { success: true };
+        return { success: false, error: error.message };
+    } catch (err: any) {
         console.error('Error deleting approved review:', err);
-        return false;
+        return { success: false, error: err?.message || 'Unknown error' };
     }
 };
 

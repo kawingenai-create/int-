@@ -349,7 +349,7 @@ const Admin: React.FC = () => {
     };
 
     const handleDeleteReview = async (id: number) => {
-        if (!window.confirm('Are you sure you want to permanently delete this review?')) {
+        if (!window.confirm('Are you sure you want to permanently delete this pending review?')) {
             return;
         }
 
@@ -363,11 +363,12 @@ const Admin: React.FC = () => {
             if (!error) {
                 setReviews(reviews.filter(r => r.id !== id));
             } else {
-                alert('Failed to delete review');
+                console.error('Delete error details:', error);
+                alert(`Failed to delete review permanently.\n\nReason: ${error.message || 'Unknown error'}\n\nNote: You may need to enable DELETE permission for the anon or authenticated role on the 'pending_reviews' table in the Supabase Dashboard.`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting review:', error);
-            alert('An error occurred while deleting the review');
+            alert(`An error occurred while deleting the review: ${error?.message || 'Unknown error'}`);
         }
     };
 
@@ -428,16 +429,17 @@ const Admin: React.FC = () => {
 
         try {
             const { deleteApprovedReview } = await import('../lib/supabase');
-            const success = await deleteApprovedReview(id);
+            const result = await deleteApprovedReview(id);
 
-            if (success) {
+            if (result.success) {
                 setApprovedReviews(approvedReviews.filter(r => r.id !== id));
             } else {
-                alert('Failed to delete review');
+                console.error('Delete error details:', result.error);
+                alert(`Failed to delete approved review permanently.\n\nReason: ${result.error || 'Unknown error'}\n\nNote: Permanent deletion requires DELETE permissions for the 'pending_reviews' table in your Supabase project.`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error deleting approved review:', error);
-            alert('An error occurred while deleting the review');
+            alert(`An error occurred: ${error?.message || 'Unknown error'}`);
         }
     };
 
@@ -746,54 +748,54 @@ const Admin: React.FC = () => {
                 </motion.div>
 
                 {/* Tabs */}
-                <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-1">
+                <div className="grid grid-cols-2 sm:flex gap-2 sm:gap-2 mb-4 sm:mb-6">
                     <button
                         onClick={() => setActiveTab('reviews')}
-                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'reviews'
-                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
+                        className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2.5 py-2.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'reviews'
+                            ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        Reviews ({reviews.length})
+                        <Star className="h-4 w-4" />
+                        <span className="truncate">Reviews ({reviews.length})</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('analytics')}
-                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'analytics'
-                            ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
+                        className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2.5 py-2.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'analytics'
+                            ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <BarChart3 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        Analytics
+                        <BarChart3 className="h-4 w-4" />
+                        <span className="truncate">Analytics</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('enquiries')}
-                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'enquiries'
-                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' // Changed color for enquiries tab
+                        className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2.5 py-2.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'enquiries'
+                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        Enquiries ({enquiries.length})
+                        <Mail className="h-4 w-4" />
+                        <span className="truncate">Enquiries ({enquiries.length})</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('chatbot')}
-                        className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'chatbot'
-                            ? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white'
+                        className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2.5 py-2.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${activeTab === 'chatbot'
+                            ? 'bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg'
                             : isDark
                                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                             }`}
                     >
-                        <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                        Chatbot Leads ({chatbotLeads.length})
+                        <Bot className="h-4 w-4" />
+                        <span className="truncate text-left leading-tight">Chatbot Leads ({chatbotLeads.length})</span>
                     </button>
                 </div>
 
@@ -883,10 +885,61 @@ const Admin: React.FC = () => {
                             {/* Approved Reviews Section */}
                             {approvedReviews.length > 0 && (
                                 <div className="mt-6 sm:mt-8">
-                                    <h3 className={`text-base sm:text-xl font-bold mb-3 sm:mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                        ✅ Approved Reviews ({approvedReviews.length})
-                                    </h3>
-                                    <div className="overflow-x-auto">
+                                    {/* Mobile Card View (shown only on small screens) */}
+                                    <div className="grid gap-4 sm:hidden">
+                                        {approvedReviews.map((review) => (
+                                            <InteractiveCard key={review.id} className="p-4 relative">
+                                                <div className="flex gap-3 mb-3">
+                                                    <img
+                                                        src={review.image}
+                                                        alt={review.name}
+                                                        className="w-10 h-10 rounded-full object-cover"
+                                                    />
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className={`text-sm font-bold truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                            {review.name}
+                                                        </h4>
+                                                        <p className={`text-xs truncate ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                                                            {review.company || 'Private Client'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-2 mb-4">
+                                                    <div className="flex items-center gap-1">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
+                                                        ))}
+                                                    </div>
+                                                    <p className={`text-[10px] uppercase font-semibold tracking-wider ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                                        {review.service}
+                                                    </p>
+                                                    <p className={`text-sm italic ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                        "{review.review}"
+                                                    </p>
+                                                </div>
+
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => handleEditApprovedReview(review)}
+                                                        className="flex-1 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-semibold transition-all"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteApprovedReview(review.id)}
+                                                        className="flex-1 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1"
+                                                    >
+                                                        <Trash2 className="h-3 w-3" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </InteractiveCard>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop Table View (hidden on mobile) */}
+                                    <div className="hidden sm:block overflow-x-auto">
                                         <table className={`w-full border-collapse rounded-lg overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
                                             <thead>
                                                 <tr className={isDark ? 'bg-gray-700' : 'bg-gray-100'}>
@@ -1508,10 +1561,48 @@ const Admin: React.FC = () => {
                                 <InteractiveCard className="!p-0 overflow-hidden">
                                     <div className={`p-3 sm:p-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                                         <h3 className={`font-bold text-sm sm:text-base ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                                            🤖 Integer Chat Leads — Detailed View
+                                            🤖 Integer Chat Leads
                                         </h3>
                                     </div>
-                                    <div className="overflow-x-auto">
+
+                                    {/* Mobile Cards (shown on small screens) */}
+                                    <div className="sm:hidden divide-y divide-gray-700/50">
+                                        {chatbotLeads.map((lead: any) => (
+                                            <div key={lead.id} className="p-4 space-y-3">
+                                                <div className="flex justify-between items-start">
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className={`font-bold truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                                                            {lead.name || 'Anonymous User'}
+                                                        </h4>
+                                                        <p className={`text-xs truncate ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>
+                                                            {lead.email || 'No email provided'}
+                                                        </p>
+                                                    </div>
+                                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold ${isDark ? 'bg-emerald-500/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'}`}>
+                                                        {lead.message_count || 0} msgs
+                                                    </span>
+                                                </div>
+
+                                                {lead.unhandled_queries && (
+                                                    <div className={`p-2 rounded-lg text-xs leading-relaxed ${isDark ? 'bg-yellow-500/10 text-yellow-300 border border-yellow-500/20' : 'bg-yellow-50 text-yellow-800 border border-yellow-200'}`}>
+                                                        <span className="font-bold">Latest Query:</span> {lead.unhandled_queries}
+                                                    </div>
+                                                )}
+
+                                                <div className="flex items-center justify-between pt-1">
+                                                    <div className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                                                        {lead.created_at ? new Date(lead.created_at).toLocaleString() : '—'}
+                                                    </div>
+                                                    <div className={`text-[10px] font-medium uppercase tracking-tighter ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
+                                                        ID: {lead.session_id.slice(0, 8)}...
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Desktop Table View (hidden on mobile) */}
+                                    <div className="hidden sm:block overflow-x-auto">
                                         <table className="w-full text-left">
                                             <thead>
                                                 <tr className={isDark ? 'bg-gray-800/50' : 'bg-gray-50'}>

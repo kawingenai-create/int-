@@ -63,29 +63,43 @@ SERVICES (6 CORE CATEGORIES)
    - Cloud deployment, Server configuration, Website hosting setup, Domain & SSL setup, Performance monitoring, Ongoing maintenance
 
 ═══════════════════════════════════════
-PRODUCTS
+OUR PRODUCTS (SaaS & AI Tools)
+    - Full details: [integer-io.netlify.app/products](https://integer-io.netlify.app/products)
 ═══════════════════════════════════════
 1. Chatz.IO — AI Chat Assistant for Students (LIVE!)
-   - AI-powered study assistance and tutoring
-   - Research and academic writing support
-   - Exam preparation and practice questions
-   - Multi-subject knowledge integration
-   - URL: https://chatz-io.netlify.app/
+   - Intelligent AI tutor for research, exam prep, and academic writing.
+   - URL: [chatz-io.netlify.app](https://chatz-io.netlify.app/)
 
-2. Dips.IO — AI Image Generation & Documentation (COMING SOON)
-   - AI-powered image generation
-   - Smart documentation management
-   - Seamless workflow integration
-   - Advanced export options
+2. Project-Portal.IO — CRM & Project Management (LIVE!)
+   - Streamlined workflow, task tracking, and client collaboration for agencies.
+   - URL: [integer-io-projectportal.netlify.app](https://integer-io-projectportal.netlify.app/)
+
+3. Dips.IO — AI Image Generation (COMING SOON)
+   - Cutting-edge AI for creative image generation and smart documentation.
 
 ═══════════════════════════════════════
-FEATURED CLIENT PROJECTS
+CLIENT PROJECTS (Portfolio)
+    - Full details: [integer-io.netlify.app/projects](https://integer-io.netlify.app/projects)
 ═══════════════════════════════════════
-1. SAS Impex — Import-export consultancy website: https://sas-impex.netlify.app/
-2. Sri Karpagam Brand — Traditional foods showcase: https://srikarpagambrand.in/
-3. Multi Brand Cooling Services — Home appliance repairs: https://multibrandwashingmachineservice.in/
-4. PVR Tiles — Business website: https://pvrtiles.netlify.app/
-5. Chatz.IO — Student AI assistant: https://chatz-io.netlify.app/
+1. SAS Impex — Import-Export Consultancy Website
+   - High-performance business site with maps and detailed services.
+   - URL: [sas-impex.netlify.app](https://sas-impex.netlify.app/)
+
+2. Sri Karpagam Brand — Premium Food Branding
+   - Modern React site with smooth animations and product galleries.
+   - URL: [srikarpagambrand.in](https://srikarpagambrand.in/)
+
+3. Cooling Services — Appliance Service Booking
+   - Responsive repair booking system with technician tracking.
+   - URL: [multibrandwashingmachineservice.in](https://multibrandwashingmachineservice.in/)
+
+4. Floq Pump — Industrial Consulting
+   - Professional informational site for industrial equipment.
+   - URL: [demo.floqpumps.com](https://demo.floqpumps.com/)
+
+5. Bus Consulting Services — Transport Operations 
+   - Clean, professional consulting site for bus operators.
+   - URL: [busconsulting.in](https://www.busconsulting.in/)
 
 ═══════════════════════════════════════
 COMPANY VALUES
@@ -104,14 +118,15 @@ RESPONSE RULES
 - Always stay professional and project-oriented.
 - Use common web design terms: Scalable, UI/UX, Automation, Generative AI.
 - If asked about pricing, say "Pricing depends on the project scope. Connect with us on WhatsApp for a free consultation!"
-- Always be professional, friendly, and helpful
-- If user speaks in Tamil/Tanglish, respond in Tanglish (Tamil words in English script mixed with English)
-- For detailed inquiries, suggest contacting via WhatsApp (+91 8015355914) or email
-- IMPORTANT: Naturally try to collect the user's phone number during conversation. Use human-like approaches after 2-3 messages.
-- Never make up information not listed above
-- When asked about team, mention all 3 members with their roles
-- When asked about services, list all 6 categories briefly
-- You are the Integer Helper AI — always introduce yourself as such`;
+- Always be professional, friendly, and helpful.
+- ACT LIKE A REAL HUMAN AI ASSISTANT, NOT A ROBOT.
+- If user speaks in Tamil/Tanglish, respond in Tanglish (Tamil words in English script mixed with English).
+- For detailed inquiries, suggest contacting via WhatsApp (+91 8015355914) or email.
+- IMPORTANT: Naturally try to collect the user's name and phone number during conversation if they haven't provided it. Use human-like phrases like "By the way, who am I speaking with?" or "Could I get your number to stay in touch?".
+- Never make up information not listed above.
+- When asked about team, mention all 3 members with their roles.
+- When asked about services, list all 6 categories briefly.
+- You are the Integer Helper AI — always introduce yourself as such. Respond naturally to greetings like 'hi' or 'hello' first before diving into details.`;
 
 const DAILY_MSG_LIMIT = 6;
 
@@ -150,12 +165,10 @@ const ChatbotWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTamil, setIsTamil] = useState(false);
   const [input, setInput] = useState('');
-  const [intakeStep, setIntakeStep] = useState<'name' | 'email' | 'done'>('name');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [userPhone, setUserPhone] = useState('');
   const [isLimited, setIsLimited] = useState(false);
-  const [msgCount, setMsgCount] = useState(0);
   const sessionId = useRef(getSessionId());
 
   // ── Rotating tooltip phrases ──
@@ -173,10 +186,9 @@ const ChatbotWidget: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "👋 **Hi!** I'm Integer Helper AI, your personal assistant.\n\nBefore we dive into your requirements, may I know your **Name**?",
+      text: "👋 **Hi!** I'm Integer Helper AI, your personal assistant at **Integer.IO**. \n\nHow can I help you regarding our **Web Development**, **AI Automation**, or **Digital Branding** services today?",
       sender: 'bot',
       timestamp: new Date(),
-      isIntake: true,
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
@@ -190,7 +202,6 @@ const ChatbotWidget: React.FC = () => {
       setUserName(savedName);
       setUserEmail(savedEmail);
       if (savedPhone) setUserPhone(savedPhone);
-      setIntakeStep('done');
       setMessages([{
         id: '1',
         text: `Welcome back, ${savedName}! 👋\nI'm Integer Helper AI. How can I help you today?`,
@@ -239,7 +250,6 @@ const ChatbotWidget: React.FC = () => {
         : "🌐 **English mode activated!** How can I assist you today?",
       sender: 'bot',
       timestamp: new Date(),
-      isIntake: true,
     }]);
   };
 
@@ -248,7 +258,7 @@ const ChatbotWidget: React.FC = () => {
     const apiKey = import.meta.env.VITE_GROQ_API_KEY;
     if (!apiKey) throw new Error('VITE_GROQ_API_KEY is missing in .env');
     
-    const history = messages.filter(m => !m.isIntake).slice(-6).map(m => ({
+    const history = messages.slice(-6).map(m => ({
       role: m.sender === 'user' ? 'user' as const : 'assistant' as const,
       content: m.text
     }));
@@ -373,92 +383,60 @@ const ChatbotWidget: React.FC = () => {
       text,
       sender: 'user',
       timestamp: new Date(),
-      isIntake: intakeStep !== 'done',
     };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
 
+    // Background Data Extraction (Human-like)
     const phone = extractPhone(text);
     const emailMatch = text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/i);
-    const extractedEmailGlobal = emailMatch ? emailMatch[1] : null;
+    const extractedEmail = emailMatch ? emailMatch[1] : null;
 
+    // Smart Name Extraction
+    let extractedName = null;
+    const namePatterns = [
+      /my name is ([a-z\s]+)/i,
+      /i am ([a-z\s]+)/i,
+      /i'm ([a-z\s]+)/i,
+      /this is ([a-z\s]+)/i,
+      /call me ([a-z\s]+)/i
+    ];
+
+    for (const pattern of namePatterns) {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        const potentialName = match[1].trim().split(' ')[0];
+        // Don't capture common words or greetings as names
+        const commonWords = ['hi', 'hello', 'hey', 'the', 'a', 'an', 'some', 'any', 'bro', 'sir', 'madam'];
+        if (potentialName.length > 2 && !commonWords.includes(potentialName.toLowerCase())) {
+          extractedName = potentialName.charAt(0).toUpperCase() + potentialName.slice(1);
+          break;
+        }
+      }
+    }
+
+    // Update local state and storage if new info found
+    if (extractedName && (!userName || userName === 'Visitor')) {
+      setUserName(extractedName);
+      localStorage.setItem('integer_user_name', extractedName);
+    }
     if (phone && !userPhone) {
       setUserPhone(phone);
       localStorage.setItem('integer_user_phone', phone);
-      logChatbotLead({
-        session_id: sessionId.current,
-        name: userName || 'Visitor',
-        email: userEmail || 'Not Provided',
-        message_count: 0,
-        unhandled_queries: `Phone: ${phone}`,
-      });
+    }
+    if (extractedEmail && !userEmail) {
+      setUserEmail(extractedEmail);
+      localStorage.setItem('integer_user_email', extractedEmail);
     }
 
-    if (extractedEmailGlobal && !userEmail) {
-      setUserEmail(extractedEmailGlobal);
-      localStorage.setItem('integer_user_email', extractedEmailGlobal);
-    }
-
-    if (intakeStep === 'name') {
-      const words = text.trim().split(/\s+/);
-      const isQuestion = words.length > 2 || text.includes('?');
-      const finalName = isQuestion ? "Visitor" : text.trim();
-      setUserName(finalName);
-      localStorage.setItem('integer_user_name', finalName);
-
-      if (isQuestion) {
-        setIntakeStep('done');
-      } else {
-        setTimeout(() => {
-          const persuasiveText = isTamil
-            ? `Nice to meet you, **${finalName}**! 😊\n\nOru **important info**: I can send you a **Direct Consultation Link** and our **Project Portfolios** directly. Share your **Email or WhatsApp** so I can send the links! 🚀`
-            : `Nice to meet you, **${finalName}**! 😊\n\nI have something **very important** to share: I can send you a **Priority Consultation Link** and our **Exclusive Project Brochure** for our upcoming **AI Tools**. \n\nCould you share your **Email or WhatsApp** number so I can send it to you?`;
-
-          setMessages(prev => [...prev, {
-            id: Date.now().toString(),
-            text: persuasiveText,
-            sender: 'bot',
-            timestamp: new Date(),
-            isIntake: true,
-          }]);
-          setIntakeStep('email');
-          setIsTyping(false);
-        }, 800);
-        return;
-      }
-    } else if (intakeStep === 'email') {
-      const isQuestion = text.trim().split(/\s+/).length > 2 || text.includes('?');
-      const finalEmail = extractedEmailGlobal || (isQuestion ? "Not Provided" : text.trim());
-      setUserEmail(finalEmail);
-      localStorage.setItem('integer_user_email', finalEmail);
-
-      if (isQuestion && !extractedEmailGlobal && !phone) {
-        setIntakeStep('done');
-      } else {
-        const displayEmail = finalEmail !== "Not Provided" ? finalEmail : (phone || "Not Provided");
-        logChatbotLead({ session_id: sessionId.current, name: userName || 'Visitor', email: displayEmail, message_count: 0 });
-        setTimeout(() => {
-          setMessages(prev => [...prev, {
-            id: Date.now().toString(),
-            text: `**Perfect!** 🎉 You're all set. Our team will share the important links soon.\n\nNow, how can I help you regarding **Integer.IO Services**?`,
-            sender: 'bot',
-            timestamp: new Date(),
-            isIntake: true,
-            navButtons: getNavButtons(''),
-          }]);
-          setIntakeStep('done');
-          setIsTyping(false);
-        }, 800);
-        return;
-      }
-    }
-
+    // Daily and Session Limit Logic
     const newCount = incrementDailyCount();
-    setMsgCount(prev => prev + 1);
+
+    // Call AI
     const responseText = await callAIWithFallback(text);
 
-    // Both AIs failed — show WhatsApp fallback message
+    // AI Response Handling
     if (responseText === BOTH_FAILED) {
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
@@ -815,11 +793,7 @@ const ChatbotWidget: React.FC = () => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
-                    placeholder={
-                      intakeStep === 'name' ? "Your name..."
-                        : intakeStep === 'email' ? "Your email..."
-                          : isTamil ? "Type pannunga..." : "Ask me anything..."
-                    }
+                    placeholder={isTamil ? "Type pannunga..." : "Ask me anything..."}
                     className={`flex-1 bg-transparent border-none outline-none text-sm ${isDark ? 'text-white placeholder:text-gray-500' : 'text-gray-800 placeholder:text-gray-400'}`}
                   />
                   <button
