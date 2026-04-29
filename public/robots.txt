@@ -54,7 +54,7 @@ User-agent: facebookexternalhit
 Allow: /
 
 # Sitemap location
-Sitemap: https://integer-io.vercel.app/sitemap.xml
+Sitemap: https://integerio.com/sitemap.xml
 
 # Crawl-delay to prevent overload
 Crawl-delay: 1

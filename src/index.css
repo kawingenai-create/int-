@@ -553,8 +553,9 @@ html {
 /* Enhanced mobile performance */
 @media (max-width: 768px) {
 
-  /* Optimize touch interactions */
-  * {
+  /* Scope tap-highlight & touch-action to interactive elements only
+     so the carousel's touch-action: pan-y is not overridden globally */
+  button, a, input, select, textarea, [role="button"] {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }

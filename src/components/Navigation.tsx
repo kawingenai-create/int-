@@ -67,7 +67,7 @@ const Navigation: React.FC = () => {
           {/* Logo Section - Enhanced Visibility */}
           <Link
             to="/"
-            className={`flex items-center space-x-2 group relative z-10 flex-shrink-0 px-3 py-2 rounded-xl transition-all duration-300 ${isDark
+            className={`flex items-center space-x-1.5 sm:space-x-2 group relative z-10 flex-shrink-0 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl transition-all duration-300 ${isDark
               ? 'bg-gray-900/80 backdrop-blur-xl border border-gray-700/50 shadow-lg'
               : 'bg-white/80 backdrop-blur-xl border border-white/50 shadow-md'
               }`}
@@ -80,8 +80,8 @@ const Navigation: React.FC = () => {
                 src={logo}
                 alt="Logo"
                 className={`object-contain rounded-full transition-all duration-200 ease-out will-change-transform ${isScrolled
-                  ? 'h-9 w-9 sm:h-10 sm:w-10'
-                  : 'h-12 w-12 sm:h-14 sm:w-14'
+                  ? 'h-7 w-7 sm:h-10 sm:w-10'
+                  : 'h-9 w-9 sm:h-14 sm:w-14'
                   }`}
               />
             </div>
@@ -89,7 +89,7 @@ const Navigation: React.FC = () => {
             {/* Company Name */}
             <div className="relative flex items-center min-h-[2rem] sm:min-h-[2.5rem]">
               <span
-                className={`font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-200 ease-out ${isScrolled ? 'text-lg sm:text-xl' : 'text-xl sm:text-2xl'
+                className={`font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-200 ease-out ${isScrolled ? 'text-base sm:text-xl' : 'text-lg sm:text-2xl'
                   } ${isDark
                     ? 'from-emerald-300 via-emerald-400 to-purple-400'
                     : 'from-purple-800 via-indigo-700 to-emerald-700'

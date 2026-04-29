@@ -212,6 +212,7 @@ export const getPendingReviews = async () => {
         const { data, error } = await supabase
             .from('pending_reviews')
             .select('*')
+            .eq('status', 'pending')
             .order('created_at', { ascending: false });
 
         if (error) throw error;

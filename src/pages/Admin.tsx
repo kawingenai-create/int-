@@ -389,6 +389,23 @@ const Admin: React.FC = () => {
         }
     };
 
+    const handleDeleteChatbotLead = async (id: number) => {
+        if (window.confirm('Are you sure you want to permanently delete this chatbot lead?')) {
+            try {
+                const { deleteChatbotLead } = await import('../lib/supabase');
+                const success = await deleteChatbotLead(id);
+                if (success) {
+                    setChatbotLeads(chatbotLeads.filter(l => l.id !== id));
+                } else {
+                    alert('Failed to delete chatbot lead. Please check Supabase RLS permissions.');
+                }
+            } catch (error: any) {
+                console.error('Error deleting chatbot lead:', error);
+                alert(`An error occurred: ${error?.message || 'Unknown error'}`);
+            }
+        }
+    };
+
     // Handle editing approved review
     const handleEditApprovedReview = async (review: Review) => {
         if (!editingReview) {
@@ -615,7 +632,7 @@ const Admin: React.FC = () => {
     // Login Screen
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen pt-20 flex items-center justify-center px-4">
+            <div className="min-h-screen pt-28 sm:pt-32 flex items-center justify-center px-4">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -680,7 +697,7 @@ const Admin: React.FC = () => {
 
     // Admin Dashboard
     return (
-        <div className="min-h-screen pt-20 px-2 sm:px-4 pb-8 sm:pb-12">
+        <div className="min-h-screen pt-28 sm:pt-32 px-2 sm:px-4 pb-8 sm:pb-12">
             <div className="max-w-7xl mx-auto">
                 {/* Print-Only Report Header (hidden on screen, visible on print) */}
                 <div className="hidden print:block text-center mb-8 pb-6 border-b-2 border-gray-300">
@@ -1593,8 +1610,17 @@ const Admin: React.FC = () => {
                                                     <div className={`text-[10px] ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                                                         {lead.created_at ? new Date(lead.created_at).toLocaleString() : '—'}
                                                     </div>
-                                                    <div className={`text-[10px] font-medium uppercase tracking-tighter ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
-                                                        ID: {lead.session_id.slice(0, 8)}...
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`text-[10px] font-medium uppercase tracking-tighter ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
+                                                            ID: {lead.session_id.slice(0, 8)}...
+                                                        </div>
+                                                        <button
+                                                            onClick={() => handleDeleteChatbotLead(lead.id)}
+                                                            className="p-1.5 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors"
+                                                            title="Delete Lead"
+                                                        >
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1612,6 +1638,7 @@ const Admin: React.FC = () => {
                                                     <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Msgs</th>
                                                     <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>User Query</th>
                                                     <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Date & Time</th>
+                                                    <th className={`px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1649,6 +1676,15 @@ const Admin: React.FC = () => {
                                                                     <div className="text-[10px] opacity-70">{new Date(lead.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
                                                                 </div>
                                                             ) : '—'}
+                                                        </td>
+                                                        <td className="px-3 sm:px-4 py-2.5">
+                                                            <button
+                                                                onClick={() => handleDeleteChatbotLead(lead.id)}
+                                                                className="p-1.5 rounded-lg text-red-500 hover:bg-red-500/10 transition-colors"
+                                                                title="Delete Lead"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 ))}

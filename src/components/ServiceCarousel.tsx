@@ -20,6 +20,7 @@ const ServiceCarousel = () => {
   const rotationRef = useRef(0);
   const isDraggingRef = useRef(false);
   const lastMouseXRef = useRef(0);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   const services = [
     {
@@ -98,29 +99,29 @@ const ServiceCarousel = () => {
     isDraggingRef.current = true;
     lastMouseXRef.current = e.touches[0].clientX;
     setIsPaused(true);
+    // Do NOT preventDefault – allows vertical page scroll to propagate
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDraggingRef.current || !carouselRef.current) return;
-    // Don't preventDefault here generally to allow vertical scroll, 
-    // but maybe for horizontal swipe we might need to.
-    const deltaX = e.touches[0].clientX - lastMouseXRef.current;
-    rotationRef.current = (rotationRef.current + deltaX * 0.5) % 360; // Slightly faster multiplier for touch
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - lastMouseXRef.current;
+    rotationRef.current = (rotationRef.current + deltaX * 0.45) % 360;
     (carouselRef.current as HTMLDivElement).style.transform = `rotateY(${rotationRef.current}deg)`;
-    lastMouseXRef.current = e.touches[0].clientX;
+    lastMouseXRef.current = touch.clientX;
   };
 
   const handleTouchEnd = () => {
     isDraggingRef.current = false;
-    setTimeout(() => setIsPaused(false), 200);
+    setTimeout(() => setIsPaused(false), 300);
   };
-  // Optimized animation: faster rotation speed
+  // Optimised animation loop – 30 fps cap on mobile to reduce scroll jank
   useEffect(() => {
     if (!isIntersecting || !carouselRef.current || isPaused) return;
 
     let lastTime = performance.now();
-    // Slower speed: 0.25 on desktop, 0.18 on mobile
-    const speed = window.innerWidth < 768 ? 0.18 : 0.25;
+    const speed = isMobile ? 0.12 : 0.25;
+    const frameLimit = isMobile ? 33 : 16; // 30 fps on mobile, 60 fps on desktop
 
     const step = (now: number) => {
       if (document.hidden || isPaused) {
@@ -128,10 +129,10 @@ const ServiceCarousel = () => {
         return;
       }
       const delta = now - lastTime;
-      if (delta >= 16) {
+      if (delta >= frameLimit) {
         rotationRef.current = (rotationRef.current - speed) % 360;
         if (carouselRef.current) {
-          carouselRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+          (carouselRef.current as HTMLDivElement).style.transform = `rotateY(${rotationRef.current}deg)`;
         }
         lastTime = now;
       }
@@ -143,7 +144,7 @@ const ServiceCarousel = () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     };
-  }, [isIntersecting, isPaused]);
+  }, [isIntersecting, isPaused, isMobile]);
 
   // Keep rotation state in sync for initial render and when ref resets
   useEffect(() => {
@@ -172,7 +173,7 @@ const ServiceCarousel = () => {
           ref={carouselRef}
           style={{
             transform: `rotateY(${rotation}deg)`,
-            willChange: isIntersecting ? 'transform' : 'auto',
+            willChange: isIntersecting && !isMobile ? 'transform' : 'auto',
           }}
         >
           {services.map((service, index) => {

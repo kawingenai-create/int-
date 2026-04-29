@@ -137,30 +137,33 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
 
                 {/* Project Number */}
                 <div className="absolute top-4 right-4">
-                  <span className={`text-3xl font-bold text-white drop-shadow-lg`}>
+                  <span className={`text-3xl font-bold drop-shadow-lg ${isDark ? 'text-white' : 'text-gray-800'}`}>
                     {String(currentIndex + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-lg ml-1 text-gray-300">
+                  <span className={`text-lg ml-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                     / {String(projects.length).padStart(2, '0')}
                   </span>
                 </div>
 
-                {/* Title Overlay on Image */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
-                    {currentProject.title}
-                  </h2>
-                </div>
               </div>
 
               {/* BOTTOM: Content Section */}
               <div className="p-5 sm:p-6 md:p-8">
+                {/* Project Title */}
+                <motion.h2
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}
+                >
+                  {currentProject.title}
+                </motion.h2>
+
                 {/* Description */}
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className={`text-sm sm:text-base md:text-lg leading-relaxed mb-5 ${isDark ? 'text-gray-300' : 'text-gray-700'
+                  className={`text-sm sm:text-base md:text-lg leading-relaxed mb-5 ${isDark ? 'text-gray-300' : 'text-gray-900'
                     }`}
                 >
                   {currentProject.description}
@@ -183,7 +186,7 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
                         <div key={idx} className="flex items-center gap-2">
                           <CheckCircle className={`h-4 w-4 flex-shrink-0 ${isDark ? 'text-emerald-400' : 'text-emerald-500'
                             }`} />
-                          <span className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'
+                          <span className={`text-xs sm:text-sm ${isDark ? 'text-gray-400' : 'text-gray-800'
                             }`}>
                             {highlight}
                           </span>
@@ -208,7 +211,7 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
                           key={idx}
                           className={`px-3 py-1.5 rounded-full text-xs font-medium ${isDark
                             ? 'bg-gray-800 text-gray-300 border border-gray-700'
-                            : 'bg-gray-100 text-gray-700 border border-gray-200'
+                            : 'bg-gray-200 text-gray-900 border border-gray-300'
                             }`}
                         >
                           {tech}

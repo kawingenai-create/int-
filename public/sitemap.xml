@@ -6,7 +6,7 @@
 
   <!-- Home Page - Main landing page with company overview -->
   <url>
-    <loc>https://integer-io-services.com/</loc>
+    <loc>https://integerio.com/</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
 
   <!-- About Page - Company information, team, and mission -->
   <url>
-    <loc>https://integer-io-services.com/about</loc>
+    <loc>https://integerio.com/about</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
 
   <!-- Services Page - Our 6 core services -->
   <url>
-    <loc>https://integer-io-services.com/services</loc>
+    <loc>https://integerio.com/services</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -30,7 +30,7 @@
 
   <!-- Services - Web Development -->
   <url>
-    <loc>https://integer-io-services.com/services?service=web-development</loc>
+    <loc>https://integerio.com/services?service=web-development</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -38,7 +38,7 @@
 
   <!-- Services - Logo & Poster Design -->
   <url>
-    <loc>https://integer-io-services.com/services?service=logo-poster-design</loc>
+    <loc>https://integerio.com/services?service=logo-poster-design</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -46,7 +46,7 @@
 
   <!-- Services - AI & ML Projects -->
   <url>
-    <loc>https://integer-io-services.com/services?service=ai-ml-projects</loc>
+    <loc>https://integerio.com/services?service=ai-ml-projects</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -54,7 +54,7 @@
 
   <!-- Services - Data Analytics -->
   <url>
-    <loc>https://integer-io-services.com/services?service=data-analytics</loc>
+    <loc>https://integerio.com/services?service=data-analytics</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -62,7 +62,7 @@
 
   <!-- Services - Business Automation -->
   <url>
-    <loc>https://integer-io-services.com/services?service=business-automation</loc>
+    <loc>https://integerio.com/services?service=business-automation</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -70,7 +70,7 @@
 
   <!-- Services - Digital Marketing -->
   <url>
-    <loc>https://integer-io-services.com/services?service=digital-marketing</loc>
+    <loc>https://integerio.com/services?service=digital-marketing</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -78,7 +78,7 @@
 
   <!-- Products Page - Our digital products and solutions -->
   <url>
-    <loc>https://integer-io-services.com/products</loc>
+    <loc>https://integerio.com/products</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -86,7 +86,7 @@
 
   <!-- Projects Page - Portfolio of completed projects -->
   <url>
-    <loc>https://integer-io-services.com/projects</loc>
+    <loc>https://integerio.com/projects</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -94,7 +94,7 @@
 
   <!-- Contact Page - Contact form, phone, email, WhatsApp -->
   <url>
-    <loc>https://integer-io-services.com/contact</loc>
+    <loc>https://integerio.com/contact</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -102,7 +102,7 @@
 
   <!-- Privacy Policy -->
   <url>
-    <loc>https://integer-io-services.com/privacy</loc>
+    <loc>https://integerio.com/privacy</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
@@ -110,7 +110,7 @@
 
   <!-- Terms of Service -->
   <url>
-    <loc>https://integer-io-services.com/terms</loc>
+    <loc>https://integerio.com/terms</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

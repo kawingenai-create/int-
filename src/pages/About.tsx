@@ -44,8 +44,8 @@ const About = () => {
   const teamMembers = [
     {
       name: 'Kawin M.S.',
-      role: 'Founder & CEO',
-      description: 'Leads the company vision, projects, and development. Expert in AI Automation, web development, and business strategy.',
+      role: 'CEO / Founder',
+      description: 'Business strategy & decision making. Investment & project approvals.',
       email: 'integeriokawin@gmail.com',
       phone: '+91 8015355914',
       linkedin: 'https://www.linkedin.com/in/kawin-m-s-570961285/',
@@ -54,24 +54,25 @@ const About = () => {
       color: 'emerald',
     },
     {
-      name: 'Livan',
-      role: 'Creative Director',
-      description: 'Manages video editing, YouTube content, Instagram marketing, and creative design projects.',
-      email: 'integeriolivan@gmail.com',
-      phone: '+91 6385243064',
-      linkedin: 'https://linkedin.com/in/livan',
-      image: livan,
-      color: 'indigo',
-    },
-    {
       name: 'Hemanth',
-      role: 'Operations & QA Executive',
-      description: 'Oversees profit/loss and supports client communication. Manages financial planning and stakeholder relations.',
+      role: 'COO / Sales',
+      description: 'Client handling & deals. Server & operations management.',
       email: 'integeriohemanth@gmail.com',
       phone: '+91 6385279258',
       linkedin: '#',
       image: hemanth,
       color: 'pink',
+    },
+    {
+      name: 'Livan',
+      role: 'CMO / Relations',
+      description: 'Social media & branding. Client visits & follow-ups.',
+      email: 'integeriolivan@gmail.com',
+      phone: '+91 6385243064',
+      linkedin: 'https://linkedin.com/in/livan',
+      portfolio: 'https://livan-portfolio.netlify.app/',
+      image: livan,
+      color: 'indigo',
     },
   ];
 
@@ -238,7 +239,7 @@ const About = () => {
               >
                 <div
                   className={`relative w-full transition-transform duration-700 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
-                  style={{ minHeight: '340px' }}
+                  style={{ minHeight: '420px' }}
                 >
                   {/* Front Face - Square Card with Border */}
                   <div
@@ -248,19 +249,31 @@ const About = () => {
                       } shadow-lg`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-center text-center">
-                      <div className={`w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 shrink-0 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 bg-white/50 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
-                        <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
+                    <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-between text-center">
+                      <div className="flex flex-col items-center flex-1 justify-center">
+                        <div className={`w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 shrink-0 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 bg-white/50 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
+                          <img src={member.image} alt={member.name} className="w-full h-full object-contain" />
+                        </div>
+                        <h3 className={`text-lg sm:text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                          {member.name}
+                        </h3>
+                        <p className={`text-sm font-medium mb-2 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                          {member.role}
+                        </p>
+                        <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {member.description}
+                        </p>
                       </div>
-                      <h3 className={`text-lg sm:text-xl font-bold mb-1 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                        {member.name}
-                      </h3>
-                      <p className={`text-sm font-medium mb-3 bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                        {member.role}
-                      </p>
-                      <p className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        {member.description}
-                      </p>
+                      
+                      <div className="mt-4">
+                        <button
+                          onClick={() => setHoveredCard(index)}
+                          className="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md hover:scale-105 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white"
+                        >
+                          <Mail className="h-4 w-4" />
+                          Contact
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -272,46 +285,43 @@ const About = () => {
                       } shadow-lg`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-4 sm:p-6 h-full flex flex-col justify-center">
-                      <h3 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
-                        Contact Details
-                      </h3>
-                      <div className="space-y-4">
-                        <a href={`mailto:${member.email}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Mail className="h-4 w-4" />
-                          <span className="truncate">{member.email}</span>
-                        </a>
-                        <a href={`tel:${member.phone}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Phone className="h-4 w-4" />
-                          <span>{member.phone}</span>
-                        </a>
-                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                          <Linkedin className="h-4 w-4" />
-                          <span>LinkedIn</span>
-                        </a>
-                        {member.portfolio && (
-                          <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                            <Globe className="h-4 w-4" />
-                            <span>Portfolio</span>
+                    <div className="p-4 sm:p-6 h-full flex flex-col justify-between">
+                      <div className="flex-1 flex flex-col justify-center">
+                        <h3 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-6 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
+                          Contact Details
+                        </h3>
+                        <div className="space-y-4">
+                          <a href={`mailto:${member.email}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                            <Mail className="h-4 w-4" />
+                            <span className="truncate">{member.email}</span>
                           </a>
-                        )}
+                          <a href={`tel:${member.phone}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                            <Phone className="h-4 w-4" />
+                            <span>{member.phone}</span>
+                          </a>
+                          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                            <Linkedin className="h-4 w-4" />
+                            <span>LinkedIn</span>
+                          </a>
+                          {member.portfolio && (
+                            <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                              <Globe className="h-4 w-4" />
+                              <span>Portfolio</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="mt-4 flex justify-center">
+                        <button
+                          onClick={() => setHoveredCard(null)}
+                          className="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md hover:scale-105 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white"
+                        >
+                          Back
+                        </button>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Floating Contact Button */}
-                <div className="flex justify-center mt-4">
-                  <button
-                    onClick={() => setHoveredCard(hoveredCard === index ? null : index)}
-                    className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-lg hover:scale-105 ${hoveredCard === index
-                      ? 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white'
-                      : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white'
-                      }`}
-                  >
-                    <Mail className="h-4 w-4" />
-                    {hoveredCard === index ? 'Back' : 'Contact'}
-                  </button>
                 </div>
               </motion.div>
             ))}

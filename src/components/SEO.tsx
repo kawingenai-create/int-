@@ -8,30 +8,43 @@ interface SEOProps {
   keywords?: string;
   image?: string;
   url?: string;
+  page?: string;
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = "Integer.IO Services - Web Development, AI Automation, SaaS & Cloud Solutions in Tamil Nadu, India",
-  description = "Leading technology solutions provider in Tamil Nadu, India. We specialize in web application development, AI product & automation services, custom software & SaaS development, digital marketing & branding, education & student services, and cloud deployment & technical support. Serving businesses, startups, and students with innovative digital solutions.",
-  keywords = "web application development Tamil Nadu, AI automation services India, SaaS development, custom software development, digital marketing branding, student services India, cloud deployment, technical support, final year projects, portfolio websites, AI chatbots, voice assistants, billing software, React development, Integer.IO Services",
+  title = "Integer.IO Solutions | Web Development, AI Automation & Digital Solutions in Madurai, Tamil Nadu",
+  description = "Integer.IO Solutions is a leading IT company based in Madurai, Tamil Nadu. We specialize in web development, AI automation, SaaS products, billing software, digital marketing, branding, and student project services. Trusted by 30+ clients across India.",
+  keywords = "Integer.IO, Integer IO Solutions, integerio.com, web development Madurai, AI automation Tamil Nadu, SaaS development India, custom software, billing software, digital marketing Madurai, branding, student projects, final year projects, React development, AI chatbot, portfolio website, SEO services, cloud deployment, IT company Madurai, IT company Thirunagar, best web developer Madurai",
   image = logoAsset,
-  url = "https://integer-io.vercel.app"
+  url = "https://integerio.com",
+  page = ""
 }) => {
+  const fullUrl = page ? `${url}/${page}` : url;
+
   return (
     <Helmet>
+      {/* Primary Meta Tags */}
       <title>{title}</title>
+      <meta name="title" content={title} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta name="author" content="MS Kawin" />
-      <meta name="robots" content="index, follow" />
+      <meta name="author" content="Kawin M.S. - Integer.IO Solutions" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
-      {/* Open Graph */}
+      {/* Geo Meta Tags */}
+      <meta name="geo.region" content="IN-TN" />
+      <meta name="geo.placename" content="Madurai" />
+      <meta name="geo.position" content="9.9252;78.1198" />
+      <meta name="ICBM" content="9.9252, 78.1198" />
+
+      {/* Open Graph / Facebook */}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
+      <meta property="og:url" content={fullUrl} />
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Integer.IO Services" />
+      <meta property="og:site_name" content="Integer.IO Solutions" />
+      <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -39,52 +52,53 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
 
-      {/* Additional SEO */}
+      {/* Technical */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="theme-color" content="#10b981" />
-      <link rel="canonical" href={url} />
+      <link rel="canonical" href={fullUrl} />
 
-      {/* Structured Data for Organizations */}
+      {/* Organization Structured Data */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "Integer.IO Services",
-          "alternateName": "Integer IO",
-          "description": "Professional technology solutions provider specializing in web development, AI Automation projects, digital marketing, and business automation services in Tamil Nadu, India",
+          "name": "Integer.IO Solutions",
+          "alternateName": ["Integer IO", "Integer.IO Services", "IntegerIO"],
+          "description": "Professional web development, AI automation, SaaS products, digital marketing, and student project services based in Madurai, Tamil Nadu, India.",
           "url": url,
           "logo": image,
           "image": image,
           "founder": {
             "@type": "Person",
-            "name": "MS Kawin",
-            "jobTitle": "Founder & CEO"
+            "name": "Kawin M.S.",
+            "jobTitle": "CEO / Founder"
           },
           "address": {
             "@type": "PostalAddress",
+            "streetAddress": "Thirunagar",
+            "addressLocality": "Madurai",
             "addressRegion": "Tamil Nadu",
-            "addressCountry": "IN",
-            "addressLocality": "India"
+            "postalCode": "625006",
+            "addressCountry": "IN"
           },
           "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+91-8015355914",
             "contactType": "customer service",
-            "email": "mskawin2004@gmail.com",
+            "email": "integer.io.ai@gmail.com",
             "availableLanguage": ["English", "Tamil"],
             "areaServed": "IN"
           },
           "sameAs": [
-            "https://wa.me/918015355914"
+            "https://wa.me/918015355914",
+            "https://www.linkedin.com/in/kawin-m-s-570961285/"
           ],
           "areaServed": {
             "@type": "Country",
             "name": "India"
           },
-          "serviceArea": {
-            "@type": "State",
-            "name": "Tamil Nadu"
-          },
+          "numberOfEmployees": "3",
+          "foundingDate": "2024",
           "knowsAbout": [
             "Web Application Development",
             "AI Product & Automation",
@@ -142,33 +156,67 @@ const SEO: React.FC<SEOProps> = ({
                 "description": "Cloud deployment, server configuration, website hosting, domain & SSL setup, and ongoing maintenance"
               }
             }
+          ],
+          "priceRange": "$$"
+        })}
+      </script>
+
+      {/* LocalBusiness Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Integer.IO Solutions",
+          "image": image,
+          "description": "IT company in Madurai specializing in web development, AI automation, SaaS products, billing software, digital marketing, and student project services.",
+          "@id": url,
+          "url": url,
+          "telephone": "+91-8015355914",
+          "email": "integer.io.ai@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Thirunagar",
+            "addressLocality": "Madurai",
+            "addressRegion": "Tamil Nadu",
+            "postalCode": "625006",
+            "addressCountry": "IN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 9.9252,
+            "longitude": 78.1198
+          },
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          "priceRange": "$$",
+          "serviceType": [
+            "Web Application Development",
+            "AI Automation & Chatbot Development",
+            "Custom Software & SaaS Development",
+            "Digital Marketing & Branding",
+            "Final Year Student Projects",
+            "Cloud Deployment & Technical Support"
           ]
         })}
       </script>
 
-      {/* Additional Structured Data for Services */}
+      {/* BreadcrumbList for Navigation */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "ProfessionalService",
-          "name": "Integer.IO Services",
-          "image": image,
-          "description": "Technology solutions and digital services provider in Tamil Nadu",
-          "address": {
-            "@type": "PostalAddress",
-            "addressRegion": "Tamil Nadu",
-            "addressCountry": "IN"
-          },
-          "telephone": "+91-8015355914",
-          "email": "mskawin2004@gmail.com",
-          "priceRange": "$$",
-          "serviceType": [
-            "Web Application Development",
-            "AI Product & Automation",
-            "Custom Software & SaaS",
-            "Digital Marketing & Branding",
-            "Education & Student Services",
-            "Cloud Deployment & Technical Support"
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": url },
+            { "@type": "ListItem", "position": 2, "name": "Services", "item": `${url}/services` },
+            { "@type": "ListItem", "position": 3, "name": "Products", "item": `${url}/products` },
+            { "@type": "ListItem", "position": 4, "name": "Projects", "item": `${url}/projects` },
+            { "@type": "ListItem", "position": 5, "name": "About", "item": `${url}/about` },
+            { "@type": "ListItem", "position": 6, "name": "Contact", "item": `${url}/contact` },
+            { "@type": "ListItem", "position": 7, "name": "Careers", "item": `${url}/careers` }
           ]
         })}
       </script>

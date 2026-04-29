@@ -88,6 +88,7 @@ const Footer: React.FC = () => {
     { name: 'Services', path: '/services' },
     { name: 'Projects', path: '/projects' },
     { name: 'Products', path: '/products' },
+    { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -143,7 +144,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p
-              className={`mb-4 text-base leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
+              className={`mb-4 text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
                 }`}
             >
               Empowering Tamil Nadu's future through smart web & AI solutions.
@@ -210,7 +211,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <h3
-              className={`text-base font-semibold tracking-wide mb-3 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-base lg:text-lg font-semibold tracking-wide mb-3 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Quick Links
@@ -220,7 +221,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-sm transition-all flex items-center ${isDark
+                    className={`text-base transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -233,7 +234,7 @@ const Footer: React.FC = () => {
             </ul>
 
             <h4
-              className={`text-sm font-bold mt-4 mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-base font-bold mt-4 mb-2 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Legal
@@ -243,7 +244,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-sm transition-all flex items-center ${isDark
+                    className={`text-base transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -263,7 +264,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h3
-              className={`text-sm font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-base lg:text-lg font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Our Services
@@ -273,7 +274,7 @@ const Footer: React.FC = () => {
                 <li key={service.key}>
                   <Link
                     to={`/services?service=${service.key}`}
-                    className={`text-sm transition-all flex items-center ${isDark
+                    className={`text-base transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -297,7 +298,7 @@ const Footer: React.FC = () => {
               {/* Contact Info */}
               <div>
                 <h3
-                  className={`text-sm font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+                  className={`text-base lg:text-lg font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
                     }`}
                 >
                   Contact Info
@@ -305,19 +306,19 @@ const Footer: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Phone className={`h-4 w-4 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                    <a href="tel:8015355914" className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <a href="tel:8015355914" className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       +91 8015355914
                     </a>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Mail className={`h-4 w-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-                    <a href="mailto:integer.io.ai@gmail.com" className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <a href="mailto:integer.io.ai@gmail.com" className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       integer.io.ai@gmail.com
                     </a>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className={`h-4 w-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                    <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                     <span className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       Tamil Nadu, India
                     </span>
                   </div>
@@ -326,13 +327,13 @@ const Footer: React.FC = () => {
 
               {/* Business Hours */}
               <div className="lg:mt-4">
-                <h4 className={`text-sm font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <h4 className={`text-base font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Business Hours
                 </h4>
-                <div className={`text-sm space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className={`text-base space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>Mon-Sat: 9AM - 8PM</p>
                   <p>Sunday: 10AM - 6PM</p>
-                  <p className="text-emerald-400 text-xs">24/7 WhatsApp Support</p>
+                  <p className="text-emerald-400 text-sm">24/7 WhatsApp Support</p>
                 </div>
               </div>
             </div>
@@ -348,8 +349,8 @@ const Footer: React.FC = () => {
             }`}
         >
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-            <p
-              className={`text-sm flex items-center ${isDark ? 'text-gray-400' : 'text-gray-500'
+              <p
+              className={`text-base flex items-center ${isDark ? 'text-gray-400' : 'text-gray-500'
                 }`}
             >
               © 2026Integer.IO Services. Crafted with{' '}
@@ -370,7 +371,7 @@ const Footer: React.FC = () => {
                 🚀
               </motion.div>
               <span
-                className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'
+                className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'
                   }`}
               >
                 Launching Dreams into Digital Reality

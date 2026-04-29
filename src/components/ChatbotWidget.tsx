@@ -19,25 +19,23 @@ interface Message {
 }
 
 const SYSTEM_PROMPT = `═══════════════════════════════════════
-TEAM MEMBERS
-═══════════════════════════════════════
-1. Kawin M.S. — Founder & CEO
-   - Expert in AI Automation, Full-Stack Web Development, and Business Strategy
+1. Kawin M.S. — CEO / Founder
+   - Business strategy & decision making. Investment & project approvals.
    - Email: integeriokawin@gmail.com
    - Phone: +91 8015355914
    - LinkedIn: https://www.linkedin.com/in/kawin-m-s-570961285/
    - Portfolio: https://kawin-portfolio.netlify.app/
-   - Leads the company vision, projects, and development
 
-2. Livan — Creative Director
-   - Manages video editing, YouTube content, Instagram marketing, and creative design
-   - Email: integeriolivan@gmail.com
-   - Phone: +91 6385243064
-
-3. Hemanth — Operations & QA Executive
-   - Oversees profit/loss, client communication, financial planning, and stakeholder relations
+2. Hemanth — COO / Sales
+   - Client handling & deals. Server & operations management.
    - Email: integeriohemanth@gmail.com
    - Phone: +91 6385279258
+
+3. Livan — CMO / Relations
+   - Social media & branding. Client visits & follow-ups.
+   - Email: integeriolivan@gmail.com
+   - Phone: +91 6385243064
+   - Portfolio: https://livan-portfolio.netlify.app/
 
 ═══════════════════════════════════════
 SERVICES (6 CORE CATEGORIES)
@@ -100,6 +98,12 @@ CLIENT PROJECTS (Portfolio)
 5. Bus Consulting Services — Transport Operations 
    - Clean, professional consulting site for bus operators.
    - URL: [busconsulting.in](https://www.busconsulting.in/)
+
+═══════════════════════════════════════
+COMPANY LOCATION & CONTACT
+═══════════════════════════════════════
+- Location / Physical Address: Madurai, Thirunagar
+- Primary Contact Number: +91 8015355914
 
 ═══════════════════════════════════════
 COMPANY VALUES
@@ -169,6 +173,9 @@ const ChatbotWidget: React.FC = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userPhone, setUserPhone] = useState('');
   const [isLimited, setIsLimited] = useState(false);
+  const [contactGatePassed, setContactGatePassed] = useState(false);
+  const [gateInput, setGateInput] = useState('');
+  const [gateError, setGateError] = useState('');
   const sessionId = useRef(getSessionId());
 
   // ── Rotating tooltip phrases ──
@@ -183,38 +190,31 @@ const ChatbotWidget: React.FC = () => {
   const [tipIdx, setTipIdx] = useState(() => Math.floor(Math.random() * 6));
   const [tipVisible, setTipVisible] = useState(false);
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "👋 **Hi!** I'm Integer Helper AI, your personal assistant at **Integer.IO**. \n\nHow can I help you regarding our **Web Development**, **AI Automation**, or **Digital Branding** services today?",
-      sender: 'bot',
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const savedName = localStorage.getItem('integer_user_name');
     const savedEmail = localStorage.getItem('integer_user_email');
     const savedPhone = localStorage.getItem('integer_user_phone');
-    if (savedName && savedEmail) {
-      setUserName(savedName);
-      setUserEmail(savedEmail);
+    if (savedEmail || savedPhone) {
+      setContactGatePassed(true);
+      if (savedEmail) setUserEmail(savedEmail);
       if (savedPhone) setUserPhone(savedPhone);
-      setMessages([{
-        id: '1',
-        text: `Welcome back, ${savedName}! 👋\nI'm Integer Helper AI. How can I help you today?`,
-        sender: 'bot',
-        timestamp: new Date(),
-        navButtons: [
-          { label: 'Our Services', path: '/services', icon: '🛠️' },
-          { label: 'Products', path: '/products', icon: '📦' },
-          { label: 'Projects', path: '/projects', icon: '🚀' },
-          { label: 'Contact Us', path: '/contact', icon: '📞' },
-        ],
-      }]);
     }
+    // Always show the same welcome message
+    setMessages([{
+      id: '1',
+      text: "👋 **Hi!** I'm Integer Helper AI, your personal assistant at **Integer.IO Solutions**. \n\nHow can I help you regarding our **Web Development**, **AI Automation**, or **Digital Branding** services today?",
+      sender: 'bot',
+      timestamp: new Date(),
+      navButtons: [
+        { label: 'Our Services', path: '/services', icon: '🛠️' },
+        { label: 'Products', path: '/products', icon: '📦' },
+        { label: 'Projects', path: '/projects', icon: '🚀' },
+        { label: 'Contact Us', path: '/contact', icon: '📞' },
+      ],
+    }]);
     if (getDailyCount() >= DAILY_MSG_LIMIT) setIsLimited(true);
   }, []);
 
@@ -251,6 +251,46 @@ const ChatbotWidget: React.FC = () => {
       sender: 'bot',
       timestamp: new Date(),
     }]);
+  };
+
+  // Gate modal submit handler with validation
+  const handleGateSubmit = async () => {
+    const val = gateInput.trim();
+    if (!val) {
+      setGateError('Please enter your email or phone number.');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Phone validation: 10+ digits, optionally with +, spaces, dashes
+    const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
+    const cleanPhone = val.replace(/[\s-]/g, '');
+
+    if (emailRegex.test(val)) {
+      setUserEmail(val);
+      localStorage.setItem('integer_user_email', val);
+      setContactGatePassed(true);
+      // Save to DB
+      logChatbotLead({
+        session_id: sessionId.current,
+        email: val,
+        message_count: 0,
+      });
+    } else if (phoneRegex.test(val) && cleanPhone.replace('+', '').length >= 10) {
+      setUserPhone(val);
+      localStorage.setItem('integer_user_phone', val);
+      setContactGatePassed(true);
+      // Save to DB
+      logChatbotLead({
+        session_id: sessionId.current,
+        email: val, // store in email field as contact
+        message_count: 0,
+      });
+    } else {
+      setGateError('Please enter a valid email (e.g. name@email.com) or phone number (10+ digits).');
+      return;
+    }
   };
 
   // ── GROQ API ──
@@ -416,7 +456,7 @@ const ChatbotWidget: React.FC = () => {
       }
     }
 
-    // Update local state and storage if new info found
+    // Update local state and storage if new info found (fallback for normal flow)
     if (extractedName && (!userName || userName === 'Visitor')) {
       setUserName(extractedName);
       localStorage.setItem('integer_user_name', extractedName);
@@ -429,6 +469,9 @@ const ChatbotWidget: React.FC = () => {
       setUserEmail(extractedEmail);
       localStorage.setItem('integer_user_email', extractedEmail);
     }
+
+    // No intake steps needed — gate modal handles contact collection
+    // Go straight to AI
 
     // Daily and Session Limit Logic
     const newCount = incrementDailyCount();
@@ -642,6 +685,44 @@ const ChatbotWidget: React.FC = () => {
             }`}
             style={{ boxShadow: isDark ? '0 25px 60px rgba(0,0,0,0.5)' : '0 25px 60px rgba(0,0,0,0.15)' }}
           >
+            {/* Contact Gate Modal Overlay */}
+            {!contactGatePassed && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-2xl">
+                <div className={`mx-4 w-full max-w-xs rounded-2xl p-5 shadow-2xl border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+                  <div className="text-center mb-4">
+                    <div className="w-14 h-14 mx-auto mb-3 bg-gradient-to-br from-emerald-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                      <img src={logo} alt="Integer.IO" className="w-8 h-8 object-contain" />
+                    </div>
+                    <h3 className={`text-base font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Welcome to Integer.IO</h3>
+                    <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Enter your email or phone number to start chatting</p>
+                  </div>
+                  <div className="space-y-3">
+                    <input
+                      type="text"
+                      value={gateInput}
+                      onChange={(e) => { setGateInput(e.target.value); setGateError(''); }}
+                      onKeyDown={(e) => e.key === 'Enter' && handleGateSubmit()}
+                      placeholder="Email or Phone Number"
+                      className={`w-full px-3 py-2.5 rounded-lg text-sm border outline-none transition-colors ${isDark
+                        ? 'bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:border-emerald-500'
+                        : 'bg-gray-50 border-gray-300 text-gray-800 placeholder:text-gray-400 focus:border-emerald-500'
+                      }`}
+                    />
+                    {gateError && (
+                      <p className="text-red-500 text-xs text-center">{gateError}</p>
+                    )}
+                    <button
+                      onClick={handleGateSubmit}
+                      className="w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold text-sm transition-all shadow-md hover:shadow-lg"
+                    >
+                      Continue to Chat →
+                    </button>
+                  </div>
+                  <p className={`text-[9px] text-center mt-3 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>Your info is safe & used only to assist you better.</p>
+                </div>
+              </div>
+            )}
+
             <div className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-indigo-700 p-3.5 shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
