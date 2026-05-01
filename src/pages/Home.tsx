@@ -83,12 +83,12 @@ const Home = () => {
   ];
 
   const slideL = {
-    hidden: { opacity: 0, x: -25 },
+    hidden: { opacity: 0, x: typeof window !== 'undefined' && window.innerWidth < 640 ? -12 : -20 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
 
   const slideR = {
-    hidden: { opacity: 0, x: 25 },
+    hidden: { opacity: 0, x: typeof window !== 'undefined' && window.innerWidth < 640 ? 12 : 20 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } }
   };
 

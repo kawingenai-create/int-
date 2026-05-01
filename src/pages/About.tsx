@@ -158,12 +158,12 @@ const About = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-24 h-24 sm:w-32 sm:h-32 md:w-44 md:h-44 flex-shrink-0"
+                className="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 flex-shrink-0"
               >
                 <div
-                  className={`w-full h-full rounded-full flex items-center justify-center border-4 overflow-hidden shadow-xl ${isDark
-                    ? 'border-emerald-400/50 shadow-emerald-500/20'
-                    : 'bg-gradient-to-r from-emerald-100/10 to-purple-500/10 border-emerald-500/50 shadow-emerald-500/10'
+                  className={`w-full h-full rounded-full flex items-center justify-center border sm:border-4 overflow-hidden shadow-xl ${isDark
+                    ? 'border-emerald-500 shadow-emerald-500/20'
+                    : 'bg-white border-emerald-500 shadow-emerald-500/10'
                     }`}
                 >
                   <img

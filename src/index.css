@@ -38,10 +38,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 10% overall scale optimization for mobile view */
+/* 15% overall scale optimization for mobile view */
 @media (max-width: 768px) {
   html {
-    font-size: 90%;
+    font-size: 85%; /* Reduced from 90% to 85% for better fitting */
+  }
+  
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 }
 

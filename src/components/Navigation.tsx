@@ -50,11 +50,11 @@ const Navigation: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${(isScrolled || isOpen)
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${(isScrolled || isOpen)
         ? isDark
-          ? 'bg-gray-900/60 backdrop-blur-xl shadow-lg border-b border-white/10'
-          : 'bg-white/40 backdrop-blur-xl shadow-lg border-b border-white/50'
-        : 'bg-transparent'
+          ? 'bg-gray-900/60 backdrop-blur-xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)] border-b border-white/[0.05]'
+          : 'bg-white/40 backdrop-blur-xl shadow-lg border-b border-white/20'
+        : 'bg-transparent border-b border-transparent'
         } ${isOpen ? 'rounded-b-3xl' : ''}`}
     >
       {/* Mobile-first responsive container */}
