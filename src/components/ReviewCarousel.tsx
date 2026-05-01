@@ -307,10 +307,10 @@ const ReviewCarousel: React.FC = () => {
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                 >
                   <div
-                    className={`h-full rounded-2xl backdrop-blur-lg border transition-all duration-500 relative ${isDark
-                      ? 'bg-gray-900/90 border-gray-700/50'
-                      : 'bg-white/95 border-gray-300/50'
-                      } shadow-2xl`}
+                    className={`h-full rounded-2xl backdrop-blur-xl border transition-all duration-500 relative ${isDark
+                      ? 'bg-white/5 border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+                      : 'bg-white/40 border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]'
+                      }`}
                   >
                     <div className="flex flex-col h-full justify-between p-4 sm:p-6">
                       <div className="flex items-center mb-4">

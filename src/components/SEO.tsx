@@ -63,7 +63,7 @@ const SEO: React.FC<SEOProps> = ({
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "Integer.IO Solutions",
-          "alternateName": ["Integer IO", "Integer.IO Services", "IntegerIO"],
+          "alternateName": ["Integer IO", "Integer.IO Solutions", "IntegerIO"],
           "description": "Professional web development, AI automation, SaaS products, digital marketing, and student project services based in Madurai, Tamil Nadu, India.",
           "url": url,
           "logo": image,

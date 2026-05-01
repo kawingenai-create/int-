@@ -16,7 +16,7 @@ import logo from '../assets/company_logo/hand.webp';
 import ReviewCarousel from '../components/ReviewCarousel';
 import kawin from '../assets/team/kawin.webp'
 import livan from '../assets/team/livan.webp'
-import hemanth from '../assets/team/heamnth.png'
+import hemanth from '../assets/team/hemanth.webp'
 
 // Add these styles to your CSS file or add as a style tag in your component
 const flipCardStyles = `
@@ -168,7 +168,7 @@ const About = () => {
                 >
                   <img
                     src={logo}
-                    alt="Integer.IO Services Logo"
+                    alt="Integer.IO Solutions Logo"
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
@@ -180,7 +180,7 @@ const About = () => {
                     Empowering Digital Transformation
                   </h3>
                   <p className={`text-xs sm:text-base lg:text-lg leading-relaxed mb-3 sm:mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Integer.IO Services is a leading digital solutions provider founded with a vision to
+                    Integer.IO Solutions is a leading digital solutions provider founded with a vision to
                     <span className="text-emerald-400 font-semibold"> democratize technology</span> for
                     businesses of all sizes. We specialize in web development, AI Automation solutions, billing software,
                     and digital marketing.
@@ -243,10 +243,10 @@ const About = () => {
                 >
                   {/* Front Face - Square Card with Border */}
                   <div
-                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden transition-all duration-300 ${isDark
-                      ? 'bg-white/5 backdrop-blur-md border border-emerald-500/30'
-                      : 'bg-white/70 backdrop-blur-md border border-emerald-400/40'
-                      } shadow-lg`}
+                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden transition-all duration-300 backdrop-blur-xl ${isDark
+                      ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+                      : 'bg-white/40 border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]'
+                      }`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
                     <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-between text-center">
@@ -279,10 +279,10 @@ const About = () => {
 
                   {/* Back Face - Contact Details with Border */}
                   <div
-                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden rotate-y-180 transition-all duration-300 ${isDark
-                      ? 'bg-white/5 backdrop-blur-md border border-emerald-500/30'
-                      : 'bg-white/70 backdrop-blur-md border border-emerald-400/40'
-                      } shadow-lg`}
+                    className={`absolute w-full h-full backface-hidden rounded-xl overflow-hidden rotate-y-180 transition-all duration-300 backdrop-blur-xl ${isDark
+                      ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+                      : 'bg-white/40 border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]'
+                      }`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
                     <div className="p-4 sm:p-6 h-full flex flex-col justify-between">

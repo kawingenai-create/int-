@@ -77,9 +77,9 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
 
   return (
     <div className="relative w-full max-w-6xl mx-auto">
-      <div className={`relative overflow-hidden rounded-2xl shadow-2xl ${isDark
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-gray-700/50'
-        : 'bg-white border border-gray-200'
+      <div className={`relative overflow-hidden rounded-2xl backdrop-blur-xl ${isDark
+        ? 'bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]'
+        : 'bg-white/40 border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]'
         }`}>
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
@@ -112,7 +112,7 @@ const ModernProjectCarousel: React.FC<ModernProjectCarouselProps> = ({ projects 
 
               {/* TOP: Full Width Image - Shows COMPLETE image */}
               <div className={`relative h-56 sm:h-72 md:h-80 lg:h-[400px] overflow-hidden ${
-                isDark ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gray-100/50'
+                isDark ? 'bg-black/20' : 'bg-white/20'
               }`}>
                 <motion.img
                   src={currentProject.image}

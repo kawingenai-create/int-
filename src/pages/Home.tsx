@@ -122,7 +122,7 @@ const Home = () => {
                   ? 'from-emerald-300 via-purple-300 to-pink-300'
                   : 'from-purple-900 via-indigo-800 to-emerald-800'
                   }`} style={{ lineHeight: '1.3' }}>
-                  Integer.IO Services
+                  Integer.IO Solutions
                 </span>
               </motion.span>
               <br />
@@ -338,7 +338,7 @@ const Home = () => {
               : 'from-purple-800 to-emerald-700'
               }`}
           >
-            Why Choose Integer.IO Services?
+            Why Choose Integer.IO Solutions?
           </motion.h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-16">

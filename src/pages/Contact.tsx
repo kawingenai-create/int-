@@ -176,7 +176,7 @@ const Contact = () => {
           </h1>
           <p className={`text-sm sm:text-lg md:text-xl font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
             Ready to transform your ideas into reality? Get in touch with
-            Integer.IO Services today!
+            Integer.IO Solutions today!
           </p>
         </motion.div>
 
@@ -296,7 +296,7 @@ const Contact = () => {
                       rel="noopener noreferrer"
                       className="text-xs sm:text-base text-blue-400 hover:text-blue-300 transition-colors"
                     >
-                      Integer.IO Services
+                      Integer.IO Solutions
                     </a>
                   </div>
                 </div>

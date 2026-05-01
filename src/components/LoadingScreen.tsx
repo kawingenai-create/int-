@@ -221,7 +221,7 @@ const LoadingScreen: React.FC<{ onComplete: () => void }> = ({
                 className={`text-xs font-light tracking-wider ${isDark ? 'text-slate-500' : 'text-slate-400'
                   }`}
               >
-                © 2025 Integer.IO Services - Professional Technology Solutions
+                © 2025 Integer.IO Solutions - Professional Technology Solutions
               </p>
             </motion.div>
           </div>

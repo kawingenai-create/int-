@@ -61,11 +61,10 @@ const WhatsAppWidget: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.8 }}
             transition={{ duration: 0.25 }}
-            className={`fixed bottom-24 left-6 w-80 rounded-lg shadow-2xl border z-50 ${
-              isDark 
-                ? 'bg-gray-900 border-gray-700' 
+            className={`fixed bottom-24 left-6 w-80 rounded-lg shadow-2xl border z-50 ${isDark
+                ? 'bg-gray-900 border-gray-700'
                 : 'bg-white border-gray-200'
-            }`}
+              }`}
           >
             {/* Header */}
             <div className="bg-green-500 text-white p-4 rounded-t-lg">
@@ -74,7 +73,7 @@ const WhatsAppWidget: React.FC = () => {
                   <MessageCircle className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Integer.IO Services</h3>
+                  <h3 className="font-semibold">Integer.IO Solutions</h3>
                   <p className="text-sm opacity-90">Typically replies instantly</p>
                 </div>
               </div>
@@ -82,9 +81,8 @@ const WhatsAppWidget: React.FC = () => {
 
             {/* Messages */}
             <div className="p-4 space-y-3 max-h-64 overflow-y-auto">
-              <div className={`p-3 rounded-lg ${
-                isDark ? 'bg-gray-800' : 'bg-gray-100'
-              }`}>
+              <div className={`p-3 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-100'
+                }`}>
                 <p className={`text-sm ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
                   👋 Hi there! How can we help you today?
                 </p>
@@ -94,11 +92,10 @@ const WhatsAppWidget: React.FC = () => {
                 <motion.button
                   key={index}
                   onClick={() => sendMessage(message)}
-                  className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                    isDark 
-                      ? 'border-gray-600 hover:bg-gray-800 text-gray-200' 
+                  className={`w-full text-left p-3 rounded-lg border transition-colors ${isDark
+                      ? 'border-gray-600 hover:bg-gray-800 text-gray-200'
                       : 'border-gray-200 hover:bg-gray-50 text-gray-700'
-                  }`}
+                    }`}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -118,11 +115,10 @@ const WhatsAppWidget: React.FC = () => {
                 </button>
                 <a
                   href="tel:8015355914"
-                  className={`p-2 rounded-lg border transition-colors ${
-                    isDark 
-                      ? 'border-gray-600 hover:bg-gray-800' 
+                  className={`p-2 rounded-lg border transition-colors ${isDark
+                      ? 'border-gray-600 hover:bg-gray-800'
                       : 'border-gray-200 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <Phone className="h-5 w-5" />
                 </a>

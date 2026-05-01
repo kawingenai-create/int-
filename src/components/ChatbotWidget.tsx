@@ -297,12 +297,12 @@ const ChatbotWidget: React.FC = () => {
   const callGroqAPI = async (userMessage: string): Promise<string> => {
     const apiKey = import.meta.env.VITE_GROQ_API_KEY;
     if (!apiKey) throw new Error('VITE_GROQ_API_KEY is missing in .env');
-    
+
     const history = messages.slice(-6).map(m => ({
       role: m.sender === 'user' ? 'user' as const : 'assistant' as const,
       content: m.text
     }));
-    
+
     const lang = isTamil ? '\nRespond in Tanglish.' : '';
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -314,7 +314,7 @@ const ChatbotWidget: React.FC = () => {
         max_tokens: 300,
       }),
     });
-    
+
     if (!res.ok) {
       const errorData = await res.text();
       throw new Error(`Groq fail (${res.status}): ${errorData}`);
@@ -327,7 +327,7 @@ const ChatbotWidget: React.FC = () => {
   const callGeminiAPI = async (userMessage: string): Promise<string> => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY_HERE') throw new Error('VITE_GEMINI_API_KEY is missing/invalid');
-    
+
     const lang = isTamil ? ' Respond in Tanglish.' : '';
     // Confirmed available for this key: gemini-2.5-flash
     const res = await fetch(
@@ -341,7 +341,7 @@ const ChatbotWidget: React.FC = () => {
         }),
       }
     );
-    
+
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(`Gemini fail (${res.status}): ${errorText}`);
@@ -605,11 +605,10 @@ const ChatbotWidget: React.FC = () => {
               exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.35, ease: 'easeOut' }}
               style={{ position: 'absolute', bottom: '100%', left: 0, marginBottom: 8, zIndex: 10 }}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg ${
-                isDark
+              className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold shadow-lg ${isDark
                   ? 'bg-gray-800 text-white border border-gray-700'
                   : 'bg-white text-gray-800 border border-gray-100'
-              }`}
+                }`}
             >
               {tooltipPhrases[tipIdx]}
             </motion.div>
@@ -680,9 +679,8 @@ const ChatbotWidget: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
-            className={`fixed bottom-24 left-[4vw] sm:left-6 w-[92vw] sm:w-[420px] h-[72vh] sm:h-[580px] z-[60] overflow-hidden flex flex-col rounded-2xl border shadow-2xl ${
-              isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
-            }`}
+            className={`fixed bottom-24 left-[4vw] sm:left-6 w-[92vw] sm:w-[420px] h-[72vh] sm:h-[580px] z-[60] overflow-hidden flex flex-col rounded-2xl border shadow-2xl ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+              }`}
             style={{ boxShadow: isDark ? '0 25px 60px rgba(0,0,0,0.5)' : '0 25px 60px rgba(0,0,0,0.15)' }}
           >
             {/* Contact Gate Modal Overlay */}
@@ -706,7 +704,7 @@ const ChatbotWidget: React.FC = () => {
                       className={`w-full px-3 py-2.5 rounded-lg text-sm border outline-none transition-colors ${isDark
                         ? 'bg-gray-800 border-gray-600 text-white placeholder:text-gray-500 focus:border-emerald-500'
                         : 'bg-gray-50 border-gray-300 text-gray-800 placeholder:text-gray-400 focus:border-emerald-500'
-                      }`}
+                        }`}
                     />
                     {gateError && (
                       <p className="text-red-500 text-xs text-center">{gateError}</p>
@@ -733,7 +731,7 @@ const ChatbotWidget: React.FC = () => {
                     <h3 className="text-white font-bold text-sm leading-tight">Integer Helper AI</h3>
                     <div className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                      <span className="text-white/70 text-[10px]">Integer.IO Services</span>
+                      <span className="text-white/70 text-[10px]">Integer.IO Solutions</span>
                     </div>
                   </div>
                 </div>
@@ -769,11 +767,10 @@ const ChatbotWidget: React.FC = () => {
                     </div>
                   )}
                   <div className="max-w-[80%] space-y-2">
-                    <div className={`rounded-2xl p-3 shadow-sm ${
-                      m.sender === 'user'
+                    <div className={`rounded-2xl p-3 shadow-sm ${m.sender === 'user'
                         ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-tr-sm'
                         : (isDark ? 'bg-gray-800 text-gray-100 border border-gray-700' : 'bg-white text-gray-800 border border-gray-100') + ' rounded-tl-sm'
-                    }`}>
+                      }`}>
                       <p className="text-[13px] leading-relaxed whitespace-pre-line">{renderMessageText(m.text)}</p>
                       <span className="text-[9px] opacity-40 mt-1 block">
                         {m.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -786,11 +783,10 @@ const ChatbotWidget: React.FC = () => {
                           <button
                             key={i}
                             onClick={() => handleNavClick(btn.path)}
-                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-200 hover:scale-105 shadow-sm ${
-                              isDark
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-200 hover:scale-105 shadow-sm ${isDark
                                 ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30'
                                 : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
-                            }`}
+                              }`}
                           >
                             <span>{btn.icon}</span>
                             {btn.label}
@@ -822,9 +818,8 @@ const ChatbotWidget: React.FC = () => {
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`flex items-center justify-between p-2 rounded-lg text-[11px] font-medium border transition-all hover:scale-[1.02] ${
-                              isDark ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-700'
-                            }`}
+                            className={`flex items-center justify-between p-2 rounded-lg text-[11px] font-medium border transition-all hover:scale-[1.02] ${isDark ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 text-gray-200' : 'bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-700'
+                              }`}
                           >
                             {link.label}
                             <ExternalLink className="w-3 h-3 opacity-50" />
@@ -880,11 +875,10 @@ const ChatbotWidget: React.FC = () => {
                   <button
                     onClick={() => handleSend(input)}
                     disabled={!input.trim()}
-                    className={`p-2 rounded-lg transition-all ${
-                      input.trim()
+                    className={`p-2 rounded-lg transition-all ${input.trim()
                         ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md hover:shadow-lg hover:scale-105'
                         : (isDark ? 'text-gray-600' : 'text-gray-300')
-                    }`}
+                      }`}
                   >
                     <Send className="w-4 h-4" />
                   </button>

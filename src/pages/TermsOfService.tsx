@@ -11,8 +11,8 @@ const TermsOfService = () => {
   return (
     <div className="relative min-h-screen pt-20">
       <SEO 
-        title="Terms of Service - Integer.IO Services"
-        description="Read our terms of service and understand our policies for using Integer.IO Services."
+        title="Terms of Service - Integer.IO Solutions"
+        description="Read our terms of service and understand our policies for using Integer.IO Solutions."
       />
       
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
@@ -38,7 +38,7 @@ const TermsOfService = () => {
                 Service Agreement
               </h2>
               <p className={`mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                By using Integer.IO Services, you agree to these terms and conditions. 
+                By using Integer.IO Solutions, you agree to these terms and conditions. 
                 We provide web development, AI Automation projects, logo design, and digital marketing services.
               </p>
               <ul className={`list-disc list-inside space-y-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
@@ -114,7 +114,7 @@ const TermsOfService = () => {
                 Limitation of Liability
               </h2>
               <p className={`mb-4 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                Integer.IO Services provides services "as is" and makes no warranties beyond those 
+                Integer.IO Solutions provides services "as is" and makes no warranties beyond those 
                 explicitly stated in project agreements.
               </p>
               <ul className={`list-disc list-inside space-y-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>

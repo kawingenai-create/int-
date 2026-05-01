@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer
-      className={`relative mt-20 border-t transition-all duration-300 ${isDark
+      className={`relative mt-10 sm:mt-20 border-t transition-all duration-300 ${isDark
         ? 'bg-gradient-to-b from-gray-900/80 via-gray-900/60 to-gray-950/80 border-emerald-500/20 backdrop-blur-xl'
         : 'bg-gradient-to-b from-white/90 via-gray-50/80 to-white/90 border-gray-300/60 backdrop-blur-xl'
         }`}
@@ -124,19 +124,19 @@ const Footer: React.FC = () => {
           }`} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-14">
-        {/* Desktop: 4 columns, Mobile: 2 columns side by side */}
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:py-14">
+        {/* Desktop: 4 columns, Mobile: 2 columns */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {/* Company Info - Full width on mobile */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="col-span-2 lg:col-span-1"
+            className="col-span-2 lg:col-span-1 mb-0"
           >
-            <div className="flex items-center space-x-3 mb-4">
-              <img src={logo} alt="Logo" className="h-10 w-10 object-contain" />
-              <span className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${isDark
+            <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-4">
+              <img src={logo} alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
+              <span className={`text-lg sm:text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${isDark
                 ? 'from-emerald-400 to-purple-400'
                 : 'from-purple-600 via-purple-500 to-emerald-500'
                 }`}>
@@ -144,7 +144,7 @@ const Footer: React.FC = () => {
               </span>
             </div>
             <p
-              className={`mb-4 text-base lg:text-lg leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
+              className={`mb-2 sm:mb-4 text-xs sm:text-base leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'
                 }`}
             >
               Empowering Tamil Nadu's future through smart web & AI solutions.
@@ -211,17 +211,17 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <h3
-              className={`text-base lg:text-lg font-semibold tracking-wide mb-3 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-sm sm:text-base font-semibold tracking-wide mb-3 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Quick Links
             </h3>
-            <ul className="space-y-1.5">
+            <ul className="space-y-0.5 sm:space-y-1.5">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-base transition-all flex items-center ${isDark
+                    className={`text-xs sm:text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -234,17 +234,17 @@ const Footer: React.FC = () => {
             </ul>
 
             <h4
-              className={`text-base font-bold mt-4 mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-xs sm:text-base font-bold mt-3 sm:mt-6 mb-1 sm:mb-2 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Legal
             </h4>
-            <ul className="space-y-1.5">
+            <ul className="space-y-0.5 sm:space-y-1.5">
               {legalLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className={`text-base transition-all flex items-center ${isDark
+                    className={`text-xs sm:text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -264,17 +264,17 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h3
-              className={`text-base lg:text-lg font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+              className={`text-xs sm:text-base font-semibold tracking-wide mb-2 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-900'
                 }`}
             >
               Our Services
             </h3>
-            <ul className="space-y-1.5">
+            <ul className="space-y-0.5 sm:space-y-1.5">
               {services.map((service) => (
                 <li key={service.key}>
                   <Link
                     to={`/services?service=${service.key}`}
-                    className={`text-base transition-all flex items-center ${isDark
+                    className={`text-xs sm:text-sm transition-all flex items-center ${isDark
                       ? 'text-gray-300 hover:text-emerald-400'
                       : 'text-gray-700 hover:text-emerald-600'
                       }`}
@@ -294,31 +294,31 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="col-span-2 lg:col-span-1"
           >
-            <div className="grid grid-cols-2 gap-4 lg:grid-cols-1 lg:gap-0">
+            <div className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-4 lg:gap-6">
               {/* Contact Info */}
               <div>
                 <h3
-                  className={`text-base lg:text-lg font-semibold tracking-wide mb-2 ${isDark ? 'text-white' : 'text-gray-900'
+                  className={`text-xs sm:text-base font-semibold tracking-wide mb-1.5 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-900'
                     }`}
                 >
                   Contact Info
                 </h3>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Phone className={`h-4 w-4 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
-                    <a href="tel:8015355914" className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="space-y-1.5 sm:space-y-3">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <Phone className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                    <a href="tel:8015355914" className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       +91 8015355914
                     </a>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Mail className={`h-4 w-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
-                    <a href="mailto:integer.io.ai@gmail.com" className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <Mail className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+                    <a href="mailto:integer.io.ai@gmail.com" className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       integer.io.ai@gmail.com
                     </a>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className={`h-4 w-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
-                     <span className={`text-base ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <MapPin className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+                    <span className={`text-xs sm:text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                       Tamil Nadu, India
                     </span>
                   </div>
@@ -326,14 +326,14 @@ const Footer: React.FC = () => {
               </div>
 
               {/* Business Hours */}
-              <div className="lg:mt-4">
-                <h4 className={`text-base font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <div>
+                <h4 className={`text-xs sm:text-base font-semibold mb-1.5 sm:mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   Business Hours
                 </h4>
-                <div className={`text-base space-y-1 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className={`text-xs sm:text-sm space-y-0.5 sm:space-y-1.5 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   <p>Mon-Sat: 9AM - 8PM</p>
                   <p>Sunday: 10AM - 6PM</p>
-                  <p className="text-emerald-400 text-sm">24/7 WhatsApp Support</p>
+                  <p className="text-emerald-500 font-medium text-xs">24/7 WhatsApp Support</p>
                 </div>
               </div>
             </div>
@@ -345,57 +345,22 @@ const Footer: React.FC = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className={`mt-10 pt-8 border-t flex flex-col md:flex-row justify-between items-center ${isDark ? 'border-gray-800' : 'border-gray-200'
+          className={`mt-4 sm:mt-10 pt-4 sm:pt-8 border-t flex justify-center items-center ${isDark ? 'border-gray-800' : 'border-gray-200'
             }`}
         >
-          <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-              <p
-              className={`text-base flex items-center ${isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}
+          <p
+            className={`text-xs sm:text-sm flex flex-wrap justify-center items-center ${isDark ? 'text-gray-400' : 'text-gray-500'
+              }`}
+          >
+            © 2026 Integer.IO Solutions. Crafted with{' '}
+            <Heart className={`h-3 w-3 sm:h-4 sm:w-4 mx-1 animate-pulse ${isDark ? 'text-red-400' : 'text-red-600'}`} /> by
+            <Link
+              to="/admin"
+              className={`ml-1 hover:text-emerald-400 transition-colors ${isDark ? 'text-gray-200' : 'text-gray-600'}`}
             >
-              © 2026Integer.IO Services. Crafted with{' '}
-              <Heart className={`h-4 w-4 mx-1 animate-pulse ${isDark ? 'text-red-400' : 'text-red-600'}`} /> by
-              <Link
-                to="/admin"
-                className={`ml-1 hover:text-emerald-400 transition-colors ${isDark ? 'text-gray-200' : 'text-gray-600'}`}
-              >
-                MS Kawin
-              </Link>
-            </p>
-            <div className="flex items-center space-x-2">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
-                className="text-emerald-400"
-              >
-                🚀
-              </motion.div>
-              <span
-                className={`text-sm ${isDark ? 'text-gray-500' : 'text-gray-400'
-                  }`}
-              >
-                Launching Dreams into Digital Reality
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col items-center md:items-end mt-4 md:mt-0">
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="text-emerald-400">●</span>
-              <span
-                className={`text-sm font-medium ${isDark ? 'text-emerald-400' : 'text-emerald-600'
-                  }`}
-              >
-                Trusted Worldwide
-              </span>
-            </div>
-            <div className={`flex items-center space-x-3 text-xs ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-              <span>Web Dev</span>
-              <span>•</span>
-              <span>AI Automation</span>
-              <span>•</span>
-              <span>Marketing</span>
-            </div>
-          </div>
+              MS Kawin
+            </Link>
+          </p>
         </motion.div>
       </div>
     </footer>

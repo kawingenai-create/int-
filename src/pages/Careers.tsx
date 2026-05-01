@@ -30,7 +30,7 @@ const Careers: React.FC = () => {
             className={`text-base sm:text-lg lg:text-xl max-w-2xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-600'
               }`}
           >
-            Build AI. Break Limits. Create Future. We are always looking for passionate individuals to join Integer.IO Services.
+            Build AI. Break Limits. Create Future. We are always looking for passionate individuals to join Integer.IO Solutions.
           </p>
         </motion.div>
 
