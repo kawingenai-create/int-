@@ -18,6 +18,7 @@ import {
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
 import ReviewFormModal from '../components/ReviewFormModal';
+import SEO from '../components/SEO';
 
 const Contact = () => {
   const { isDark } = useTheme();
@@ -161,6 +162,11 @@ const Contact = () => {
 
   return (
     <div className="relative min-h-screen pt-20">
+      <SEO 
+        title="Contact Us | Integer.IO Solutions - Madurai IT Companies"
+        description="Get in touch with Integer.IO Solutions for cost efficient web development, SaaS products, and final year projects overall TamilNadu. Based in Madurai, serving clients globally."
+        page="contact"
+      />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

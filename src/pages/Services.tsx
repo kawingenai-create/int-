@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Code, Brain, FileText, Megaphone, Search, Globe, Shield, MessageCircle } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
+import SEO from '../components/SEO';
 
 const Services = () => {
   const { isDark } = useTheme();
@@ -176,6 +177,11 @@ const Services = () => {
 
   return (
     <div className="relative min-h-screen pt-20">
+      <SEO 
+        title="Our Services | SaaS Products & Cost Efficient Web Development"
+        description="Integer.IO Solutions offers cost efficient web development, custom SaaS products, AI automation, and final year projects overall TamilNadu."
+        page="services"
+      />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -686,7 +686,15 @@ const ChatbotWidget: React.FC = () => {
             {/* Contact Gate Modal Overlay */}
             {!contactGatePassed && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-2xl">
-                <div className={`mx-4 w-full max-w-xs rounded-2xl p-5 shadow-2xl border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+                <div className={`relative mx-4 w-full max-w-xs rounded-2xl p-5 shadow-2xl border ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+                  {/* Close button for the gate modal */}
+                  <button 
+                    onClick={() => setIsOpen(false)}
+                    className="absolute top-3 right-3 p-1.5 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-all duration-200 group/close"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+
                   <div className="text-center mb-4">
                     <div className="w-14 h-14 mx-auto mb-3 bg-gradient-to-br from-emerald-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
                       <img src={logo} alt="Integer.IO" className="w-8 h-8 object-contain" />

@@ -238,8 +238,7 @@ const About = () => {
                 className="relative perspective-1000"
               >
                 <div
-                  className={`relative w-full transition-transform duration-700 transform-style-3d ${hoveredCard === index ? 'rotate-y-180' : ''}`}
-                  style={{ minHeight: '420px' }}
+                  className={`relative w-full transition-transform duration-700 transform-style-3d min-h-[340px] sm:min-h-[420px] ${hoveredCard === index ? 'rotate-y-180' : ''}`}
                 >
                   {/* Front Face - Square Card with Border */}
                   <div
@@ -249,7 +248,7 @@ const About = () => {
                       }`}
                   >
                     <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${getColorClasses(member.color)}`} />
-                    <div className="p-4 sm:p-6 h-full flex flex-col items-center justify-between text-center">
+                    <div className="p-3 sm:p-6 h-full flex flex-col items-center justify-between text-center">
                       <div className="flex flex-col items-center flex-1 justify-center">
                         <div className={`w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 shrink-0 rounded-full overflow-hidden border-2 mb-3 sm:mb-4 bg-white/50 ${isDark ? 'border-emerald-400/40' : 'border-emerald-500/30'}`}>
                           <img src={member.image} alt={member.name} className="w-full h-full object-contain" />
@@ -290,21 +289,43 @@ const About = () => {
                         <h3 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-6 text-center bg-gradient-to-r ${getColorClasses(member.color)} bg-clip-text text-transparent`}>
                           Contact Details
                         </h3>
-                        <div className="space-y-4">
-                          <a href={`mailto:${member.email}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                            <Mail className="h-4 w-4" />
+                        <div className="space-y-3 flex flex-col items-center">
+                          <a 
+                            href={`mailto:${member.email}`} 
+                            className={`flex items-center space-x-3 text-[10px] sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 shadow-sm border w-full max-w-[240px] justify-center ${isDark 
+                              ? 'bg-white/10 border-white/20 text-white hover:bg-emerald-500/30 hover:border-emerald-500/50' 
+                              : 'bg-white/60 border-gray-200 text-gray-800 hover:bg-emerald-50 hover:border-emerald-500/50'
+                            }`}
+                          >
+                            <Mail className="h-4 w-4 shrink-0" />
                             <span className="truncate">{member.email}</span>
                           </a>
-                          <a href={`tel:${member.phone}`} className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
-                            <Phone className="h-4 w-4" />
+                          <a 
+                            href={`tel:${member.phone}`} 
+                            className={`flex items-center space-x-3 text-[10px] sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 shadow-sm border w-full max-w-[240px] justify-center ${isDark 
+                              ? 'bg-white/10 border-white/20 text-white hover:bg-emerald-500/30 hover:border-emerald-500/50' 
+                              : 'bg-white/60 border-gray-200 text-gray-800 hover:bg-emerald-50 hover:border-emerald-500/50'
+                            }`}
+                          >
+                            <Phone className="h-4 w-4 shrink-0" />
                             <span>{member.phone}</span>
                           </a>
-                          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                          <a 
+                            href={member.linkedin} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className={`flex items-center space-x-2 text-xs sm:text-sm hover:underline transition-colors ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}
+                          >
                             <Linkedin className="h-4 w-4" />
                             <span>LinkedIn</span>
                           </a>
                           {member.portfolio && (
-                            <a href={member.portfolio} target="_blank" rel="noopener noreferrer" className={`flex items-center space-x-2 text-sm ${isDark ? 'text-white hover:text-emerald-400' : 'text-gray-800 hover:text-emerald-600'} transition-colors`}>
+                            <a 
+                              href={member.portfolio} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className={`flex items-center space-x-2 text-xs sm:text-sm hover:underline transition-colors ${isDark ? 'text-purple-400' : 'text-purple-600'}`}
+                            >
                               <Globe className="h-4 w-4" />
                               <span>Portfolio</span>
                             </a>

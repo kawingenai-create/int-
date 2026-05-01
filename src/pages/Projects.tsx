@@ -4,6 +4,7 @@ import { Download, FileText, ExternalLink } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import ModernProjectCarousel from '../components/ModernProjectCarousel';
 import { useTheme } from '../contexts/ThemeContext';
+import SEO from '../components/SEO';
 
 // Import project images from assets/services
 import acImg from '../assets/services/ac.webp';
@@ -186,6 +187,11 @@ const Projects = () => {
 
   return (
     <div className="relative min-h-screen pt-20">
+      <SEO 
+        title="Student Projects | Final Year Projects Overall TamilNadu by Integer.IO Solutions"
+        description="Download and explore final year projects overall TamilNadu provided by Integer.IO Solutions. We help students with AI, ML, Data Science, and cost efficient web development projects."
+        page="projects"
+      />
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

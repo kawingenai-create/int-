@@ -11,6 +11,7 @@ import InteractiveCard from '../components/InteractiveCard';
 
 import { useTheme } from '../contexts/ThemeContext';
 import ServiceCarousel from '../components/ServiceCarousel';
+import SEO from '../components/SEO';
 
 // Import product images
 import chatzImg from '../assets/products/chatz.io.webp';
@@ -93,6 +94,11 @@ const Home = () => {
 
   return (
     <div className="relative min-h-screen pt-16">
+      <SEO 
+        title="Integer.IO Solutions | Top Madurai IT Companies for SaaS Products & Web Development"
+        description="Integer.IO Solutions is your trusted partner for cost efficient web development, SaaS products, and final year projects overall TamilNadu. We are a leading IT company in Madurai delivering innovative digital solutions."
+        page=""
+      />
       {/* Hero Section with Enhanced Effects */}
       <section className="relative pt-16 sm:pt-24 md:pt-32 pb-10 sm:pb-20 px-3 sm:px-4 z-10 overflow-hidden">
         <div className="max-w-7xl mx-auto text-center">
@@ -117,7 +123,7 @@ const Home = () => {
 
             <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-4 sm:mb-6">
               <motion.span variants={slideR} className="flex items-center justify-center gap-2 sm:gap-4">
-                <img src={halfLogo} alt="Integer.IO" className="h-16 sm:h-14 md:h-24 w-auto object-contain" />
+                <img src={halfLogo} alt="Integer.IO Solutions - Top Madurai IT Companies" className="h-16 sm:h-14 md:h-24 w-auto object-contain" />
                 <span className={`bg-gradient-to-r bg-clip-text text-transparent pb-1 sm:pb-2 text-xl sm:text-3xl md:text-5xl drop-shadow-sm ${isDark
                   ? 'from-emerald-300 via-purple-300 to-pink-300'
                   : 'from-purple-900 via-indigo-800 to-emerald-800'
@@ -215,7 +221,7 @@ const Home = () => {
                 <div className={`relative rounded-t-xl ${isDark ? 'bg-gray-800/40' : 'bg-gray-50/50'}`}>
                   <img
                     src={chatzImg}
-                    alt="Chatz.IO - AI Chat for Students"
+                    alt="Chatz.IO - SaaS Products by Integer.IO Solutions for Students"
                     loading="lazy"
                     className="w-full h-36 sm:h-48 md:h-64 object-contain p-2"
                   />
@@ -252,7 +258,7 @@ const Home = () => {
                 <div className={`relative rounded-t-xl ${isDark ? 'bg-gray-800/40' : 'bg-gray-50/50'}`}>
                   <img
                     src={imgGenImg}
-                    alt="Dips.IO - Coming Soon"
+                    alt="Dips.IO - Next-Gen SaaS Products by Integer.IO Solutions"
                     loading="lazy"
                     className="w-full h-36 sm:h-48 md:h-64 object-contain p-2"
                   />
@@ -408,7 +414,7 @@ const Home = () => {
                   <div className="relative overflow-hidden rounded-lg mb-2 sm:mb-4">
                     <img
                       src={project.image}
-                      alt={project.title}
+                      alt={`${project.title} - Cost efficient web development by Integer.IO Solutions`}
                       loading="lazy"
                       className="w-full h-36 sm:h-44 md:h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                     />

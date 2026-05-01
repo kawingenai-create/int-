@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ExternalLink, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import InteractiveCard from '../components/InteractiveCard';
 import { useTheme } from '../contexts/ThemeContext';
+import SEO from '../components/SEO';
 
 // Import product images
 import chatzImg from '../assets/products/chatz.io.webp';
@@ -58,7 +59,7 @@ const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images:
                     <motion.img
                         key={currentIndex}
                         src={images[currentIndex]}
-                        alt={title}
+                        alt={`${title} - SaaS Products by Integer.IO Solutions Madurai IT Companies`}
                         loading="lazy"
                         className="absolute inset-0 w-full h-full object-contain p-3 sm:p-6"
                         initial={{ opacity: 0 }}
@@ -132,7 +133,7 @@ const ProductImageCarousel = ({ images, title, color, badge, isDark }: { images:
                             <img
                                 key={currentIndex}
                                 src={images[currentIndex]}
-                                alt={title}
+                                alt={`${title} Fullscreen - SaaS Products by Integer.IO Solutions Madurai IT Companies`}
                                 className="max-w-full max-h-full object-contain rounded-xl shadow-2xl"
                             />
                         </div>
@@ -224,6 +225,11 @@ const Products = () => {
 
     return (
         <div className="relative min-h-screen pt-20">
+            <SEO 
+                title="Our Products | SaaS Products & Solutions by Integer.IO Solutions"
+                description="Explore SaaS products developed by Integer.IO Solutions, one of the top Madurai IT companies. We build cost efficient web development and AI automation tools."
+                page="products"
+            />
             <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
                 {/* Page Header */}
                 <motion.div

@@ -50,12 +50,12 @@ const Navigation: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out ${(isScrolled || isOpen)
         ? isDark
-          ? 'bg-gray-900/95 backdrop-blur-md shadow-lg'
-          : 'bg-white/95 backdrop-blur-md shadow-lg'
+          ? 'bg-gray-900/60 backdrop-blur-xl shadow-lg border-b border-white/10'
+          : 'bg-white/40 backdrop-blur-xl shadow-lg border-b border-white/50'
         : 'bg-transparent'
-        }`}
+        } ${isOpen ? 'rounded-b-3xl' : ''}`}
     >
       {/* Mobile-first responsive container */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -191,8 +191,10 @@ const Navigation: React.FC = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className={`lg:hidden overflow-hidden ${isDark ? 'bg-gray-900/95' : 'bg-white/95'
-                } backdrop-blur-md`}
+              className={`lg:hidden overflow-hidden ${isDark 
+                ? 'border-t border-white/10' 
+                : 'border-t border-white/50'
+                }`}
             >
               <div
                 className={`h-px ${isDark ? 'bg-gray-700/20' : 'bg-gray-200/20'
